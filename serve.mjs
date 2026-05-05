@@ -1,0 +1,47 @@
+import { createServer } from 'http';
+import { readFile } from 'fs/promises';
+import { extname, join } from 'path';
+import { fileURLToPath } from 'url';
+
+const __dirname = fileURLToPath(new URL('.', import.meta.url));
+const PORT = 3000;
+
+const mime = {
+  '.html': 'text/html; charset=utf-8',
+  '.css': 'text/css',
+  '.js': 'application/javascript',
+  '.mjs': 'application/javascript',
+  '.png': 'image/png',
+  '.jpg': 'image/jpeg',
+  '.jpeg': 'image/jpeg',
+  '.gif': 'image/gif',
+  '.svg': 'image/svg+xml',
+  '.ico': 'image/x-icon',
+  '.webp': 'image/webp',
+  '.txt': 'text/plain; charset=utf-8',
+  '.xml': 'application/xml; charset=utf-8',
+};
+
+createServer(async (req, res) => {
+  let url = req.url.split('?')[0];
+  if (url === '/') url = '/index.html';
+  const filePath = join(__dirname, decodeURIComponent(url));
+  const ext = extname(filePath).toLowerCase();
+  const contentType = ext ? (mime[ext] || 'application/octet-stream') : 'text/html; charset=utf-8';
+
+  try {
+    const data = await readFile(filePath);
+    const longCacheExts = new Set(['.png', '.jpg', '.jpeg', '.gif', '.svg', '.ico', '.webp']);
+    res.writeHead(200, {
+      'Content-Type': contentType,
+      'Cache-Control': longCacheExts.has(ext) ? 'public, max-age=31536000, immutable' : 'no-cache',
+      'X-Content-Type-Options': 'nosniff'
+    });
+    res.end(data);
+  } catch {
+    res.writeHead(404, { 'Content-Type': 'text/plain' });
+    res.end('404 Not Found');
+  }
+}).listen(PORT, () => {
+  console.log(`Server running at http://localhost:${PORT}`);
+});
