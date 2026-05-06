@@ -1,0 +1,135 @@
+name: elmridgedental
+region: nyc
+
+services:
+  - name: web
+    github:
+      repo: jeffmuszynski/elmridgedental
+      branch: main
+      deploy_on_push: true
+    dockerfile_path: Dockerfile
+    source_dir: /
+    http_port: 8080
+    instance_count: 1
+    instance_size_slug: apps-s-1vcpu-0.5gb
+
+ingress:
+  rules:
+    - match:
+        path:
+          prefix: /dentalimplants
+      redirect:
+        uri: /dental-implants-killeen-tx
+        authority: www.elmridgedental.com
+        scheme: https
+        redirect_code: 301
+    - match:
+        path:
+          prefix: /contact-us
+      redirect:
+        uri: /
+        authority: www.elmridgedental.com
+        scheme: https
+        redirect_code: 301
+    - match:
+        path:
+          prefix: /reviews
+      redirect:
+        uri: /
+        authority: www.elmridgedental.com
+        scheme: https
+        redirect_code: 301
+    - match:
+        path:
+          prefix: /before-and-after
+      redirect:
+        uri: /
+        authority: www.elmridgedental.com
+        scheme: https
+        redirect_code: 301
+    - match:
+        path:
+          prefix: /cosmeticdentistry
+      redirect:
+        uri: /cosmetic-dentistry-killeen-tx
+        authority: www.elmridgedental.com
+        scheme: https
+        redirect_code: 301
+    - match:
+        path:
+          prefix: /invisalign
+      redirect:
+        uri: /invisalign-killeen-tx
+        authority: www.elmridgedental.com
+        scheme: https
+        redirect_code: 301
+    - match:
+        path:
+          prefix: /rootcanals
+      redirect:
+        uri: /root-canal-killeen-tx
+        authority: www.elmridgedental.com
+        scheme: https
+        redirect_code: 301
+    - match:
+        path:
+          prefix: /dentures
+      redirect:
+        uri: /dentures-killeen-tx
+        authority: www.elmridgedental.com
+        scheme: https
+        redirect_code: 301
+    - match:
+        path:
+          prefix: /extractions
+      redirect:
+        uri: /emergency-dentist-killeen-tx
+        authority: www.elmridgedental.com
+        scheme: https
+        redirect_code: 301
+    - match:
+        path:
+          prefix: /generaldentistry
+      redirect:
+        uri: /
+        authority: www.elmridgedental.com
+        scheme: https
+        redirect_code: 301
+    - match:
+        path:
+          prefix: /cleanings
+      redirect:
+        uri: /
+        authority: www.elmridgedental.com
+        scheme: https
+        redirect_code: 301
+    - match:
+        path:
+          prefix: /wellnessexams
+      redirect:
+        uri: /
+        authority: www.elmridgedental.com
+        scheme: https
+        redirect_code: 301
+    - match:
+        path:
+          prefix: /sedation
+      redirect:
+        uri: /
+        authority: www.elmridgedental.com
+        scheme: https
+        redirect_code: 301
+    - match:
+        authority:
+          exact: elmridgedental.com
+        path:
+          prefix: /
+      redirect:
+        authority: www.elmridgedental.com
+        scheme: https
+        redirect_code: 301
+    - match:
+        path:
+          prefix: /
+      component:
+        name: web

@@ -4,6 +4,8 @@ Canonical domain: `https://www.elmridgedental.com`
 
 These old indexed URLs were detected from search results for `elmridgedental.com` and mapped to the closest relevant current page. Redirects are implemented in `serve.mjs` so the DigitalOcean-hosted Node server returns direct one-hop `301` responses.
 
+Production diagnosis: the live DigitalOcean App Platform deployment appeared to be serving the repository as a static site, so `serve.mjs` was not active in production. That is why `/dentalimplants` still returned a static-host 404 even though the local Node server redirected correctly. The repo now includes a `Dockerfile` and `.do/app.yaml` web service spec so DigitalOcean can run `node serve.mjs` as the production entry point.
+
 | Old URL | 301 destination | Notes |
 | --- | --- | --- |
 | `https://www.elmridgedental.com/contact-us` | `https://www.elmridgedental.com/#contact` | Contact section replacement. |
