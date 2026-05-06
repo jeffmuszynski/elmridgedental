@@ -696,7 +696,7 @@
           <p class="font-body text-xs tracking-widest uppercase text-teal-dark mb-3">Get Started</p>
           <h2 class="font-display text-4xl md:text-5xl font-light italic text-charcoal mb-10 leading-snug">Request an<br />Appointment.</h2>
           <form id="appointment-form" class="space-y-5" action="https://formsubmit.co/ajax/contact@elmridgedental.com" method="POST">
-            <input type="hidden" name="_subject" value="WEBSITE APPOINTMENT REQUEST" />
+            <input type="hidden" name="_subject" id="form-email-subject" value="WEBSITE APPOINTMENT REQUEST" />
             <input type="hidden" name="_template" value="table" />
             <input type="hidden" name="_captcha" value="false" />
             <input type="hidden" name="Patient name" id="form-patient-name" value="" />
@@ -979,6 +979,7 @@
       if (appointmentForm) {
         const submitButton = document.getElementById('appointment-submit');
         const formStatus = document.getElementById('appointment-form-status');
+        const emailSubjectField = document.getElementById('form-email-subject');
         const patientNameField = document.getElementById('form-patient-name');
         const sourcePageField = document.getElementById('form-source-page');
         const submittedAtField = document.getElementById('form-submitted-at');
@@ -1010,9 +1011,17 @@
 
           const firstName = appointmentForm.querySelector('[name="First name"]')?.value.trim() || '';
           const lastName = appointmentForm.querySelector('[name="Last name"]')?.value.trim() || '';
-          if (patientNameField) patientNameField.value = `${firstName} ${lastName}`.trim();
+          const patientName = `${firstName} ${lastName}`.trim();
+          const requestedService = appointmentForm.querySelector('[name="Service of interest"]')?.value.trim() || '';
+          const submittedAt = new Date().toLocaleString();
+          const subjectParts = ['WEBSITE APPOINTMENT REQUEST'];
+          if (patientName) subjectParts.push(patientName);
+          if (requestedService) subjectParts.push(requestedService);
+
+          if (emailSubjectField) emailSubjectField.value = subjectParts.join(' - ');
+          if (patientNameField) patientNameField.value = patientName;
           if (sourcePageField) sourcePageField.value = window.location.href;
-          if (submittedAtField) submittedAtField.value = new Date().toLocaleString();
+          if (submittedAtField) submittedAtField.value = submittedAt;
 
           const formData = new FormData(appointmentForm);
 
