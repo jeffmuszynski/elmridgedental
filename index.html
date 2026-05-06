@@ -716,7 +716,8 @@
               <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
                   <label for="appointment-phone" class="block font-body text-xs tracking-widest uppercase text-charcoal/50 mb-2">Phone</label>
-                  <input id="appointment-phone" name="Phone" type="tel" placeholder="254-699-4127" autocomplete="tel" required class="w-full px-4 py-3 border border-teal-light bg-stone text-charcoal font-body text-sm placeholder:text-charcoal/30 focus:outline-none focus:border-teal transition-[border-color] duration-200" />
+                  <input id="appointment-phone" name="Phone" type="tel" placeholder="254-699-4127" autocomplete="tel" inputmode="tel" required aria-describedby="appointment-phone-error" class="w-full px-4 py-3 border border-teal-light bg-stone text-charcoal font-body text-sm placeholder:text-charcoal/30 focus:outline-none focus:border-teal transition-[border-color] duration-200" />
+                  <p id="appointment-phone-error" class="hidden mt-2 font-body text-xs text-red-700" aria-live="polite">Please enter a valid phone number.</p>
                 </div>
                 <div>
                   <label for="appointment-email" class="block font-body text-xs tracking-widest uppercase text-charcoal/50 mb-2">Email</label>
@@ -765,7 +766,7 @@
                 Send Appointment Request
               </button>
               <p class="font-body text-xs text-charcoal/45 leading-relaxed">Please do not include sensitive medical or personal health information in this form. This form is intended for general appointment requests and communication only.</p>
-              <p id="appointment-form-status" class="hidden font-body text-sm leading-relaxed" role="status" aria-live="polite"></p>
+              <div id="appointment-form-status" class="hidden border border-teal-light bg-teal-pale/60 p-5 font-body text-base leading-relaxed text-charcoal shadow-sm focus:outline-none focus:ring-2 focus:ring-teal" role="status" aria-live="polite" tabindex="-1"></div>
             </form>
         </div>
 
@@ -979,6 +980,8 @@
       if (appointmentForm) {
         const submitButton = document.getElementById('appointment-submit');
         const formStatus = document.getElementById('appointment-form-status');
+        const phoneInput = document.getElementById('appointment-phone');
+        const phoneError = document.getElementById('appointment-phone-error');
         const emailSubjectField = document.getElementById('form-email-subject');
         const patientNameField = document.getElementById('form-patient-name');
         const sourcePageField = document.getElementById('form-source-page');
@@ -988,12 +991,37 @@
         const showFormStatus = (message, type) => {
           if (!formStatus) return;
           formStatus.textContent = message;
-          formStatus.classList.remove('hidden', 'text-teal-dark', 'text-red-700');
-          formStatus.classList.add(type === 'success' ? 'text-teal-dark' : 'text-red-700');
+          formStatus.classList.remove('hidden', 'border-teal-light', 'bg-teal-pale/60', 'text-charcoal', 'border-red-200', 'bg-red-50', 'text-red-800');
+          formStatus.classList.add(...(type === 'success'
+            ? ['border-teal-light', 'bg-teal-pale/60', 'text-charcoal']
+            : ['border-red-200', 'bg-red-50', 'text-red-800']));
+          formStatus.scrollIntoView({ behavior: 'smooth', block: 'center' });
+          formStatus.focus({ preventScroll: true });
         };
+
+        const validatePhoneNumber = () => {
+          if (!phoneInput) return true;
+          const digits = phoneInput.value.replace(/\D/g, '');
+          const isValid = digits.length >= 10;
+          phoneInput.setAttribute('aria-invalid', isValid ? 'false' : 'true');
+          phoneInput.classList.toggle('border-red-500', !isValid);
+          phoneInput.classList.toggle('border-teal-light', isValid);
+          if (phoneError) phoneError.classList.toggle('hidden', isValid);
+          return isValid;
+        };
+
+        phoneInput?.addEventListener('input', () => {
+          if (phoneInput.getAttribute('aria-invalid') === 'true') validatePhoneNumber();
+        });
 
         appointmentForm.addEventListener('submit', async event => {
           event.preventDefault();
+          const phoneIsValid = validatePhoneNumber();
+          if (!phoneIsValid) {
+            phoneInput?.focus();
+            return;
+          }
+
           if (!appointmentForm.checkValidity()) {
             appointmentForm.reportValidity();
             return;
