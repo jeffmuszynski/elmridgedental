@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://www.elmridgeimplantdentistry.com/sitemap.xml
+Sitemap: https://www.elmridgedental.com/sitemap.xml

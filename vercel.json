@@ -1,0 +1,15 @@
+{
+  "redirects": [
+    {
+      "source": "/:path*",
+      "has": [
+        {
+          "type": "host",
+          "value": "elmridgedental.com"
+        }
+      ],
+      "destination": "https://www.elmridgedental.com/:path*",
+      "permanent": true
+    }
+  ]
+}
