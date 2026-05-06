@@ -695,30 +695,37 @@
         <div>
           <p class="font-body text-xs tracking-widest uppercase text-teal-dark mb-3">Get Started</p>
           <h2 class="font-display text-4xl md:text-5xl font-light italic text-charcoal mb-10 leading-snug">Request an<br />Appointment.</h2>
-          <form id="appointment-form" class="space-y-5">
-            <div class="grid grid-cols-2 gap-4">
-              <div>
-                <label class="block font-body text-xs tracking-widest uppercase text-charcoal/50 mb-2">First Name</label>
-                <input name="First name" type="text" placeholder="Jane" class="w-full px-4 py-3 border border-teal-light bg-stone text-charcoal font-body text-sm placeholder:text-charcoal/30 focus:outline-none focus:border-teal transition-[border-color] duration-200" />
+          <form id="appointment-form" class="space-y-5" action="https://formsubmit.co/ajax/contact@elmridgedental.com" method="POST">
+            <input type="hidden" name="_subject" value="WEBSITE APPOINTMENT REQUEST" />
+            <input type="hidden" name="_template" value="table" />
+            <input type="hidden" name="_captcha" value="false" />
+            <input type="hidden" name="Patient name" id="form-patient-name" value="" />
+            <input type="hidden" name="Source page URL" id="form-source-page" value="" />
+            <input type="hidden" name="Date/time submitted" id="form-submitted-at" value="" />
+            <input type="text" name="_honey" class="hidden" tabindex="-1" autocomplete="off" aria-hidden="true" />
+              <div class="grid grid-cols-2 gap-4">
+                <div>
+                  <label for="appointment-first-name" class="block font-body text-xs tracking-widest uppercase text-charcoal/50 mb-2">First Name</label>
+                  <input id="appointment-first-name" name="First name" type="text" placeholder="Jane" autocomplete="given-name" required class="w-full px-4 py-3 border border-teal-light bg-stone text-charcoal font-body text-sm placeholder:text-charcoal/30 focus:outline-none focus:border-teal transition-[border-color] duration-200" />
+                </div>
+                <div>
+                  <label for="appointment-last-name" class="block font-body text-xs tracking-widest uppercase text-charcoal/50 mb-2">Last Name</label>
+                  <input id="appointment-last-name" name="Last name" type="text" placeholder="Smith" autocomplete="family-name" required class="w-full px-4 py-3 border border-teal-light bg-stone text-charcoal font-body text-sm placeholder:text-charcoal/30 focus:outline-none focus:border-teal transition-[border-color] duration-200" />
+                </div>
+              </div>
+              <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div>
+                  <label for="appointment-phone" class="block font-body text-xs tracking-widest uppercase text-charcoal/50 mb-2">Phone</label>
+                  <input id="appointment-phone" name="Phone" type="tel" placeholder="254-699-4127" autocomplete="tel" required class="w-full px-4 py-3 border border-teal-light bg-stone text-charcoal font-body text-sm placeholder:text-charcoal/30 focus:outline-none focus:border-teal transition-[border-color] duration-200" />
+                </div>
+                <div>
+                  <label for="appointment-email" class="block font-body text-xs tracking-widest uppercase text-charcoal/50 mb-2">Email</label>
+                  <input id="appointment-email" name="Email" type="email" placeholder="jane@example.com" autocomplete="email" required class="w-full px-4 py-3 border border-teal-light bg-stone text-charcoal font-body text-sm placeholder:text-charcoal/30 focus:outline-none focus:border-teal transition-[border-color] duration-200" />
+                </div>
               </div>
               <div>
-                <label class="block font-body text-xs tracking-widest uppercase text-charcoal/50 mb-2">Last Name</label>
-                <input name="Last name" type="text" placeholder="Smith" class="w-full px-4 py-3 border border-teal-light bg-stone text-charcoal font-body text-sm placeholder:text-charcoal/30 focus:outline-none focus:border-teal transition-[border-color] duration-200" />
-              </div>
-            </div>
-            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              <div>
-                <label class="block font-body text-xs tracking-widest uppercase text-charcoal/50 mb-2">Phone</label>
-                <input name="Phone" type="tel" placeholder="254-699-4127" class="w-full px-4 py-3 border border-teal-light bg-stone text-charcoal font-body text-sm placeholder:text-charcoal/30 focus:outline-none focus:border-teal transition-[border-color] duration-200" />
-              </div>
-              <div>
-                <label class="block font-body text-xs tracking-widest uppercase text-charcoal/50 mb-2">Email</label>
-                <input name="Email" type="email" placeholder="jane@example.com" class="w-full px-4 py-3 border border-teal-light bg-stone text-charcoal font-body text-sm placeholder:text-charcoal/30 focus:outline-none focus:border-teal transition-[border-color] duration-200" />
-              </div>
-            </div>
-            <div>
-              <label class="block font-body text-xs tracking-widest uppercase text-charcoal/50 mb-2">Service of Interest</label>
-              <select name="Service of interest" class="w-full px-4 py-3 border border-teal-light bg-stone text-charcoal font-body text-sm focus:outline-none focus:border-teal transition-[border-color] duration-200 appearance-none">
+                <label for="appointment-service" class="block font-body text-xs tracking-widest uppercase text-charcoal/50 mb-2">Service of Interest</label>
+                <select id="appointment-service" name="Service of interest" required class="w-full px-4 py-3 border border-teal-light bg-stone text-charcoal font-body text-sm focus:outline-none focus:border-teal transition-[border-color] duration-200 appearance-none">
                 <option value="">Select a service…</option>
                 <option>New Patient Exam &amp; Cleaning</option>
                 <option>Dental Implants</option>
@@ -730,10 +737,10 @@
                 <option>Emergency Care</option>
                 <option>Other</option>
               </select>
-            </div>
-            <div>
-              <label class="block font-body text-xs tracking-widest uppercase text-charcoal/50 mb-2">Do You Have Dental Insurance?</label>
-              <select id="insurance-toggle" name="Has dental insurance" class="w-full px-4 py-3 border border-teal-light bg-stone text-charcoal font-body text-sm focus:outline-none focus:border-teal transition-[border-color] duration-200 appearance-none">
+              </div>
+              <div>
+                <label for="insurance-toggle" class="block font-body text-xs tracking-widest uppercase text-charcoal/50 mb-2">Do You Have Dental Insurance?</label>
+                <select id="insurance-toggle" name="Has dental insurance" class="w-full px-4 py-3 border border-teal-light bg-stone text-charcoal font-body text-sm focus:outline-none focus:border-teal transition-[border-color] duration-200 appearance-none">
                 <option value="">Select an option...</option>
                 <option>No</option>
                 <option>Yes</option>
@@ -749,15 +756,17 @@
                 <input aria-label="Subscriber date of birth" name="Subscriber date of birth" type="text" placeholder="Subscriber date of birth" class="w-full px-4 py-3 border border-teal-light bg-white text-charcoal font-body text-sm placeholder:text-charcoal/35 focus:outline-none focus:border-teal transition-[border-color] duration-200" />
                 <input aria-label="Insurance phone number" name="Insurance phone" type="text" placeholder="Insurance phone number" class="w-full px-4 py-3 border border-teal-light bg-white text-charcoal font-body text-sm placeholder:text-charcoal/35 focus:outline-none focus:border-teal transition-[border-color] duration-200" />
               </div>
-            </div>
-            <div>
-              <label class="block font-body text-xs tracking-widest uppercase text-charcoal/50 mb-2">Message</label>
-              <textarea rows="4" placeholder="Tell us a bit about what brings you in…" class="w-full px-4 py-3 border border-teal-light bg-stone text-charcoal font-body text-sm placeholder:text-charcoal/30 focus:outline-none focus:border-teal transition-[border-color] duration-200 resize-none"></textarea>
-            </div>
-            <button type="submit" class="w-full px-8 py-4 bg-teal text-white font-body font-semibold tracking-widest uppercase text-xs hover:bg-teal-dark active:scale-95 transition-[background-color,transform] duration-200 ease-out focus-visible:outline focus-visible:outline-2 focus-visible:outline-teal-dark">
-              Send Appointment Request
-            </button>
-          </form>
+              </div>
+              <div>
+                <label for="appointment-message" class="block font-body text-xs tracking-widest uppercase text-charcoal/50 mb-2">Message</label>
+                <textarea id="appointment-message" name="Message" rows="4" placeholder="Tell us a bit about what brings you in…" class="w-full px-4 py-3 border border-teal-light bg-stone text-charcoal font-body text-sm placeholder:text-charcoal/30 focus:outline-none focus:border-teal transition-[border-color] duration-200 resize-none"></textarea>
+              </div>
+              <button id="appointment-submit" type="submit" class="w-full px-8 py-4 bg-teal text-white font-body font-semibold tracking-widest uppercase text-xs hover:bg-teal-dark active:scale-95 transition-[background-color,transform] duration-200 ease-out focus-visible:outline focus-visible:outline-2 focus-visible:outline-teal-dark disabled:opacity-70 disabled:cursor-not-allowed">
+                Send Appointment Request
+              </button>
+              <p class="font-body text-xs text-charcoal/45 leading-relaxed">Please do not include sensitive medical or personal health information in this form. This form is intended for general appointment requests and communication only.</p>
+              <p id="appointment-form-status" class="hidden font-body text-sm leading-relaxed" role="status" aria-live="polite"></p>
+            </form>
         </div>
 
         <div class="pt-1">
@@ -967,19 +976,68 @@
       });
     }
 
-    if (appointmentForm) {
-      appointmentForm.addEventListener('submit', event => {
-        event.preventDefault();
-        const formData = new FormData(appointmentForm);
-        const lines = ['New appointment request from elmridgedental.com', ''];
-        for (const [label, value] of formData.entries()) {
-          if (value && String(value).trim()) lines.push(`${label}: ${value}`);
-        }
-        const subject = encodeURIComponent('New appointment request');
-        const body = encodeURIComponent(lines.join('\n'));
-        window.location.href = `mailto:contact@elmridgedental.com?subject=${subject}&body=${body}`;
-      });
-    }
+      if (appointmentForm) {
+        const submitButton = document.getElementById('appointment-submit');
+        const formStatus = document.getElementById('appointment-form-status');
+        const patientNameField = document.getElementById('form-patient-name');
+        const sourcePageField = document.getElementById('form-source-page');
+        const submittedAtField = document.getElementById('form-submitted-at');
+        const defaultSubmitText = submitButton ? submitButton.textContent.trim() : 'Send Appointment Request';
+
+        const showFormStatus = (message, type) => {
+          if (!formStatus) return;
+          formStatus.textContent = message;
+          formStatus.classList.remove('hidden', 'text-teal-dark', 'text-red-700');
+          formStatus.classList.add(type === 'success' ? 'text-teal-dark' : 'text-red-700');
+        };
+
+        appointmentForm.addEventListener('submit', async event => {
+          event.preventDefault();
+          if (!appointmentForm.checkValidity()) {
+            appointmentForm.reportValidity();
+            return;
+          }
+
+          if (submitButton) {
+            submitButton.disabled = true;
+            submitButton.textContent = 'Sending...';
+          }
+
+          if (formStatus) {
+            formStatus.classList.add('hidden');
+            formStatus.textContent = '';
+          }
+
+          const firstName = appointmentForm.querySelector('[name="First name"]')?.value.trim() || '';
+          const lastName = appointmentForm.querySelector('[name="Last name"]')?.value.trim() || '';
+          if (patientNameField) patientNameField.value = `${firstName} ${lastName}`.trim();
+          if (sourcePageField) sourcePageField.value = window.location.href;
+          if (submittedAtField) submittedAtField.value = new Date().toLocaleString();
+
+          const formData = new FormData(appointmentForm);
+
+          try {
+            const response = await fetch(appointmentForm.action, {
+              method: 'POST',
+              body: formData,
+              headers: { Accept: 'application/json' },
+            });
+
+            if (!response.ok) throw new Error('Form submission failed');
+
+            appointmentForm.reset();
+            if (insuranceFields) insuranceFields.classList.add('hidden');
+            showFormStatus('Thank you for your submission. Someone from our team will reach out within one business day.', 'success');
+          } catch (error) {
+            showFormStatus('Sorry, something went wrong. Please call our office or try again.', 'error');
+          } finally {
+            if (submitButton) {
+              submitButton.disabled = false;
+              submitButton.textContent = defaultSubmitText;
+            }
+          }
+        });
+      }
 
     const carousel = document.getElementById('ba-carousel');
     const track = document.getElementById('ba-track');
