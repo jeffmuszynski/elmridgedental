@@ -715,14 +715,18 @@
         <div>
           <p class="font-body text-xs tracking-widest uppercase text-teal-dark mb-3">Get Started</p>
           <h2 class="font-display text-4xl md:text-5xl font-light italic text-charcoal mb-10 leading-snug">Request an<br />Appointment.</h2>
-          <form id="appointment-form" class="space-y-5" action="https://formsubmit.co/ajax/contact@elmridgedental.com" method="POST">
+          <form id="appointment-form" class="space-y-5" action="/api/contact" method="POST">
             <input type="hidden" name="_subject" id="form-email-subject" value="WEBSITE APPOINTMENT REQUEST" />
             <input type="hidden" name="_template" value="table" />
             <input type="hidden" name="_captcha" value="false" />
             <input type="hidden" name="Patient name" id="form-patient-name" value="" />
             <input type="hidden" name="Source page URL" id="form-source-page" value="" />
             <input type="hidden" name="Date/time submitted" id="form-submitted-at" value="" />
-            <input type="text" name="_honey" class="hidden" tabindex="-1" autocomplete="off" aria-hidden="true" />
+            <input type="hidden" name="recaptcha_token" id="recaptcha-token" value="" />
+            <div class="absolute left-[-10000px] top-auto h-px w-px overflow-hidden" aria-hidden="true">
+              <label for="appointment-website">Website</label>
+              <input id="appointment-website" type="text" name="website" tabindex="-1" autocomplete="off" />
+            </div>
               <div class="grid grid-cols-2 gap-4">
                 <div>
                   <label for="appointment-first-name" class="block font-body text-xs tracking-widest uppercase text-charcoal/50 mb-2">First Name</label>
@@ -741,7 +745,7 @@
                 </div>
                 <div>
                   <label for="appointment-email" class="block font-body text-xs tracking-widest uppercase text-charcoal/50 mb-2">Email</label>
-                  <input id="appointment-email" name="Email" type="email" placeholder="jane@example.com" autocomplete="email" required class="w-full px-4 py-3 border border-teal-light bg-stone text-charcoal font-body text-base sm:text-sm placeholder:text-charcoal/30 focus:outline-none focus:border-teal transition-[border-color] duration-200" />
+                  <input id="appointment-email" name="Email" type="email" placeholder="Email address" autocomplete="email" required class="w-full px-4 py-3 border border-teal-light bg-stone text-charcoal font-body text-base sm:text-sm placeholder:text-charcoal/30 focus:outline-none focus:border-teal transition-[border-color] duration-200" />
                 </div>
               </div>
               <div>
@@ -969,6 +973,8 @@
   <footer class="bg-charcoal pt-16 pb-8"><div class="max-w-7xl mx-auto px-6"><div class="grid grid-cols-1 md:grid-cols-3 gap-12 mb-12"><div><div class="inline-flex items-center justify-center w-24 h-24 bg-teal overflow-hidden mb-5"><img src="/square logo.webp" alt="Elm Ridge Implant and Family Dentistry logo" class="w-20 h-20 object-contain" loading="lazy" decoding="async" /></div><h3 class="font-display text-xl font-light text-white mb-3" style="letter-spacing:0.04em;">Elm Ridge Implant<br />and Family Dentistry</h3><p class="font-body text-sm text-white/45 leading-relaxed">A practice built on lasting relationships and exceptional care.</p></div><div><p class="font-body text-xs tracking-widest uppercase text-teal mb-5">Navigation</p><ul class="space-y-3"><li><a href="/#services" class="font-body text-sm text-white/55 hover:text-white">Services</a></li><li><a href="/dental-implants-killeen-tx" class="font-body text-sm text-white/55 hover:text-white">Implants</a></li><li><a href="/cosmetic-dentistry-killeen-tx" class="font-body text-sm text-white/55 hover:text-white">Cosmetic</a></li><li><a href="/#team" class="font-body text-sm text-white/55 hover:text-white">Our Doctors</a></li><li><a href="/#before-after" class="font-body text-sm text-white/55 hover:text-white">Before &amp; After</a></li><li><a href="/#contact" class="font-body text-sm text-white/55 hover:text-white">Contact</a></li><li><a href="/blog" class="font-body text-sm text-white/55 hover:text-white">Blog</a></li><li><a href="/accessibility-statement" class="font-body text-sm text-white/55 hover:text-white">Accessibility</a></li></ul></div><div><p class="font-body text-xs tracking-widest uppercase text-teal mb-5">Contact</p><address class="not-italic space-y-3"><p class="font-body text-sm text-white/55">2601 E Elms Rd<br />Killeen, TX 76542</p><p><a href="tel:+12546994127" class="font-body text-sm text-white/55 hover:text-white">254-699-4127</a></p><p class="font-body text-sm text-white/55">Monday - Thursday: 8am - 5pm<br />Friday - Sunday: Closed</p></address></div></div><div class="border-t border-white/10 pt-6 flex flex-col md:flex-row items-center justify-between gap-3"><p class="font-body text-xs text-white/30">&copy; 2026 Elm Ridge Implant and Family Dentistry. All rights reserved.</p><p class="font-body text-xs text-white/30">Designed for the community we serve.</p></div></div></footer>
 
   <script>
+    window.ELM_RIDGE_RECAPTCHA_SITE_KEY = "__RECAPTCHA_SITE_KEY__";
+
     const menuBtn = document.getElementById('menu-btn');
     const mobileMenu = document.getElementById('mobile-menu');
     const iconMenu = document.getElementById('icon-menu');
@@ -1010,7 +1016,9 @@
         const patientNameField = document.getElementById('form-patient-name');
         const sourcePageField = document.getElementById('form-source-page');
         const submittedAtField = document.getElementById('form-submitted-at');
+        const recaptchaTokenField = document.getElementById('recaptcha-token');
         const defaultSubmitText = submitButton ? submitButton.textContent.trim() : 'Send Appointment Request';
+        let recaptchaScriptPromise;
 
         const showFormStatus = (message, type) => {
           if (!formStatus) return;
@@ -1037,6 +1045,39 @@
         phoneInput?.addEventListener('input', () => {
           if (phoneInput.getAttribute('aria-invalid') === 'true') validatePhoneNumber();
         });
+
+        const loadRecaptcha = siteKey => {
+          if (!siteKey) return Promise.resolve(false);
+          if (window.grecaptcha) return Promise.resolve(true);
+          if (!recaptchaScriptPromise) {
+            recaptchaScriptPromise = new Promise(resolve => {
+              const script = document.createElement('script');
+              script.src = `https://www.google.com/recaptcha/api.js?render=${encodeURIComponent(siteKey)}`;
+              script.async = true;
+              script.defer = true;
+              script.onload = () => resolve(true);
+              script.onerror = () => resolve(false);
+              document.head.appendChild(script);
+            });
+          }
+          return recaptchaScriptPromise;
+        };
+
+        const getRecaptchaToken = async () => {
+          const siteKey = window.ELM_RIDGE_RECAPTCHA_SITE_KEY || '';
+          if (!siteKey) return '';
+          const loaded = await loadRecaptcha(siteKey);
+          if (!loaded || !window.grecaptcha) return '';
+          return new Promise(resolve => {
+            window.grecaptcha.ready(async () => {
+              try {
+                resolve(await window.grecaptcha.execute(siteKey, { action: 'contact_form' }));
+              } catch {
+                resolve('');
+              }
+            });
+          });
+        };
 
         appointmentForm.addEventListener('submit', async event => {
           event.preventDefault();
@@ -1075,13 +1116,20 @@
           if (sourcePageField) sourcePageField.value = window.location.href;
           if (submittedAtField) submittedAtField.value = submittedAt;
 
+          const recaptchaToken = await getRecaptchaToken();
+          if (recaptchaTokenField) recaptchaTokenField.value = recaptchaToken;
+
           const formData = new FormData(appointmentForm);
+          const payload = Object.fromEntries(formData.entries());
 
           try {
             const response = await fetch(appointmentForm.action, {
               method: 'POST',
-              body: formData,
-              headers: { Accept: 'application/json' },
+              body: JSON.stringify(payload),
+              headers: {
+                Accept: 'application/json',
+                'Content-Type': 'application/json',
+              },
             });
 
             if (!response.ok) throw new Error('Form submission failed');
