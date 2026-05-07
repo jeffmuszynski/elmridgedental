@@ -2,12 +2,94 @@ import fs from 'fs';
 
 export const domain = 'https://www.elmridgedental.com';
 export const practiceName = 'Elm Ridge Implant and Family Dentistry';
+export const globalDentistSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'Dentist',
+  '@id': 'https://www.elmridgedental.com/#dentist',
+  name: 'Elm Ridge Implant and Family Dentistry',
+  image: 'https://www.elmridgedental.com/Building.webp',
+  url: 'https://www.elmridgedental.com',
+  telephone: '+1-254-699-4127',
+  email: 'contact@elmridgedental.com',
+  priceRange: '$$',
+  address: {
+    '@type': 'PostalAddress',
+    streetAddress: '2601 E. Elms Rd',
+    addressLocality: 'Killeen',
+    addressRegion: 'TX',
+    postalCode: '76542',
+    addressCountry: 'US',
+  },
+  geo: {
+    '@type': 'GeoCoordinates',
+    latitude: 31.0976,
+    longitude: -97.722,
+  },
+  openingHoursSpecification: [
+    {
+      '@type': 'OpeningHoursSpecification',
+      dayOfWeek: ['Monday', 'Tuesday', 'Wednesday', 'Thursday'],
+      opens: '08:00',
+      closes: '17:00',
+    },
+  ],
+  areaServed: [
+    { '@type': 'City', name: 'Killeen' },
+    { '@type': 'City', name: 'Harker Heights' },
+    { '@type': 'City', name: 'Belton' },
+    { '@type': 'City', name: 'Copperas Cove' },
+    { '@type': 'City', name: 'Nolanville' },
+    { '@type': 'City', name: 'Salado' },
+    { '@type': 'City', name: 'Temple' },
+    { '@type': 'Place', name: 'Fort Cavazos' },
+  ],
+  medicalSpecialty: [
+    'Dentistry',
+    'Cosmetic Dentistry',
+    'Implant Dentistry',
+    'Sleep Dentistry',
+  ],
+  sameAs: [
+    'https://www.facebook.com/ElmRidgeDental/',
+    'https://www.yelp.com/biz/elm-ridge-implant-and-family-dentistry-killeen',
+    'https://www.bbb.org/us/tx/killeen/profile/dentist/elm-ridge-implant-and-family-dentistry-0825-1000182119',
+    'https://www.google.com/search?q=Elm+Ridge+Implant+and+Family+Dentistry&kgmid=/g/11gcmpmzf9',
+    'https://killeenchamber.com/ElmRidgeImplantandFamilyDentistry?i=Nzg%3D',
+    'https://nextdoor.com/pages/elm-ridge-implant-and-family-dentistry-killeen-tx/',
+  ],
+  aggregateRating: {
+    '@type': 'AggregateRating',
+    ratingValue: '5.0',
+    reviewCount: '559',
+    bestRating: '5',
+    worstRating: '1',
+  },
+  hasOfferCatalog: {
+    '@type': 'OfferCatalog',
+    name: 'Dental Services',
+    itemListElement: [
+      { '@type': 'Offer', itemOffered: { '@type': 'MedicalProcedure', name: 'Dental Implants', url: 'https://www.elmridgedental.com/dental-implants-killeen-tx' } },
+      { '@type': 'Offer', itemOffered: { '@type': 'MedicalProcedure', name: 'All-on-4 Dental Implants', url: 'https://www.elmridgedental.com/all-on-4-dental-implants-killeen-tx' } },
+      { '@type': 'Offer', itemOffered: { '@type': 'MedicalProcedure', name: 'Full-Arch Dental Implants', url: 'https://www.elmridgedental.com/full-arch-dental-implants-killeen-tx' } },
+      { '@type': 'Offer', itemOffered: { '@type': 'MedicalProcedure', name: 'Single Tooth Implants', url: 'https://www.elmridgedental.com/single-tooth-implant-killeen-tx' } },
+      { '@type': 'Offer', itemOffered: { '@type': 'MedicalProcedure', name: 'Implant Bridges', url: 'https://www.elmridgedental.com/implant-bridges-killeen-tx' } },
+      { '@type': 'Offer', itemOffered: { '@type': 'MedicalProcedure', name: 'Snap-On Dentures', url: 'https://www.elmridgedental.com/snap-on-dentures-killeen-tx' } },
+      { '@type': 'Offer', itemOffered: { '@type': 'MedicalProcedure', name: 'Dentures', url: 'https://www.elmridgedental.com/dentures-killeen-tx' } },
+      { '@type': 'Offer', itemOffered: { '@type': 'MedicalProcedure', name: 'Cosmetic Dentistry', url: 'https://www.elmridgedental.com/cosmetic-dentistry-killeen-tx' } },
+      { '@type': 'Offer', itemOffered: { '@type': 'MedicalProcedure', name: 'Invisalign', url: 'https://www.elmridgedental.com/invisalign-killeen-tx' } },
+      { '@type': 'Offer', itemOffered: { '@type': 'MedicalProcedure', name: 'Dental Crowns', url: 'https://www.elmridgedental.com/dental-crowns-killeen-tx' } },
+      { '@type': 'Offer', itemOffered: { '@type': 'MedicalProcedure', name: 'Root Canals', url: 'https://www.elmridgedental.com/root-canal-killeen-tx' } },
+      { '@type': 'Offer', itemOffered: { '@type': 'MedicalProcedure', name: 'Sleep Dentistry', url: 'https://www.elmridgedental.com/sleep-dentistry-killeen-tx' } },
+      { '@type': 'Offer', itemOffered: { '@type': 'MedicalProcedure', name: 'Emergency Dentistry', url: 'https://www.elmridgedental.com/emergency-dentist-killeen-tx' } },
+    ],
+  },
+};
 
 export function head(title, description, path) {
   const pageTitle = title.includes(practiceName) ? title : `${title} | ${practiceName}`;
   const url = `${domain}${path}`;
   const image = `${domain}/hero%20photo.webp`;
-  return `<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8" /><meta name="viewport" content="width=device-width, initial-scale=1.0" /><title>${pageTitle}</title><meta name="description" content="${description}" /><meta name="robots" content="index, follow" /><link rel="canonical" href="${url}" /><meta property="og:site_name" content="${practiceName}" /><meta property="og:title" content="${pageTitle}" /><meta property="og:description" content="${description}" /><meta property="og:type" content="website" /><meta property="og:url" content="${url}" /><meta property="og:image" content="${image}" /><meta name="twitter:card" content="summary_large_image" /><meta name="twitter:title" content="${pageTitle}" /><meta name="twitter:description" content="${description}" /><meta name="twitter:image" content="${image}" /><link rel="icon" type="image/webp" href="/square logo.webp" /><link rel="preconnect" href="https://fonts.googleapis.com" /><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin /><link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet" /><script src="https://cdn.tailwindcss.com"></script><script>tailwind.config={theme:{extend:{colors:{teal:{DEFAULT:'#7FBDBD',dark:'#5A9A9A',light:'#A8D4D4',pale:'#EAF4F4'},charcoal:'#2C3E3E',stone:'#F5F0EB'},fontFamily:{display:['Cormorant Garamond','Georgia','serif'],body:['DM Sans','system-ui','sans-serif']}}}}</script><style>html{scroll-behavior:smooth}section{scroll-margin-top:120px}.prose-page p{line-height:1.8;color:rgba(44,62,62,.72)}.prose-page h2{font-family:'Cormorant Garamond',Georgia,serif;font-size:2.35rem;line-height:1.1;color:#2C3E3E;margin-top:2rem}.prose-page h3{font-size:1.05rem;font-weight:700;color:#2C3E3E;margin-top:1.5rem}.prose-page a{color:#5A9A9A;font-weight:600}.prose-page ul{list-style:disc;padding-left:1.25rem;color:rgba(44,62,62,.72);line-height:1.8}.prose-page table{width:100%;border-collapse:collapse;background:white}.prose-page th,.prose-page td{border:1px solid #A8D4D4;padding:.9rem;text-align:left;vertical-align:top}.prose-page th{background:#EAF4F4;color:#2C3E3E}.stop-card input{accent-color:#5A9A9A}</style><script type="application/ld+json" data-schema="global-dentist">{"@context":"https://schema.org","@type":"Dentist","@id":"https://www.elmridgedental.com/#dentist","name":"Elm Ridge Implant and Family Dentistry","image":"https://www.elmridgedental.com/Building.webp","url":"https://www.elmridgedental.com","telephone":"+1-254-699-4127","address":{"@type":"PostalAddress","streetAddress":"2601 E. Elms Rd","addressLocality":"Killeen","addressRegion":"TX","postalCode":"76542","addressCountry":"US"},"areaServed":[{"@type":"City","name":"Killeen"},{"@type":"City","name":"Harker Heights"},{"@type":"City","name":"Nolanville"},{"@type":"City","name":"Belton"},{"@type":"City","name":"Salado"}]}</script></head>`;
+  return `<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8" /><meta name="viewport" content="width=device-width, initial-scale=1.0" /><title>${pageTitle}</title><meta name="description" content="${description}" /><meta name="robots" content="index, follow" /><link rel="canonical" href="${url}" /><meta property="og:site_name" content="${practiceName}" /><meta property="og:title" content="${pageTitle}" /><meta property="og:description" content="${description}" /><meta property="og:type" content="website" /><meta property="og:url" content="${url}" /><meta property="og:image" content="${image}" /><meta name="twitter:card" content="summary_large_image" /><meta name="twitter:title" content="${pageTitle}" /><meta name="twitter:description" content="${description}" /><meta name="twitter:image" content="${image}" /><link rel="icon" type="image/webp" href="/square logo.webp" /><link rel="preconnect" href="https://fonts.googleapis.com" /><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin /><link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet" /><script src="https://cdn.tailwindcss.com"></script><script>tailwind.config={theme:{extend:{colors:{teal:{DEFAULT:'#7FBDBD',dark:'#5A9A9A',light:'#A8D4D4',pale:'#EAF4F4'},charcoal:'#2C3E3E',stone:'#F5F0EB'},fontFamily:{display:['Cormorant Garamond','Georgia','serif'],body:['DM Sans','system-ui','sans-serif']}}}}</script><style>html{scroll-behavior:smooth}section{scroll-margin-top:120px}.prose-page p{line-height:1.8;color:rgba(44,62,62,.72)}.prose-page h2{font-family:'Cormorant Garamond',Georgia,serif;font-size:2.35rem;line-height:1.1;color:#2C3E3E;margin-top:2rem}.prose-page h3{font-size:1.05rem;font-weight:700;color:#2C3E3E;margin-top:1.5rem}.prose-page a{color:#5A9A9A;font-weight:600}.prose-page ul{list-style:disc;padding-left:1.25rem;color:rgba(44,62,62,.72);line-height:1.8}.prose-page table{width:100%;border-collapse:collapse;background:white}.prose-page th,.prose-page td{border:1px solid #A8D4D4;padding:.9rem;text-align:left;vertical-align:top}.prose-page th{background:#EAF4F4;color:#2C3E3E}.stop-card input{accent-color:#5A9A9A}</style><script type="application/ld+json" data-schema="global-dentist">${JSON.stringify(globalDentistSchema)}</script></head>`;
 }
 
 export function header() {
