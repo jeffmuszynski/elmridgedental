@@ -194,10 +194,18 @@ function patchNavFooter(html) {
 }
 
 function patchHomeServices(html) {
-  if (html.includes('href="/faq"') && html.includes('Questions before your visit? Read our FAQ.')) return html;
+  if (!html.includes('Complete Care,<br />All in One Practice.')) return html;
   return html.replace(
-    'From routine checkups to complex restorations, Elm Ridge offers comprehensive dental services under one roof — less referrals, less hassle.\n          </p>',
-    'From routine checkups to complex restorations, Elm Ridge offers comprehensive dental services under one roof — less referrals, less hassle.\n          </p>\n          <p class="font-body text-sm text-charcoal/65 leading-7 mt-4">\n            Questions before your visit? Read our <a href="/faq" class="text-teal-dark font-semibold hover:text-charcoal">FAQ</a> for clear answers about insurance, anxiety, emergencies, implants, and first visits.\n          </p>'
+    /<div class="flex items-center">[\s\S]*?<\/div>\s*<\/div>/,
+    `<div class="flex flex-col justify-center">
+          <p class="font-body text-base text-charcoal/60 leading-relaxed">
+            From routine checkups to complex restorations, Elm Ridge offers comprehensive dental services under one roof — less referrals, less hassle.
+          </p>
+          <p class="font-body text-sm text-charcoal/65 leading-7 mt-4">
+            Questions before your visit? Read our <a href="/faq" class="text-teal-dark font-semibold hover:text-charcoal">FAQ</a> for clear answers about insurance, anxiety, emergencies, implants, and first visits.
+          </p>
+        </div>
+      </div>`
   );
 }
 
