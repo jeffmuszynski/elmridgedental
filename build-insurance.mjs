@@ -96,6 +96,9 @@ shell({
       <p><strong>“In many cases, patients are surprised to find that their out-of-network benefits are very similar to in-network coverage.”</strong></p>
     </div>
     <p>We focus on providing the best care—not limiting treatment based on insurance restrictions. If a plan is out-of-network, we can still help you understand likely benefits and how claims may be filed.</p>
+    <div class="not-prose">
+      <a href="/#contact" class="inline-block bg-teal px-8 py-4 text-center font-body text-xs font-semibold uppercase tracking-widest text-white hover:bg-teal-dark" style="color:#fff;">Call Us to Check Your Benefits</a>
+    </div>
     <h2>Insurance Plans</h2>
     <p>We are in-network with many major dental insurance providers, including:</p>
     <ul><li>Delta Dental</li><li>MetLife</li><li>Cigna</li><li>Aetna</li><li>Guardian</li><li>UnitedHealthcare</li><li>and many more</li></ul>

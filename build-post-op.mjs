@@ -165,6 +165,7 @@ const postOpPages = [
     serviceLabel: 'Root Canal Therapy',
     servicePath: '/root-canal-killeen-tx',
     surgical: false,
+    painControl: true,
     content: [
       { type: 'list', items: [
         'Avoid chewing hard foods on the treated tooth.',
@@ -247,26 +248,14 @@ const postOpPages = [
 ];
 
 function painControlBlock() {
-  return `<aside class="my-8 border border-teal-light bg-teal-pale/60 p-6 sm:p-7">
-    <div class="flex flex-col sm:flex-row gap-5 sm:items-center">
-      <div class="flex h-24 w-full sm:w-36 shrink-0 items-center justify-center bg-white border border-teal-light" role="img" aria-label="Tylenol plus ibuprofen combination therapy placeholder graphic">
-        <svg viewBox="0 0 120 72" class="h-16 w-28 text-teal-dark" aria-hidden="true">
-          <rect x="12" y="27" width="42" height="18" rx="9" fill="none" stroke="currentColor" stroke-width="4"/>
-          <rect x="66" y="27" width="42" height="18" rx="9" fill="none" stroke="currentColor" stroke-width="4"/>
-          <path d="M60 22v28M46 36h28" stroke="currentColor" stroke-width="4" stroke-linecap="round"/>
-        </svg>
-      </div>
-      <div>
-        <p class="font-body text-xs uppercase tracking-widest text-teal-dark mb-2">Tylenol + Ibuprofen Combination Therapy</p>
-        <p class="font-body text-sm sm:text-base leading-7 text-charcoal/70">We recommend alternating Acetaminophen (Tylenol) and Ibuprofen (Motrin) as directed for pain control.<br />If you are unsure whether you can safely take these medications, consult your medical doctor first.</p>
-      </div>
-    </div>
+  return `<aside class="mt-8 border border-teal-light bg-teal-pale/60 p-6 sm:p-7">
+    <img src="/assets/images/tylenol-ibuprofen-schedule.png" alt="Alternating Tylenol and Ibuprofen schedule for post-operative dental pain control" class="mx-auto w-full max-w-[650px] h-auto object-contain" loading="lazy" decoding="async" />
+    <p class="mt-4 text-center font-body text-sm sm:text-base leading-7 text-charcoal/70">If you are unsure whether you can safely take Acetaminophen (Tylenol) or Ibuprofen (Motrin), consult your medical doctor before taking them.</p>
   </aside>`;
 }
 
 function renderContent(page) {
   const pieces = [];
-  if (page.surgical) pieces.push(painControlBlock());
   for (const block of page.content) {
     if (block.type === 'heading') {
       pieces.push(`<h3 class="font-body text-base font-semibold text-charcoal mt-7 mb-3">${block.text}</h3>`);
@@ -274,11 +263,12 @@ function renderContent(page) {
       pieces.push(`<ul class="space-y-2 text-charcoal/70 leading-7">${block.items.map(item => `<li class="flex gap-3"><span class="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-teal"></span><span>${item}</span></li>`).join('')}</ul>`);
     }
   }
+  if (page.surgical || page.painControl) pieces.push(painControlBlock());
   return pieces.join('');
 }
 
 function pageCard(page, expanded = false) {
-  return `<details class="group bg-white border border-teal-light/80 shadow-[0_18px_55px_rgba(44,62,62,0.05)]" ${expanded ? 'open' : ''}>
+  return `<details id="${page.slug}" data-post-op-section="${page.slug}" class="group scroll-mt-28 bg-white border border-teal-light/80 shadow-[0_18px_55px_rgba(44,62,62,0.05)]" ${expanded ? 'open' : ''}>
     <summary class="flex cursor-pointer list-none items-center justify-between gap-4 px-5 py-5 sm:px-7">
       <span class="font-display text-2xl sm:text-3xl text-charcoal">${page.title}</span>
       <span class="grid h-9 w-9 shrink-0 place-items-center rounded-full bg-teal-pale text-teal-dark transition-transform group-open:rotate-45" aria-hidden="true">+</span>
@@ -291,6 +281,27 @@ function pageCard(page, expanded = false) {
       </div>
     </div>
   </details>`;
+}
+
+function hubHashScript() {
+  const slugs = postOpPages.map(page => page.slug);
+  return `<script>
+(() => {
+  const validSections = new Set(${JSON.stringify(slugs)});
+  const openFromHash = () => {
+    const hash = decodeURIComponent(window.location.hash || '').replace(/^#/, '');
+    const sections = document.querySelectorAll('[data-post-op-section]');
+    sections.forEach(section => { section.open = false; });
+    if (!validSections.has(hash)) return;
+    const target = document.getElementById(hash);
+    if (!target) return;
+    target.open = true;
+    window.requestAnimationFrame(() => target.scrollIntoView({ behavior: 'smooth', block: 'start' }));
+  };
+  window.addEventListener('DOMContentLoaded', openFromHash);
+  window.addEventListener('hashchange', openFromHash);
+})();
+</script>`;
 }
 
 function fullPage(page) {
@@ -345,7 +356,7 @@ ${header()}
   <section class="py-16 bg-stone">
     <div class="max-w-4xl mx-auto px-6">
       <div class="space-y-4">
-        ${postOpPages.map((page, index) => pageCard(page, index === 0)).join('')}
+        ${postOpPages.map(page => pageCard(page)).join('')}
       </div>
     </div>
   </section>
@@ -353,6 +364,7 @@ ${header()}
 ${footer()}
 ${breadcrumb(path, 'Post-Operative Instructions')}
 <script src="/accessibility.js" defer></script>
+${hubHashScript()}
 ${menuScript}
 </body></html>`;
 }
@@ -367,23 +379,37 @@ function insertFooterLink(html) {
 
 function addServicePostOpLinks() {
   const snippets = [
-    ['dental-implants-killeen-tx', '<section class="py-12 bg-stone"><div class="max-w-4xl mx-auto px-6 border border-teal-light bg-white p-7"><h2 class="font-display text-3xl text-charcoal mb-3">After Implant Treatment</h2><p class="text-charcoal/65 leading-7 mb-5">Review healing instructions for dental implant surgery and bone grafting before or after your appointment.</p><div class="flex flex-col sm:flex-row gap-3"><a href="/post-op/implants" class="inline-block bg-teal px-6 py-3 text-center font-body text-xs font-semibold uppercase tracking-widest text-white">Dental Implant Instructions</a><a href="/post-op/bone-graft" class="inline-block border border-teal px-6 py-3 text-center font-body text-xs font-semibold uppercase tracking-widest text-teal-dark">Bone Graft Instructions</a></div></div></section>'],
-    ['single-tooth-implant-killeen-tx', '<section class="py-12 bg-stone"><div class="max-w-4xl mx-auto px-6 border border-teal-light bg-white p-7"><h2 class="font-display text-3xl text-charcoal mb-3">After Implant Treatment</h2><p class="text-charcoal/65 leading-7 mb-5">Review healing instructions for dental implant surgery and bone grafting before or after your appointment.</p><div class="flex flex-col sm:flex-row gap-3"><a href="/post-op/implants" class="inline-block bg-teal px-6 py-3 text-center font-body text-xs font-semibold uppercase tracking-widest text-white">Dental Implant Instructions</a><a href="/post-op/bone-graft" class="inline-block border border-teal px-6 py-3 text-center font-body text-xs font-semibold uppercase tracking-widest text-teal-dark">Bone Graft Instructions</a></div></div></section>'],
-    ['implant-bridges-killeen-tx', '<section class="py-12 bg-stone"><div class="max-w-4xl mx-auto px-6 border border-teal-light bg-white p-7"><h2 class="font-display text-3xl text-charcoal mb-3">After Implant Treatment</h2><p class="text-charcoal/65 leading-7 mb-5">Review healing instructions for dental implant surgery and bone grafting before or after your appointment.</p><div class="flex flex-col sm:flex-row gap-3"><a href="/post-op/implants" class="inline-block bg-teal px-6 py-3 text-center font-body text-xs font-semibold uppercase tracking-widest text-white">Dental Implant Instructions</a><a href="/post-op/bone-graft" class="inline-block border border-teal px-6 py-3 text-center font-body text-xs font-semibold uppercase tracking-widest text-teal-dark">Bone Graft Instructions</a></div></div></section>'],
-    ['full-arch-dental-implants-killeen-tx', '<section class="py-12 bg-stone"><div class="max-w-4xl mx-auto px-6 border border-teal-light bg-white p-7"><h2 class="font-display text-3xl text-charcoal mb-3">After Implant Treatment</h2><p class="text-charcoal/65 leading-7 mb-5">Review healing instructions for dental implant surgery and bone grafting before or after your appointment.</p><div class="flex flex-col sm:flex-row gap-3"><a href="/post-op/implants" class="inline-block bg-teal px-6 py-3 text-center font-body text-xs font-semibold uppercase tracking-widest text-white">Dental Implant Instructions</a><a href="/post-op/bone-graft" class="inline-block border border-teal px-6 py-3 text-center font-body text-xs font-semibold uppercase tracking-widest text-teal-dark">Bone Graft Instructions</a></div></div></section>'],
-    ['all-on-4-dental-implants-killeen-tx', '<section class="py-12 bg-stone"><div class="max-w-4xl mx-auto px-6 border border-teal-light bg-white p-7"><h2 class="font-display text-3xl text-charcoal mb-3">After Implant Treatment</h2><p class="text-charcoal/65 leading-7 mb-5">Review healing instructions for dental implant surgery and bone grafting before or after your appointment.</p><div class="flex flex-col sm:flex-row gap-3"><a href="/post-op/implants" class="inline-block bg-teal px-6 py-3 text-center font-body text-xs font-semibold uppercase tracking-widest text-white">Dental Implant Instructions</a><a href="/post-op/bone-graft" class="inline-block border border-teal px-6 py-3 text-center font-body text-xs font-semibold uppercase tracking-widest text-teal-dark">Bone Graft Instructions</a></div></div></section>'],
-    ['snap-on-dentures-killeen-tx', '<section class="py-12 bg-stone"><div class="max-w-4xl mx-auto px-6 border border-teal-light bg-white p-7"><h2 class="font-display text-3xl text-charcoal mb-3">After Implant Denture Treatment</h2><p class="text-charcoal/65 leading-7 mb-5">Review implant surgery and denture healing instructions before or after your appointment.</p><div class="flex flex-col sm:flex-row gap-3"><a href="/post-op/implants" class="inline-block bg-teal px-6 py-3 text-center font-body text-xs font-semibold uppercase tracking-widest text-white">Dental Implant Instructions</a><a href="/post-op/immediate-dentures" class="inline-block border border-teal px-6 py-3 text-center font-body text-xs font-semibold uppercase tracking-widest text-teal-dark">Immediate Denture Instructions</a></div></div></section>'],
-    ['dental-crowns-killeen-tx', '<section class="py-12 bg-stone"><div class="max-w-4xl mx-auto px-6 border border-teal-light bg-white p-7"><h2 class="font-display text-3xl text-charcoal mb-3">Temporary Crown Instructions</h2><p class="text-charcoal/65 leading-7 mb-5">If you leave with a temporary crown, these instructions help protect it until your final crown is placed.</p><a href="/post-op/crowns" class="inline-block bg-teal px-6 py-3 text-center font-body text-xs font-semibold uppercase tracking-widest text-white">View Crown Instructions</a></div></section>'],
-    ['root-canal-killeen-tx', '<section class="py-12 bg-stone"><div class="max-w-4xl mx-auto px-6 border border-teal-light bg-white p-7"><h2 class="font-display text-3xl text-charcoal mb-3">After Root Canal Therapy</h2><p class="text-charcoal/65 leading-7 mb-5">Review what to expect after treatment and how to protect the tooth while it heals.</p><a href="/post-op/root-canal" class="inline-block bg-teal px-6 py-3 text-center font-body text-xs font-semibold uppercase tracking-widest text-white">View Root Canal Instructions</a></div></section>'],
-    ['dentures-killeen-tx', '<section class="py-12 bg-stone"><div class="max-w-4xl mx-auto px-6 border border-teal-light bg-white p-7"><h2 class="font-display text-3xl text-charcoal mb-3">Immediate Denture Instructions</h2><p class="text-charcoal/65 leading-7 mb-5">If dentures are placed the day teeth are removed, these instructions explain the first 48 hours and what to expect during healing.</p><a href="/post-op/immediate-dentures" class="inline-block bg-teal px-6 py-3 text-center font-body text-xs font-semibold uppercase tracking-widest text-white">View Immediate Denture Instructions</a></div></section>'],
-    ['cosmetic-dentistry-killeen-tx', '<section class="py-12 bg-stone"><div class="max-w-4xl mx-auto px-6 border border-teal-light bg-white p-7"><h2 class="font-display text-3xl text-charcoal mb-3">After Whitening</h2><p class="text-charcoal/65 leading-7 mb-5">Review whitening instructions for sensitivity, scheduling, and avoiding stains after treatment.</p><a href="/post-op/whitening" class="inline-block bg-teal px-6 py-3 text-center font-body text-xs font-semibold uppercase tracking-widest text-white">View Whitening Instructions</a></div></section>'],
-    ['emergency-dentist-killeen-tx', '<section class="py-12 bg-stone"><div class="max-w-4xl mx-auto px-6 border border-teal-light bg-white p-7"><h2 class="font-display text-3xl text-charcoal mb-3">After Tooth Extractions</h2><p class="text-charcoal/65 leading-7 mb-5">Review extraction instructions for bleeding, swelling, eating, rinsing, and dry socket prevention.</p><a href="/post-op/extractions" class="inline-block bg-teal px-6 py-3 text-center font-body text-xs font-semibold uppercase tracking-widest text-white">View Extraction Instructions</a></div></section>'],
+    ['dental-implants-killeen-tx', '<section class="py-12 bg-stone"><div class="max-w-4xl mx-auto px-6 border border-teal-light bg-white p-7"><h2 class="font-display text-3xl text-charcoal mb-3">After Implant Treatment</h2><p class="text-charcoal/65 leading-7 mb-5">Review healing instructions for dental implant surgery and bone grafting before or after your appointment.</p><div class="flex flex-col sm:flex-row gap-3"><a href="/post-operative-instructions#implants" class="inline-block bg-teal px-6 py-3 text-center font-body text-xs font-semibold uppercase tracking-widest text-white">Dental Implant Instructions</a><a href="/post-operative-instructions#bone-graft" class="inline-block border border-teal px-6 py-3 text-center font-body text-xs font-semibold uppercase tracking-widest text-teal-dark">Bone Graft Instructions</a></div></div></section>'],
+    ['single-tooth-implant-killeen-tx', '<section class="py-12 bg-stone"><div class="max-w-4xl mx-auto px-6 border border-teal-light bg-white p-7"><h2 class="font-display text-3xl text-charcoal mb-3">After Implant Treatment</h2><p class="text-charcoal/65 leading-7 mb-5">Review healing instructions for dental implant surgery and bone grafting before or after your appointment.</p><div class="flex flex-col sm:flex-row gap-3"><a href="/post-operative-instructions#implants" class="inline-block bg-teal px-6 py-3 text-center font-body text-xs font-semibold uppercase tracking-widest text-white">Dental Implant Instructions</a><a href="/post-operative-instructions#bone-graft" class="inline-block border border-teal px-6 py-3 text-center font-body text-xs font-semibold uppercase tracking-widest text-teal-dark">Bone Graft Instructions</a></div></div></section>'],
+    ['implant-bridges-killeen-tx', '<section class="py-12 bg-stone"><div class="max-w-4xl mx-auto px-6 border border-teal-light bg-white p-7"><h2 class="font-display text-3xl text-charcoal mb-3">After Implant Treatment</h2><p class="text-charcoal/65 leading-7 mb-5">Review healing instructions for dental implant surgery and bone grafting before or after your appointment.</p><div class="flex flex-col sm:flex-row gap-3"><a href="/post-operative-instructions#implants" class="inline-block bg-teal px-6 py-3 text-center font-body text-xs font-semibold uppercase tracking-widest text-white">Dental Implant Instructions</a><a href="/post-operative-instructions#bone-graft" class="inline-block border border-teal px-6 py-3 text-center font-body text-xs font-semibold uppercase tracking-widest text-teal-dark">Bone Graft Instructions</a></div></div></section>'],
+    ['full-arch-dental-implants-killeen-tx', '<section class="py-12 bg-stone"><div class="max-w-4xl mx-auto px-6 border border-teal-light bg-white p-7"><h2 class="font-display text-3xl text-charcoal mb-3">After Implant Treatment</h2><p class="text-charcoal/65 leading-7 mb-5">Review healing instructions for dental implant surgery and bone grafting before or after your appointment.</p><div class="flex flex-col sm:flex-row gap-3"><a href="/post-operative-instructions#implants" class="inline-block bg-teal px-6 py-3 text-center font-body text-xs font-semibold uppercase tracking-widest text-white">Dental Implant Instructions</a><a href="/post-operative-instructions#bone-graft" class="inline-block border border-teal px-6 py-3 text-center font-body text-xs font-semibold uppercase tracking-widest text-teal-dark">Bone Graft Instructions</a></div></div></section>'],
+    ['all-on-4-dental-implants-killeen-tx', '<section class="py-12 bg-stone"><div class="max-w-4xl mx-auto px-6 border border-teal-light bg-white p-7"><h2 class="font-display text-3xl text-charcoal mb-3">After Implant Treatment</h2><p class="text-charcoal/65 leading-7 mb-5">Review healing instructions for dental implant surgery and bone grafting before or after your appointment.</p><div class="flex flex-col sm:flex-row gap-3"><a href="/post-operative-instructions#implants" class="inline-block bg-teal px-6 py-3 text-center font-body text-xs font-semibold uppercase tracking-widest text-white">Dental Implant Instructions</a><a href="/post-operative-instructions#bone-graft" class="inline-block border border-teal px-6 py-3 text-center font-body text-xs font-semibold uppercase tracking-widest text-teal-dark">Bone Graft Instructions</a></div></div></section>'],
+    ['snap-on-dentures-killeen-tx', '<section class="py-12 bg-stone"><div class="max-w-4xl mx-auto px-6 border border-teal-light bg-white p-7"><h2 class="font-display text-3xl text-charcoal mb-3">After Implant Denture Treatment</h2><p class="text-charcoal/65 leading-7 mb-5">Review implant surgery and denture healing instructions before or after your appointment.</p><div class="flex flex-col sm:flex-row gap-3"><a href="/post-operative-instructions#implants" class="inline-block bg-teal px-6 py-3 text-center font-body text-xs font-semibold uppercase tracking-widest text-white">Dental Implant Instructions</a><a href="/post-operative-instructions#immediate-dentures" class="inline-block border border-teal px-6 py-3 text-center font-body text-xs font-semibold uppercase tracking-widest text-teal-dark">Immediate Denture Instructions</a></div></div></section>'],
+    ['dental-crowns-killeen-tx', '<section class="py-12 bg-stone"><div class="max-w-4xl mx-auto px-6 border border-teal-light bg-white p-7"><h2 class="font-display text-3xl text-charcoal mb-3">Temporary Crown Instructions</h2><p class="text-charcoal/65 leading-7 mb-5">If you leave with a temporary crown, these instructions help protect it until your final crown is placed.</p><a href="/post-operative-instructions#crowns" class="inline-block bg-teal px-6 py-3 text-center font-body text-xs font-semibold uppercase tracking-widest text-white">View Crown Instructions</a></div></section>'],
+    ['root-canal-killeen-tx', '<section class="py-12 bg-stone"><div class="max-w-4xl mx-auto px-6 border border-teal-light bg-white p-7"><h2 class="font-display text-3xl text-charcoal mb-3">After Root Canal Therapy</h2><p class="text-charcoal/65 leading-7 mb-5">Review what to expect after treatment and how to protect the tooth while it heals.</p><a href="/post-operative-instructions#root-canal" class="inline-block bg-teal px-6 py-3 text-center font-body text-xs font-semibold uppercase tracking-widest text-white">View Root Canal Instructions</a></div></section>'],
+    ['dentures-killeen-tx', '<section class="py-12 bg-stone"><div class="max-w-4xl mx-auto px-6 border border-teal-light bg-white p-7"><h2 class="font-display text-3xl text-charcoal mb-3">Immediate Denture Instructions</h2><p class="text-charcoal/65 leading-7 mb-5">If dentures are placed the day teeth are removed, these instructions explain the first 48 hours and what to expect during healing.</p><a href="/post-operative-instructions#immediate-dentures" class="inline-block bg-teal px-6 py-3 text-center font-body text-xs font-semibold uppercase tracking-widest text-white">View Immediate Denture Instructions</a></div></section>'],
+    ['cosmetic-dentistry-killeen-tx', '<section class="py-12 bg-stone"><div class="max-w-4xl mx-auto px-6 border border-teal-light bg-white p-7"><h2 class="font-display text-3xl text-charcoal mb-3">After Whitening</h2><p class="text-charcoal/65 leading-7 mb-5">Review whitening instructions for sensitivity, scheduling, and avoiding stains after treatment.</p><a href="/post-operative-instructions#whitening" class="inline-block bg-teal px-6 py-3 text-center font-body text-xs font-semibold uppercase tracking-widest text-white">View Whitening Instructions</a></div></section>'],
+    ['emergency-dentist-killeen-tx', '<section class="py-12 bg-stone"><div class="max-w-4xl mx-auto px-6 border border-teal-light bg-white p-7"><h2 class="font-display text-3xl text-charcoal mb-3">After Tooth Extractions</h2><p class="text-charcoal/65 leading-7 mb-5">Review extraction instructions for bleeding, swelling, eating, rinsing, and dry socket prevention.</p><a href="/post-operative-instructions#extractions" class="inline-block bg-teal px-6 py-3 text-center font-body text-xs font-semibold uppercase tracking-widest text-white">View Extraction Instructions</a></div></section>'],
   ];
 
   for (const [file, snippet] of snippets) {
     if (!fs.existsSync(file)) continue;
     let html = fs.readFileSync(file, 'utf8');
-    if (html.includes(snippet)) continue;
+    const originalHtml = html;
+    html = html
+      .replaceAll('href="/post-op/fillings"', 'href="/post-operative-instructions#fillings"')
+      .replaceAll('href="/post-op/crowns"', 'href="/post-operative-instructions#crowns"')
+      .replaceAll('href="/post-op/extractions"', 'href="/post-operative-instructions#extractions"')
+      .replaceAll('href="/post-op/implants"', 'href="/post-operative-instructions#implants"')
+      .replaceAll('href="/post-op/bone-graft"', 'href="/post-operative-instructions#bone-graft"')
+      .replaceAll('href="/post-op/root-canal"', 'href="/post-operative-instructions#root-canal"')
+      .replaceAll('href="/post-op/deep-cleaning"', 'href="/post-operative-instructions#deep-cleaning"')
+      .replaceAll('href="/post-op/whitening"', 'href="/post-operative-instructions#whitening"')
+      .replaceAll('href="/post-op/immediate-dentures"', 'href="/post-operative-instructions#immediate-dentures"');
+    if (html.includes(snippet)) {
+      if (html !== originalHtml) fs.writeFileSync(file, html);
+      continue;
+    }
     html = html.replace('</main>', `${snippet}</main>`);
     fs.writeFileSync(file, html);
   }

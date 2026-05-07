@@ -17,21 +17,10 @@
         <a href="/dental-implants-killeen-tx" class="inline-block bg-teal px-6 py-3 text-center font-body text-xs font-semibold uppercase tracking-widest text-white hover:bg-teal-dark">Dental Implants</a>
       </div>
       <article class="border border-teal-light bg-stone/70 p-6 sm:p-9 shadow-[0_20px_70px_rgba(44,62,62,0.06)]">
-        <aside class="my-8 border border-teal-light bg-teal-pale/60 p-6 sm:p-7">
-    <div class="flex flex-col sm:flex-row gap-5 sm:items-center">
-      <div class="flex h-24 w-full sm:w-36 shrink-0 items-center justify-center bg-white border border-teal-light" role="img" aria-label="Tylenol plus ibuprofen combination therapy placeholder graphic">
-        <svg viewBox="0 0 120 72" class="h-16 w-28 text-teal-dark" aria-hidden="true">
-          <rect x="12" y="27" width="42" height="18" rx="9" fill="none" stroke="currentColor" stroke-width="4"/>
-          <rect x="66" y="27" width="42" height="18" rx="9" fill="none" stroke="currentColor" stroke-width="4"/>
-          <path d="M60 22v28M46 36h28" stroke="currentColor" stroke-width="4" stroke-linecap="round"/>
-        </svg>
-      </div>
-      <div>
-        <p class="font-body text-xs uppercase tracking-widest text-teal-dark mb-2">Tylenol + Ibuprofen Combination Therapy</p>
-        <p class="font-body text-sm sm:text-base leading-7 text-charcoal/70">We recommend alternating Acetaminophen (Tylenol) and Ibuprofen (Motrin) as directed for pain control.<br />If you are unsure whether you can safely take these medications, consult your medical doctor first.</p>
-      </div>
-    </div>
-  </aside><ul class="space-y-2 text-charcoal/70 leading-7"><li class="flex gap-3"><span class="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-teal"></span><span>Follow extraction instructions unless otherwise directed.</span></li><li class="flex gap-3"><span class="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-teal"></span><span>Sutures will always be placed.</span></li><li class="flex gap-3"><span class="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-teal"></span><span>Small graft particles may come out. This is normal.</span></li><li class="flex gap-3"><span class="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-teal"></span><span>Avoid chewing in the area for 3–4 weeks.</span></li></ul>
+        <ul class="space-y-2 text-charcoal/70 leading-7"><li class="flex gap-3"><span class="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-teal"></span><span>Follow extraction instructions unless otherwise directed.</span></li><li class="flex gap-3"><span class="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-teal"></span><span>Sutures will always be placed.</span></li><li class="flex gap-3"><span class="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-teal"></span><span>Small graft particles may come out. This is normal.</span></li><li class="flex gap-3"><span class="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-teal"></span><span>Avoid chewing in the area for 3–4 weeks.</span></li></ul><aside class="mt-8 border border-teal-light bg-teal-pale/60 p-6 sm:p-7">
+    <img src="/assets/images/tylenol-ibuprofen-schedule.png" alt="Alternating Tylenol and Ibuprofen schedule for post-operative dental pain control" class="mx-auto w-full max-w-[650px] h-auto object-contain" loading="lazy" decoding="async" />
+    <p class="mt-4 text-center font-body text-sm sm:text-base leading-7 text-charcoal/70">If you are unsure whether you can safely take Acetaminophen (Tylenol) or Ibuprofen (Motrin), consult your medical doctor before taking them.</p>
+  </aside>
       </article>
     </div>
   </section>
