@@ -186,7 +186,7 @@ createServer(async (req, res) => {
     return;
   }
 
-  let url = requestUrl.pathname;
+  let url = normalizedPath;
   if (url === '/') url = '/index.html';
   const filePath = join(__dirname, decodeURIComponent(url));
   const ext = extname(filePath).toLowerCase();
