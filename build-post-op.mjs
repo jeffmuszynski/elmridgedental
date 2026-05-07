@@ -392,7 +392,7 @@ function hubHashScript() {
 
 function fullPage(page) {
   const path = `/post-op/${page.slug}`;
-  const description = `${page.title} post-operative instructions from Elm Ridge Implant and Family Dentistry in Killeen, TX. Clear guidance for comfortable healing after dental treatment.`;
+  const description = `${page.title} post-operative instructions from Elm Ridge in Killeen, TX with clear guidance for healing, comfort, home care, and when to call us.`;
   return `${head(`${page.title} Post-Operative Instructions`, description, path).replace('content="index, follow"', 'content="noindex, follow"')}
 <body class="font-body text-charcoal bg-stone">
 ${header()}
@@ -427,7 +427,7 @@ ${menuScript}
 
 function hubPage() {
   const path = '/post-operative-instructions';
-  const description = 'Post-operative dental instructions for fillings, temporary crowns, extractions, implants, bone grafts, root canals, deep cleanings, whitening, and immediate dentures.';
+  const description = 'Post-operative dental instructions in Killeen, TX for fillings, crowns, extractions, implants, bone grafts, whitening, and immediate dentures.';
   return `${head('Post-Operative Instructions', description, path)}
 <body class="font-body text-charcoal bg-stone">
 ${header()}

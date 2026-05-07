@@ -3,7 +3,7 @@ import { head, header, footer, menuScript, breadcrumb, faqSchema, domain, practi
 
 const path = '/dentist-nolanville-tx';
 const title = 'Dentist Near Nolanville, TX';
-const description = 'Looking for a dentist near Nolanville, TX? Elm Ridge Implant and Family Dentistry in Killeen offers implants, cosmetic dentistry, emergency care, insurance help, and family dental care.';
+const description = 'Dentist near Nolanville, TX for implants, cosmetic dentistry, emergency care, insurance guidance, and family dental care in nearby Killeen.';
 const faq = [
   ['Do you accept patients from Nolanville?', 'Yes. Elm Ridge Implant and Family Dentistry is located in Killeen and welcomes patients and families from Nolanville.'],
   ['How far is your office from Nolanville?', 'Our office is in Killeen, a short drive from Nolanville with convenient access from nearby local roads.'],

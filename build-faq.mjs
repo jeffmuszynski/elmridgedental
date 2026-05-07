@@ -222,7 +222,7 @@ const flatFaq = faqSections.flatMap((section) => section.qas);
 const body = buildFaqBody();
 const faqHtml = `${head(
   'Dental FAQ — Killeen, TX | Elm Ridge Implant and Family Dentistry',
-  'Answers to the most common dental questions from patients in Killeen, Harker Heights, Belton, and Fort Cavazos. Insurance, costs, procedures, anxiety, emergencies, and more.',
+  'Dental FAQ in Killeen, TX with answers about insurance, costs, procedures, anxiety, emergencies, and first visits from Elm Ridge.',
   '/faq'
 )}<body class="font-body text-charcoal bg-stone">${header()}<main id="main-content"><section class="bg-charcoal text-white py-20"><div class="max-w-5xl mx-auto px-6"><nav class="text-xs uppercase tracking-widest text-teal mb-6"><a href="/">Home</a> / FAQ</nav><p class="text-xs uppercase tracking-widest text-teal mb-4">Patient Questions</p><h1 class="font-display text-5xl md:text-6xl font-light leading-tight mb-6">Frequently Asked Questions</h1><p class="text-white/70 leading-8 text-lg max-w-3xl">Honest answers to the questions our Killeen dental patients ask most.</p><p class="text-white/70 leading-8 text-lg max-w-3xl mt-6">These are the same practical answers Drs. Jeff and Kayla Muszynski give every day in their Killeen office. If your situation is more specific, we are always happy to talk it through in person and explain what actually applies to your teeth, your health history, and your goals.</p></div></section><section class="py-16 bg-white"><div class="max-w-5xl mx-auto px-6 prose-page space-y-16">${body}</div></section><section class="py-16 bg-charcoal text-white text-center"><div class="max-w-3xl mx-auto px-6"><h2 class="font-display text-4xl mb-4">Still have a question?</h2><p class="text-white/65 mb-8">Call our office or request an appointment and we will help you get a clear answer.</p><a href="/#contact" class="inline-block bg-teal px-8 py-4 text-xs uppercase tracking-widest font-semibold">Request an Appointment</a></div></section></main>${footer()}${faqSchema(flatFaq)}${breadcrumb('/faq', 'FAQ')}<script src="/accessibility.js" defer></script>${menuScript}</body></html>`;
 
@@ -235,15 +235,6 @@ for (const file of walkRouteFiles('.')) {
   if (path.basename(file) === 'index.html') html = patchHomeServices(html);
   if (html !== original) fs.writeFileSync(file, html);
 }
-
-let redirects = fs.readFileSync('_redirects', 'utf8');
-if (!redirects.includes('/faqs')) {
-  redirects = `${redirects.trim()}\n/faqs /faq 301\n/FAQs /faq 301\n`;
-} else {
-  redirects = redirects.replace(/^\/faqs\s+\/\s+301\s*$/m, '/faqs /faq 301');
-  if (!redirects.includes('/FAQs /faq 301')) redirects = `${redirects.trim()}\n/FAQs /faq 301\n`;
-}
-fs.writeFileSync('_redirects', redirects);
 
 let sitemap = fs.readFileSync('sitemap.xml', 'utf8');
 const faqLoc = `${domain}/faq`;
