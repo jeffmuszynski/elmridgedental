@@ -36,6 +36,19 @@ function ctaBlock() {
   return `<section class="py-16 bg-charcoal text-white text-center"><div class="max-w-3xl mx-auto px-6"><h2 class="font-display text-4xl mb-4">Questions about benefits or financing?</h2><p class="text-white/65 mb-8">Our team can help estimate benefits and explain payment options before treatment begins.</p><a href="/#contact" class="inline-block bg-teal px-8 py-4 text-xs uppercase tracking-widest font-semibold">Request an Appointment</a></div></section>`;
 }
 
+function supportCoverageTable(page) {
+  const rows = page.path.includes('crowns')
+    ? [['Crown', 'Often major care with deductible, coinsurance, annual maximum, and frequency rules.'], ['Replacement crown', 'May be limited if the plan says the previous crown is too recent.']]
+    : page.path.includes('implants')
+      ? [['Implant body', 'May be covered, excluded, or downgraded depending on the plan.'], ['Implant crown or denture', 'May be reviewed separately from the surgical implant placement.']]
+      : page.path.includes('invisalign')
+        ? [['Orthodontic benefit', 'May have a lifetime maximum and age limits.'], ['Adult Invisalign', 'Coverage varies widely and may not be included.']]
+        : page.path.includes('annual-maximum')
+          ? [['Preventive care', 'May use little or none of the annual maximum depending on the plan.'], ['Major care', 'Can use the annual maximum quickly.']]
+          : [['Covered service', 'May still leave a balance because of deductibles, coinsurance, or maximums.'], ['Denied or reduced claim', 'May reflect plan rules, documentation requests, or alternate benefits.']];
+  return `<h2>Common Coverage Pattern</h2><p>These examples are general patterns only, not promises of payment.</p><table><thead><tr><th>Situation</th><th>Common Pattern</th></tr></thead><tbody>${rows.map(([a,b])=>`<tr><td>${a}</td><td>${b}</td></tr>`).join('')}</tbody></table><p><strong>Coverage varies significantly by plan.</strong> Contact your insurance provider or our office for details regarding your specific benefits.</p>`;
+}
+
 function shell({ file, path, title, description, crumb, intro, body, faq }) {
   fs.writeFileSync(file, `${head(title, description, path)}
 <body class="font-body text-charcoal bg-stone">
@@ -86,6 +99,8 @@ shell({
     <p>We provide our best estimate based on the information available to us at the time. That may include the plan information you provide, benefit details available from the insurance company, and our experience with similar claims.</p>
     <p>Insurance companies do NOT guarantee payment in advance. Even when a plan gives an estimate or pre-treatment estimate, final payment is determined after claim processing. The insurance company may process a claim differently because of eligibility, plan limitations, remaining annual maximum, deductibles, missing information, waiting periods, or internal plan rules.</p>
     <p><strong>All estimates are just that—estimates, not guarantees.</strong></p>
+    <h2>Common Misunderstandings</h2>
+    <ul><li>"Covered" does not mean free. It usually means the plan may contribute if plan rules are met.</li><li>Estimates are not guarantees. Final payment is decided after claim processing.</li><li>Insurance companies may downgrade benefits to a lower-cost alternate procedure.</li><li>Annual maximums are often lower than patients expect, especially for larger treatment plans.</li></ul>
     <h2>Payment Policy</h2>
     <p>Payment is due at the time services are rendered. We help estimate insurance and maximize benefits whenever possible, but patients are responsible for any amount not paid by insurance. Patients are also responsible for understanding their own benefits, including deductibles, annual maximums, waiting periods, excluded services, and frequency limitations.</p>
     <p>Our team is happy to help you interpret available information, but your insurance plan is a contract between you, your employer or plan sponsor, and the insurance company. The insurance company makes the final claim decision.</p>
@@ -104,6 +119,10 @@ shell({
     <ul><li>Delta Dental</li><li>MetLife</li><li>Cigna</li><li>Aetna</li><li>Guardian</li><li>UnitedHealthcare</li><li>and many more</li></ul>
     <p>If you do not see your plan listed, contact our office or your insurance provider to verify your benefits.</p>
     <p><strong>Out-of-network? No problem.</strong> Many patients use out-of-network benefits successfully.</p>
+    <h2>Common Coverage Patterns</h2>
+    <p>These are general patterns only. A crown may be covered at 50% by one plan but denied entirely by another depending on waiting periods, frequency limitations, and plan details.</p>
+    <table><thead><tr><th>Procedure</th><th>Common Coverage Pattern</th></tr></thead><tbody><tr><td>Preventive visits</td><td>Often covered at a higher percentage, subject to frequency rules.</td></tr><tr><td>Fillings</td><td>Often covered after deductible, depending on material and plan rules.</td></tr><tr><td>Crowns</td><td>Often considered major care with deductibles, annual maximums, and replacement limits.</td></tr><tr><td>Dental implants</td><td>Coverage varies widely. Some plans exclude implants or cover only parts of treatment.</td></tr><tr><td>Invisalign</td><td>Often tied to orthodontic benefits, lifetime maximums, and adult coverage rules.</td></tr></tbody></table>
+    <p><strong>Coverage varies significantly by plan.</strong> Contact your insurance provider or our office for details regarding your specific benefits.</p>
     <h2>Financing Options</h2>
     <div class="grid md:grid-cols-2 gap-5 not-prose">
       <a href="${careCreditUrl}" target="_blank" rel="noopener" class="block bg-stone border border-teal-light p-6 hover:border-teal transition-colors"><p class="font-display text-3xl text-charcoal mb-3">CareCredit</p><p class="text-charcoal/65 leading-7">CareCredit offers healthcare financing options that can help patients spread dental treatment costs over time, subject to approval and plan terms.</p></a>
@@ -147,6 +166,7 @@ const supportPages = [
     <p>If a crown was placed recently by another office, the plan may deny replacement even when the tooth needs treatment. If a crown is older, the insurance company may request x-rays, photos, or a narrative explaining why replacement is necessary.</p>
     <p>Replacement rules can be especially frustrating when a crown fails because of new decay, a fracture, an open margin, bite forces, or trauma. A tooth can need treatment even when the insurance company says the existing crown is too new for replacement benefits. In those situations, our role is to document the clinical problem clearly and help you understand the difference between insurance limitations and actual dental need.</p>
     <h2>Materials and Alternate Benefits</h2><p>Some plans also use material restrictions or alternate benefit rules. A plan may pay based on a less expensive crown type even when a more esthetic or more appropriate material is selected for the tooth. The best crown material depends on tooth position, bite forces, smile visibility, remaining tooth structure, and long-term goals.</p>
+    <p>A common misunderstanding is that "covered" means the crown will be free or mostly paid for. In reality, one plan may cover a crown at 50%, another may apply a waiting period, and another may deny replacement because of frequency limitations.</p>
     <p>Elm Ridge Implant and Family Dentistry explains why a crown is recommended, what the crown is meant to protect, and how insurance may apply. We do not want patients surprised by plan rules after treatment is completed.</p>
     <h2>Estimates Are Not Guarantees</h2><p>We provide our best estimate based on available information, but insurance companies do not guarantee final payment in advance. Final payment is determined after claim processing. Patients are responsible for any amount not paid by insurance.</p>
     <p>If a pre-treatment estimate is submitted, it can be useful for planning, but it is still not a promise that the claim will pay exactly as expected. Eligibility can change, benefits can be used by another claim, and plan rules may be applied differently when the final claim is processed.</p>
@@ -174,6 +194,7 @@ const supportPages = [
     <p>For example, a patient may have benefits available but still have a maximum that is much smaller than the total cost of replacing a missing tooth. That does not mean the plan is useless. It means the benefit may offset part of the treatment while the patient is responsible for the rest. This is one reason we prefer to review implant treatment in phases, so patients can understand what may be billed at each step.</p>
     <p>When multiple teeth are missing, the annual maximum becomes even more important. Single implants, implant bridges, snap-on dentures, and fixed full-arch implant options may involve different codes and different claim timing. The insurance estimate should be viewed as a planning tool, not as a promise of payment.</p>
     <h2>Implant Exclusions and Alternate Benefits</h2><p>Some plans exclude implants but offer an alternate benefit toward a removable denture or traditional bridge. A plan may also pay toward a crown but deny the implant body. These rules come from the insurance contract. They do not mean implants are unnecessary or inappropriate.</p>
+    <p>A common misunderstanding is that implant coverage is all-or-nothing. For example, a plan may deny the implant body but pay toward the crown, or it may downgrade the benefit to a removable partial denture allowance. These are plan rules, not a judgment about which treatment is best for the patient.</p>
     <p>An alternate benefit can make a claim look misleading because the insurance company may pay toward what it considers a lower-cost option. For a missing tooth, that may be a removable partial denture or bridge allowance. The patient can still choose implant treatment, but the insurance payment may be based on the alternate service rather than the actual implant procedure.</p>
     <h2>Why Treatment Planning Matters</h2><p>Implant treatment should be planned around health, function, bone anatomy, bite forces, esthetics, and long-term maintenance. Insurance is part of the conversation, but it should not be the only deciding factor. Dr. Jeff uses CBCT imaging to evaluate bone, nerves, sinuses, and implant position before recommending treatment.</p>
     <p>Patients from Killeen, Harker Heights, Copperas Cove, Belton, Temple, and Salado often choose Elm Ridge because implant placement and restoration can be planned carefully in one private practice setting. That continuity matters when treatment has several steps and decisions.</p>
@@ -187,6 +208,9 @@ const supportPages = [
       ['Does insurance cover dental implants?', 'Coverage varies widely. Some plans include implant benefits, some exclude implants, and some only contribute toward related parts of treatment.'],
       ['Can I use out-of-network benefits for implants?', 'Often, yes. Being out-of-network does not prevent treatment, and many patients use out-of-network benefits successfully.'],
       ['Why is financing often used for implants?', 'Dental insurance annual maximums may limit payment for larger implant treatment, so financing can help eligible patients manage costs over time.'],
+      ['What implant cost factors affect insurance estimates?', 'The number of implants, extractions, grafting, final teeth, materials, and plan exclusions can all affect what insurance may or may not pay.'],
+      ['Does insurance cover bone grafting for implants?', 'Sometimes. Bone grafting may be reviewed separately and is subject to plan rules, documentation, deductibles, and annual maximums.'],
+      ['Can insurance downgrade implant benefits?', 'Yes. Some plans apply an alternate benefit toward a denture or bridge instead of paying toward the implant treatment selected.'],
     ],
   },
   {
@@ -202,6 +226,7 @@ const supportPages = [
     content: `<p>Invisalign coverage is commonly tied to orthodontic benefits rather than standard restorative dental benefits. That means the plan may have separate rules, a separate lifetime maximum, age limits, waiting periods, and different payment timing.</p>
     <p>Some plans include orthodontic benefits for children only. Some include adult orthodontic benefits. Some do not include orthodontic coverage at all. Even when orthodontic coverage exists, the benefit may be limited to a lifetime maximum that does not renew each year.</p>
     <h2>Lifetime Maximums</h2><p>An orthodontic lifetime maximum is the total amount the plan may pay toward orthodontic treatment over a person’s lifetime. If that benefit has already been used for braces or previous orthodontic care, it may not be available again.</p>
+    <p>A common surprise is that orthodontic coverage may be a once-in-a-lifetime benefit rather than an annual benefit. Even when Invisalign is covered, the plan may only contribute up to a fixed lifetime amount.</p>
     <p>Unlike an annual maximum, a lifetime orthodontic maximum usually does not reset each year. The plan may also pay the benefit over time rather than all at once.</p>
     <h2>Adult Coverage Varies</h2><p>Adult Invisalign coverage varies significantly. Some plans cover adult orthodontics, some only cover dependents, and some exclude clear aligners even when they cover traditional braces. The insurance company makes the final decision after claim processing.</p>
     <p>Adult coverage can also depend on the subscriber's employer plan. Two plans from the same insurance company may treat Invisalign very differently. One may include adult orthodontic benefits, another may limit orthodontics to children, and another may exclude orthodontics completely. That is why the insurance company must verify the specific plan, not just the insurance company name.</p>
@@ -236,6 +261,7 @@ const supportPages = [
     <p>The insurance company decides final payment after reviewing the claim. That decision may depend on eligibility, remaining benefits, plan limitations, documentation, and the exact contract your employer or plan sponsor purchased.</p>
     <p>This can feel unfair because the language patients hear from insurance companies often sounds simple: covered, not covered, in-network, out-of-network, basic, major, preventive. In reality, the final payment may depend on several rules at once. A service can be listed as covered and still pay less than expected because of a deductible, maximum, waiting period, downgrade, or frequency limit.</p>
     <h2>Deductible Not Met</h2><p>Many plans require the patient to pay a deductible before certain benefits apply. Preventive services may be exempt, but restorative or major services often require the deductible first.</p>
+    <p>One common misunderstanding is that a covered procedure should not have any out-of-pocket cost. A procedure can be covered and still leave a balance because of deductibles, coinsurance, plan maximums, or downgraded benefits.</p>
     <h2>Annual Maximum Reached</h2><p>The annual maximum is the total amount the plan will pay during the benefit year. If the maximum is reached, the plan may not pay additional claims until benefits renew.</p>
     <h2>Waiting Periods</h2><p>Some plans require a waiting period before covering certain procedures. A patient may be eligible for cleanings immediately but have to wait before coverage applies to crowns, dentures, implants, or other major services.</p>
     <h2>Frequency Limits</h2><p>Frequency limits restrict how often a service is covered. A plan may only pay for certain x-rays, cleanings, crowns, dentures, or replacements after a specific amount of time has passed.</p>
@@ -269,6 +295,7 @@ const supportPages = [
     content: `<p>A dental insurance annual maximum is the total amount the insurance company will pay toward covered dental care during a benefit year. Once the plan has paid that amount, additional treatment is typically the patient’s responsibility until the benefit year resets.</p>
     <p>Annual maximums vary by plan. Many plans have maximums that are modest compared with the cost of larger restorative or implant treatment. This is one reason dental insurance should be viewed as help toward care, not complete coverage.</p>
     <h2>Typical Limits</h2><p>Many dental plans have annual maximums in a range such as $1,000 to $2,000, though some plans are lower or higher. The exact number depends on the plan purchased by the employer, plan sponsor, or individual policyholder.</p>
+    <p>Patients are often surprised that annual maximums may be lower than the cost of a crown, denture, bridge, or implant plan. The maximum is the insurance company's payment limit, not the total cost of care.</p>
     <p>The annual maximum may apply differently depending on the service. Preventive care, diagnostic care, fillings, crowns, root canals, dentures, implants, and orthodontic treatment may all be handled differently by the plan.</p>
     <p>It is important to understand that the annual maximum is not the total cost of treatment and not the amount the patient can spend. It is the cap on what the insurance company may pay. If a treatment plan is larger than the remaining maximum, the patient portion may be higher even when the service is technically covered.</p>
     <h2>Annual Maximums Usually Do Not Roll Over</h2><p>In most plans, unused benefits do not roll over into the next year. If a plan has $1,500 available and only $500 is used, the unused amount usually disappears when the benefit year ends. Some plans have exceptions, but rollover benefits are not standard.</p>
@@ -306,6 +333,7 @@ for (const page of supportPages) {
         <a href="${page.servicePath}" class="inline-block bg-teal px-6 py-3 text-center font-body text-xs font-semibold uppercase tracking-widest text-white hover:bg-teal-dark">${page.serviceLabel}</a>
       </div>
       <h2>${page.h2}</h2>
+      ${supportCoverageTable(page)}
       ${page.content}
       <h2>FAQ</h2>
       <div class="not-prose space-y-4">${page.faq.map(([q,a])=>`<details class="bg-stone border border-teal-light p-6"><summary class="font-semibold text-charcoal">${q}</summary><p class="mt-3 text-charcoal/65 leading-7">${a}</p></details>`).join('')}</div>

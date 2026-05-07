@@ -1,5 +1,5 @@
 import fs from 'fs';
-import { head, header, footer, menuScript, breadcrumb, domain } from './site-helpers.mjs';
+import { head, header, footer, menuScript, breadcrumb, domain, faqSchema } from './site-helpers.mjs';
 
 const postOpPages = [
   {
@@ -28,6 +28,10 @@ const postOpPages = [
         'Your bite feels high or uneven',
       ] },
     ],
+    faq: [
+      ['Is sensitivity after a filling normal?', 'Some cold sensitivity is normal for a few days to a couple of weeks after a filling and should gradually improve.'],
+      ['When can I eat after a filling?', 'Do not eat until numbness has worn off so you do not accidentally bite your cheek, lip, or tongue.'],
+    ],
   },
   {
     title: 'Crowns (Temporary)',
@@ -51,6 +55,10 @@ const postOpPages = [
         'A small amount of toothpaste can help hold it temporarily (remove before eating or sleeping)',
         'Temporary cement from a pharmacy can also be used if needed',
       ] },
+    ],
+    faq: [
+      ['What if my temporary crown falls off?', 'Call us to let us know. If the temporary is intact, a small amount of toothpaste or pharmacy temporary cement may help hold it briefly if needed.'],
+      ['Can I floss around a temporary crown?', 'Yes, but pull floss out to the side instead of upward so you do not dislodge the temporary crown.'],
     ],
   },
   {
@@ -107,6 +115,18 @@ const postOpPages = [
         'Pain significantly worsens after a few days',
       ] },
     ],
+    warnings: [
+      'Bleeding does not improve with firm pressure',
+      'Swelling rapidly worsens',
+      'Fever develops',
+      'Pain significantly worsens after a few days',
+      'Difficulty swallowing or breathing',
+    ],
+    faq: [
+      ['Is it normal to bleed after an extraction?', 'Some oozing is normal, but you should not be soaking through gauze repeatedly. Firm pressure directly over the site is usually the key.'],
+      ['What is dry socket?', 'Dry socket may occur if the clot is disrupted. Smoking, poor clot formation, and early rinsing can increase the risk.'],
+      ['When can I rinse after an extraction?', 'Begin gentle saltwater rinses after 24 hours, but do not swish aggressively for 4 days.'],
+    ],
   },
   {
     title: 'Dental Implants',
@@ -143,6 +163,20 @@ const postOpPages = [
         '6 months if sinus grafting was performed.',
       ] },
     ],
+    warnings: [
+      'Healing abutment becomes loose or falls out',
+      'Swelling rapidly worsens',
+      'Fever develops',
+      'Severe worsening pain',
+      'Difficulty swallowing or breathing',
+    ],
+    faq: [
+      ['How long do dental implants take to heal?', 'Typical implant healing is 3 to 4 months, or about 6 months if sinus grafting was performed.'],
+      ['Can I chew on my dental implant while it heals?', 'Do not chew on the implant site for at least 3 months unless you are specifically told otherwise.'],
+      ['Why is smoking a problem after implant surgery?', 'Smoking is the number one cause of implant failure and can seriously interfere with healing.'],
+      ['What should I do if my healing abutment comes loose?', 'Do not chew on it or push on it. If it becomes loose or falls out, call immediately.'],
+      ['Can a dental implant fail?', 'Implants can fail, especially when healing is disrupted. Smoking is listed in these instructions as the number one cause of implant failure.'],
+    ],
   },
   {
     title: 'Bone Grafting',
@@ -157,6 +191,17 @@ const postOpPages = [
         'Small graft particles may come out. This is normal.',
         'Avoid chewing in the area for 3–4 weeks.',
       ] },
+    ],
+    warnings: [
+      'Swelling rapidly worsens',
+      'Fever develops',
+      'Severe worsening pain',
+      'Bleeding does not improve with firm pressure',
+      'Difficulty swallowing or breathing',
+    ],
+    faq: [
+      ['Is it normal for bone graft particles to come out?', 'Yes. Small graft particles may come out, and this can be normal.'],
+      ['How long should I avoid chewing on a bone graft?', 'Avoid chewing in the grafted area for 3 to 4 weeks unless directed otherwise.'],
     ],
   },
   {
@@ -178,6 +223,12 @@ const postOpPages = [
         'Pain is severe or worsening',
         'Swelling develops',
       ] },
+    ],
+    warnings: [
+      'Pain is severe or worsening',
+      'Swelling develops',
+      'Fever develops',
+      'Difficulty swallowing or breathing',
     ],
   },
   {
@@ -244,6 +295,18 @@ const postOpPages = [
         'A second denture may be needed after healing at full cost.',
       ] },
     ],
+    warnings: [
+      'Severe sores develop',
+      'Bleeding does not improve with firm pressure',
+      'Swelling rapidly worsens',
+      'Fever develops',
+      'Difficulty swallowing or breathing',
+    ],
+    faq: [
+      ['How long should I wear immediate dentures?', 'Leave immediate dentures in for the first 48 hours, removing only to clean. After 48 hours, remove them at night while sleeping.'],
+      ['Are sore spots normal with immediate dentures?', 'Sore spots are common. Call early for adjustments instead of waiting for severe sores.'],
+      ['Will immediate dentures get loose?', 'Yes. Fit changes significantly during healing, and looseness is normal. Relines will be needed.'],
+    ],
   },
 ];
 
@@ -254,16 +317,39 @@ function painControlBlock() {
   </aside>`;
 }
 
-function renderContent(page) {
+function warningBox(page) {
+  if (!page.warnings?.length) return '';
+  return `<aside class="mt-8 border border-teal-light bg-white p-5 sm:p-6">
+    <p class="font-body text-xs uppercase tracking-widest text-teal-dark mb-3">Call us immediately if...</p>
+    <ul class="space-y-2 text-charcoal/70 leading-7">${page.warnings.map(item => `<li class="flex gap-3"><span class="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-teal"></span><span>${item}</span></li>`).join('')}</ul>
+  </aside>`;
+}
+
+function reviewNote() {
+  return `<p class="mt-7 border-t border-teal-light/60 pt-4 font-body text-xs uppercase tracking-widest text-charcoal/45">Last updated: August 2026<br />Reviewed by Dr. Jeff Muszynski</p>`;
+}
+
+function pageFaqBlock(page) {
+  if (!page.faq?.length) return '';
+  return `<div class="mt-8">
+    <h3 class="font-body text-base font-semibold text-charcoal mb-4">FAQ</h3>
+    <div class="space-y-3">${page.faq.map(([q,a])=>`<details class="bg-white border border-teal-light p-5"><summary class="font-semibold text-charcoal">${q}</summary><p class="mt-3 text-charcoal/65 leading-7">${a}</p></details>`).join('')}</div>
+  </div>`;
+}
+
+function renderContent(page, { includeFaq = false } = {}) {
   const pieces = [];
   for (const block of page.content) {
     if (block.type === 'heading') {
       pieces.push(`<h3 class="font-body text-base font-semibold text-charcoal mt-7 mb-3">${block.text}</h3>`);
     } else if (block.type === 'list') {
-      pieces.push(`<ul class="space-y-2 text-charcoal/70 leading-7">${block.items.map(item => `<li class="flex gap-3"><span class="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-teal"></span><span>${item}</span></li>`).join('')}</ul>`);
+      pieces.push(`<ul class="space-y-3 sm:space-y-2 text-charcoal/70 leading-8 sm:leading-7">${block.items.map(item => `<li class="flex gap-3"><span class="mt-3 sm:mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-teal"></span><span>${item}</span></li>`).join('')}</ul>`);
     }
   }
   if (page.surgical || page.painControl) pieces.push(painControlBlock());
+  pieces.push(warningBox(page));
+  if (includeFaq) pieces.push(pageFaqBlock(page));
+  pieces.push(reviewNote());
   return pieces.join('');
 }
 
@@ -326,13 +412,14 @@ ${header()}
         <a href="${page.servicePath}" class="inline-block bg-teal px-6 py-3 text-center font-body text-xs font-semibold uppercase tracking-widest text-white hover:bg-teal-dark">${page.serviceLabel}</a>
       </div>
       <article class="border border-teal-light bg-stone/70 p-6 sm:p-9 shadow-[0_20px_70px_rgba(44,62,62,0.06)]">
-        ${renderContent(page)}
+        ${renderContent(page, { includeFaq: true })}
       </article>
     </div>
   </section>
 </main>
 ${footer()}
 ${breadcrumb(path, `${page.title} Instructions`)}
+${page.faq?.length ? faqSchema(page.faq) : ''}
 <script src="/accessibility.js" defer></script>
 ${menuScript}
 </body></html>`;
