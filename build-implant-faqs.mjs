@@ -1,12 +1,6 @@
 import fs from 'fs';
 
 const pages = {
-  'dental-implants-killeen-tx': [
-    ['How long do dental implants take to heal?', 'Most implant cases need about 3 to 4 months of healing before the final restoration. Some grafting or sinus cases may take longer.'],
-    ['Are dental implants painful?', 'Patients are numbed for implant placement. Soreness, swelling, or tenderness can happen afterward, but the visit is planned to keep the experience controlled and comfortable.'],
-    ['What affects dental implant cost?', 'Cost depends on the number of implants, whether extractions or bone grafting are needed, the type of final teeth, materials, and the complexity of the case.'],
-    ['Can I have sedation for dental implants?', 'Nitrous oxide and oral conscious sedation options may be available for evaluated candidates.'],
-  ],
   'single-tooth-implant-killeen-tx': [
     ['How long does a single tooth implant take to heal?', 'A single tooth implant commonly heals for about 3 to 4 months before the final crown is made.'],
     ['Does a single implant protect nearby teeth?', 'A single implant can replace one missing tooth without reshaping the neighboring teeth for a traditional bridge.'],
