@@ -1,5 +1,5 @@
 import fs from 'fs';
-import { head, header, footer, menuScript, breadcrumb, faqSchema, writePage, domain, withHeadSchemas } from './site-helpers.mjs';
+import { head, header, footer, menuScript, breadcrumb, faqSchema, writePage, domain, withHeadSchemas, medicalProcedureSchema } from './site-helpers.mjs';
 
 writePage('sleep-dentistry-killeen-tx', {
   path: '/sleep-dentistry-killeen-tx',
@@ -33,7 +33,247 @@ writePage('sleep-dentistry-killeen-tx', {
     ['What does AHI mean?', 'AHI estimates how many times per hour breathing stops or becomes significantly reduced during sleep.'],
     ['Can an oral appliance replace CPAP?', 'CPAP is often first-line therapy, especially for severe sleep apnea. Oral appliance therapy can be an effective alternative for adults who prefer it or cannot tolerate CPAP, especially in many mild to moderate cases.'],
     ['Will medical insurance help pay for a mandibular advancement device?', 'Sometimes. Coverage depends on your medical insurance plan, diagnosis, documentation, and medical necessity requirements.']
-  ]
+  ],
+  headSchemas: [
+    medicalProcedureSchema('Sleep Dentistry Consultation', 'Diagnostic', 'Airway'),
+  ],
+});
+
+writePage('family-dentist-killeen-tx', {
+  path: '/family-dentist-killeen-tx',
+  title: 'Family Dentist in Killeen, TX | Elm Ridge Implant and Family Dentistry',
+  description: 'Family dentist in Killeen, TX serving kids, adults, and seniors with wellness exams, cleanings, fillings, and preventive care from Drs. Muszynski.',
+  crumb: 'Family Dentist',
+  kicker: 'Family Dentistry',
+  h1: 'Family Dentist in Killeen, TX',
+  intro: `A family dentist takes care of every age and stage — kids losing their first baby teeth, parents juggling busy schedules, retirees protecting decades of dental work. At Elm Ridge Implant and Family Dentistry, Drs. Jeff and Kayla Muszynski see patients from age one through retirement in one Killeen office, with one chart, and one team you'll see year after year.`,
+  heroPrimaryLabel: 'Schedule a Family Visit',
+  heroPrimaryHref: '/#contact',
+  heroSecondaryLabel: 'Call 254-699-4127',
+  heroSecondaryHref: 'tel:+12546994127',
+  body: `<section class="py-16 bg-white"><div class="max-w-4xl mx-auto px-6 prose-page space-y-7">
+    <h2>What "Family Dentistry" Actually Includes</h2>
+    <p>General and family dentistry covers the everyday care that keeps teeth healthy long-term: wellness exams, cleanings, fillings, sealants, fluoride, oral cancer screening, and the early conversations that prevent bigger problems. It's the foundation of dental care — done well, you need fewer crowns, fewer root canals, and far fewer surprises.</p>
+    <h2>Wellness Exams</h2>
+    <p>A wellness exam is more than a quick look. At each visit, Drs. Jeff or Kayla check teeth for new decay, examine gums for early signs of periodontal disease, screen the soft tissues for oral cancer, evaluate your bite, look for cracks or wear, and review any recent changes in your medical history that affect dental care. We use digital X-rays at the recommended frequency for your risk level — never more, never as routine.</p>
+    <h2>Professional Cleanings</h2>
+    <p>Cleanings remove plaque and tartar that brushing and flossing leave behind. Tartar (calcified plaque) cannot be removed at home and is the primary driver of gum disease. We tailor cleaning intensity to your needs — a healthy adult typically needs a routine cleaning every six months, while patients with active periodontal disease may need scaling and root planing followed by 3-month maintenance visits.</p>
+    <h2>Fillings and Restorative Care</h2>
+    <p>When decay is caught early, a tooth-colored composite filling restores it in one appointment. We do not place silver amalgam fillings. For teeth with larger decay or fractures, we offer onlays and crowns that protect the remaining tooth structure.</p>
+    <h2>Dental Care for Kids</h2>
+    <p>The American Academy of Pediatric Dentistry recommends a child's first dental visit by age one or within six months of their first tooth. Early visits build comfort, teach parents about brushing and diet, and catch problems while they're small. We see kids of all ages at Elm Ridge with a friendly, no-pressure approach.</p>
+    <h2>Care for Seniors</h2>
+    <p>Older adults face unique dental challenges — root decay from gum recession, dry mouth from medications, complex restorative needs from years of previous dental work, and the increasing relevance of dental health to overall medical conditions like diabetes and heart disease. We work with seniors and caregivers on practical, realistic care plans that match what matters most.</p>
+    <h2>Why Patients Choose Elm Ridge for Family Care</h2>
+    <ul>
+      <li>Husband-and-wife dentists who see your whole family in one office</li>
+      <li>Nine years serving Killeen, Bell County, and Fort Cavazos</li>
+      <li>One chart, one team — no rotating dentists or chain handoffs</li>
+      <li>Tricare and most major <a href="/insurance-and-financing">dental insurance</a> accepted</li>
+      <li><a href="/emergency-dentist-killeen-tx">Same-day emergency appointments</a> when life happens</li>
+      <li>Family-owned, privately operated — not a corporate franchise</li>
+    </ul>
+  </div></section>`,
+  faqHeading: 'Family Dentistry FAQ',
+  faq: [
+    {
+      question: 'How often should I see the dentist for a checkup?',
+      answer: `Most patients benefit from a checkup and cleaning every six months. Patients with active gum disease, a history of decay, or specific risk factors may need to come in more often — we'll tell you what's right for you.`,
+    },
+    {
+      question: 'When should my child first see a dentist?',
+      answer: `Within six months of the first tooth, or by age one — whichever comes first. The first visit is short, friendly, and mostly about getting your child comfortable with the chair and our team.`,
+    },
+    {
+      question: 'Do you accept Tricare?',
+      answer: `Many of our patients are military families through Fort Cavazos. Coverage depends on your specific Tricare dental plan (Active Duty Dental Program vs. Tricare Dental Program through United Concordia). Call (254) 699-4127 with your member ID and we'll verify your benefits before your visit.`,
+      answerHtml: `Many of our patients are military families through Fort Cavazos. Coverage depends on your specific <a href="/insurance-and-financing">Tricare dental plan</a> (Active Duty Dental Program vs. Tricare Dental Program through United Concordia). Call (254) 699-4127 with your member ID and we'll verify your benefits before your visit.`,
+    },
+    {
+      question: 'What does a routine cleaning and exam cost without insurance?',
+      answer: `A new-patient comprehensive exam at Elm Ridge is around $107, with X-rays and cleaning billed separately. With most PPO insurance, preventive visits are typically covered at or near 100%.`,
+    },
+    {
+      question: 'Can my whole family book back-to-back appointments?',
+      answer: `Yes — this is one of the main reasons patients choose a family practice. Tell our front desk how many family members need to be seen and we'll block the time together when our schedule allows.`,
+    },
+    {
+      question: 'Do you see patients with anxiety or special needs?',
+      answer: `Yes. We offer nitrous oxide and oral conscious sedation for evaluated candidates, and our team is patient with kids and adults who find dental visits challenging.`,
+      answerHtml: `Yes. We offer nitrous oxide and <a href="/sedation-dentistry-killeen-tx">oral conscious sedation</a> for evaluated candidates, and our team is patient with kids and adults who find dental visits challenging.`,
+    },
+  ],
+  footerTitle: 'Looking for a Family Dentist in Killeen?',
+  footerText: 'Schedule a visit at Elm Ridge Implant and Family Dentistry. Drs. Jeff and Kayla Muszynski welcome new patients of all ages.',
+  footerPrimaryLabel: 'Schedule Your Visit',
+  footerPrimaryHref: '/#contact',
+  footerSecondaryLabel: 'Call 254-699-4127',
+  footerSecondaryHref: 'tel:+12546994127',
+  headSchemas: [
+    medicalProcedureSchema('Family and General Dentistry', 'Preventive', 'Teeth and Gums'),
+  ],
+});
+
+writePage('sedation-dentistry-killeen-tx', {
+  path: '/sedation-dentistry-killeen-tx',
+  title: 'Sedation Dentistry in Killeen, TX | Elm Ridge Implant and Family Dentistry',
+  description: 'Sedation dentistry in Killeen, TX with nitrous oxide and oral conscious sedation for evaluated candidates. Comfortable care for anxious patients.',
+  crumb: 'Sedation Dentistry',
+  kicker: 'Sedation Dentistry',
+  h1: 'Sedation Dentistry in Killeen, TX',
+  intro: `Dental anxiety is one of the most common reasons patients put off care — and one of the most treatable. At Elm Ridge Implant and Family Dentistry, we offer nitrous oxide and oral conscious sedation for evaluated candidates, so the visit you've been avoiding can be one you barely remember.`,
+  heroPrimaryLabel: 'Schedule a Sedation Consultation',
+  heroPrimaryHref: '/#contact',
+  heroSecondaryLabel: 'Call 254-699-4127',
+  heroSecondaryHref: 'tel:+12546994127',
+  body: `<section class="py-16 bg-white"><div class="max-w-4xl mx-auto px-6 prose-page space-y-7">
+    <h2>Why Patients Choose Sedation</h2>
+    <p>Patients ask us for sedation for many reasons: a previous bad experience, a strong gag reflex, fear of needles, difficulty staying numb, longer or more complex procedures, or simply wanting to feel calmer about a visit they've been postponing for years. Sedation isn't about being unconscious — it's about being relaxed enough to receive the care you need.</p>
+    <h2>Nitrous Oxide ("Laughing Gas")</h2>
+    <p>Nitrous oxide is a mild sedative inhaled through a small nosepiece. It takes effect within minutes, produces a relaxed, slightly floaty feeling, and wears off completely within five minutes after the gas is turned off. You can drive yourself to and from the appointment. Nitrous works well for routine procedures and mild-to-moderate anxiety.</p>
+    <h2>Oral Conscious Sedation</h2>
+    <p>For deeper relaxation, we offer oral conscious sedation using triazolam — a prescription pill taken before your appointment. You'll feel drowsy and relaxed but able to respond. Most patients remember little of the visit afterward, which is normal. You'll need a driver to and from the appointment, and you should plan to rest for the remainder of the day.</p>
+    <h2>Local Anesthesia</h2>
+    <p>For most patients, local anesthesia alone is enough. We use techniques to make the injection itself comfortable — topical numbing gel, slow delivery, and modern anesthetic agents. Sedation is added only when it genuinely helps the experience, not as a default.</p>
+    <h2>Who Is a Candidate?</h2>
+    <p>Sedation is appropriate for many patients but not everyone. We evaluate your medical history, current medications, weight, and the specific procedure when deciding which sedation option is right for you. Patients with certain heart conditions, sleep apnea, pregnancy, or specific medications may need an alternative approach. Bring your full medication list to the consultation.</p>
+    <h2>What to Expect on the Day of Treatment</h2>
+    <ul>
+      <li>Don't eat or drink for the hours specified at your consultation (typically six hours)</li>
+      <li>Take any prescribed medications as instructed</li>
+      <li>Arrange a driver for oral sedation appointments</li>
+      <li>Wear comfortable clothing</li>
+      <li>We'll monitor your vital signs throughout the visit</li>
+      <li>A trusted adult should stay with you for several hours afterward</li>
+    </ul>
+    <h2>Is Sedation Safe?</h2>
+    <p>Yes, when administered by a trained provider with appropriate monitoring. Dental sedation has an excellent safety record. We monitor blood pressure, pulse, and oxygen continuously during your visit, and we adjust dosage based on your weight and health history.</p>
+  </div></section>`,
+  faqHeading: 'Sedation Dentistry FAQ',
+  faq: [
+    {
+      question: 'Will I be unconscious?',
+      answer: 'No. With the sedation we offer, you remain conscious and able to respond — just relaxed and drowsy. True general anesthesia (full unconsciousness) is reserved for hospital-based oral surgery.',
+    },
+    {
+      question: 'How long does the sedation last?',
+      answer: 'Nitrous oxide wears off within five minutes after the gas is stopped. Oral conscious sedation with triazolam wears off over several hours; you may feel groggy for the rest of the day.',
+    },
+    {
+      question: 'Can I drive home?',
+      answer: `After nitrous, yes. After oral conscious sedation, no — you need a driver and shouldn't drive, operate machinery, or make important decisions for the rest of the day.`,
+    },
+    {
+      question: 'Will my insurance cover sedation?',
+      answer: "Some plans cover sedation for medically-necessary procedures (like surgical extractions). Coverage for sedation due to anxiety alone varies. We'll tell you what your specific plan covers before treatment.",
+      answerHtml: `Some plans cover sedation for medically-necessary procedures (like <a href="/tooth-extractions-killeen-tx">surgical extractions</a>). Coverage for sedation due to anxiety alone varies. We'll tell you what your specific <a href="/insurance-and-financing">plan</a> covers before treatment.`,
+    },
+    {
+      question: 'Can I have sedation for a routine cleaning?',
+      answer: 'Yes, for patients who genuinely need it — anxiety, special needs, or extreme gag reflex are all valid reasons.',
+    },
+    {
+      question: `What if I'm afraid of the needle, not the procedure?`,
+      answer: `Tell us. We can use stronger topical numbing, slow injection technique, or nitrous oxide to take the edge off the injection itself. Many patients find this is all they need.`,
+    },
+  ],
+  footerTitle: 'Ready for a Calmer Dental Visit?',
+  footerText: 'Schedule a consultation to talk through your concerns and the right sedation option for you. Elm Ridge Implant and Family Dentistry in Killeen, TX.',
+  footerPrimaryLabel: 'Schedule a Consultation',
+  footerPrimaryHref: '/#contact',
+  footerSecondaryLabel: 'Call 254-699-4127',
+  footerSecondaryHref: 'tel:+12546994127',
+  headSchemas: [
+    medicalProcedureSchema('Sedation Dentistry', 'Therapeutic', 'Mouth'),
+  ],
+});
+
+writePage('tooth-extractions-killeen-tx', {
+  path: '/tooth-extractions-killeen-tx',
+  title: 'Tooth Extractions in Killeen, TX | Elm Ridge Implant and Family Dentistry',
+  description: 'Tooth extractions in Killeen, TX including wisdom teeth and surgical extractions. Sedation and replacement options at Elm Ridge with Dr. Jeff Muszynski.',
+  crumb: 'Tooth Extractions',
+  kicker: 'Tooth Extractions',
+  h1: 'Tooth Extractions in Killeen, TX',
+  intro: `We try to save teeth when we can. But when a tooth is too damaged, infected, or causing more harm than it's worth, a planned extraction protects the rest of your mouth and clears the path for a clean, healthy outcome. At Elm Ridge Implant and Family Dentistry, Dr. Jeff Muszynski performs simple and surgical extractions in-house, with sedation options available.`,
+  heroPrimaryLabel: 'Schedule an Evaluation',
+  heroPrimaryHref: '/#contact',
+  heroSecondaryLabel: 'Call 254-699-4127',
+  heroSecondaryHref: 'tel:+12546994127',
+  body: `<section class="py-16 bg-white"><div class="max-w-4xl mx-auto px-6 prose-page space-y-7">
+    <h2>When a Tooth Needs to Be Extracted</h2>
+    <p>Common reasons we recommend extraction:</p>
+    <ul>
+      <li>Severe decay that has reached the nerve and isn't restorable</li>
+      <li>A cracked tooth fractured below the gumline</li>
+      <li>Advanced gum disease that has destroyed the supporting bone</li>
+      <li>Infection that hasn't responded to root canal treatment</li>
+      <li>Wisdom teeth that are impacted, decayed, or affecting other teeth</li>
+      <li>Crowding before orthodontic treatment</li>
+      <li>Failed prior dental work where the underlying tooth is no longer salvageable</li>
+    </ul>
+    <p>We never recommend an extraction if the tooth can reasonably be saved. The goal is the long-term health of your bite, not a quick fix.</p>
+    <h2>Simple vs. Surgical Extractions</h2>
+    <p>A <strong>simple extraction</strong> removes a tooth that's fully erupted and accessible. With local anesthesia, the procedure is usually quick and comfortable. A <strong>surgical extraction</strong> is needed when a tooth is broken at the gumline, impacted (like most wisdom teeth), or has roots that require careful management. Surgical extractions take longer and have a longer recovery, but Dr. Jeff plans them carefully using CBCT imaging when needed.</p>
+    <h2>Wisdom Teeth</h2>
+    <p>Most patients have their wisdom teeth evaluated in their late teens or early twenties. We recommend removal when the teeth are impacted (stuck under the gum or angled into adjacent teeth), causing pain, decay, or cysts, or are likely to cause problems based on their position. Not all wisdom teeth need to come out — we'll tell you honestly what we see on the X-ray.</p>
+    <h2>Comfort and Sedation Options</h2>
+    <p>Local anesthesia is enough for most extractions. For patients who want additional comfort — anxiety, complex extractions, multiple teeth at once — we offer nitrous oxide and <a href="/sedation-dentistry-killeen-tx">oral conscious sedation with triazolam</a> for evaluated candidates. Bring your medication list to your evaluation.</p>
+    <h2>Healing and Aftercare</h2>
+    <p>Healing after an extraction follows a predictable pattern. The first 24 hours are about protecting the blood clot — no straws, no spitting, no smoking, gentle saltwater rinses. Most discomfort is managed with over-the-counter pain relievers and ice for swelling. We give every extraction patient written aftercare instructions and a direct line to call if anything feels wrong.</p>
+    <p><a href="/post-op/extractions">Tooth Extraction Aftercare Instructions →</a></p>
+    <h2>What Comes After the Extraction</h2>
+    <p>For most teeth (other than wisdom teeth), we'll discuss replacement options at the same visit:</p>
+    <ul>
+      <li><a href="/dental-implants-killeen-tx"><strong>Dental implants</strong></a> — the gold standard, replacing the tooth root and crown</li>
+      <li><a href="/implant-bridges-killeen-tx"><strong>Implant bridges</strong></a> — replacing several teeth with fewer implants</li>
+      <li><strong>Traditional bridges</strong> — using neighboring teeth as anchors</li>
+      <li><a href="/dentures-killeen-tx"><strong>Partial dentures</strong></a> — removable, cost-effective option</li>
+      <li><strong>No replacement</strong> — sometimes appropriate for back molars depending on your bite</li>
+    </ul>
+    <p>The longer you go without replacing a missing tooth, the more the surrounding teeth shift and the underlying bone resorbs. We give you the time and information to make a real decision, not a pressured one.</p>
+  </div></section>`,
+  faqHeading: 'Tooth Extraction FAQ',
+  faq: [
+    {
+      question: 'Will the extraction hurt?',
+      answer: `You'll be numb for the procedure itself and won't feel pain. Some pressure and movement are normal. Mild-to-moderate soreness for a few days afterward is typical and is usually managed with over-the-counter pain relievers.`,
+    },
+    {
+      question: 'How long does an extraction take?',
+      answer: 'A simple extraction often takes 15-30 minutes. Surgical extractions and wisdom teeth take 30-60 minutes per side.',
+    },
+    {
+      question: 'Can I drive myself home?',
+      answer: `Yes, after a simple extraction with local anesthesia. After oral conscious sedation, you'll need a driver.`,
+    },
+    {
+      question: 'How long is the recovery?',
+      answer: 'Most patients return to normal activities within 24-48 hours. Bone heals over several weeks, but the discomfort is mostly gone within a few days.',
+    },
+    {
+      question: 'When can I eat?',
+      answer: `Soft foods only for the first 24 hours. Avoid straws, hot liquids, and hard or crunchy foods until your follow-up. We'll give you a list.`,
+    },
+    {
+      question: 'What if I want a dental implant after the extraction?',
+      answer: `We'll evaluate the bone before extraction and may recommend a bone graft at the time of removal to preserve the site for a future implant. In some cases an implant can be placed the same day as the extraction.`,
+    },
+    {
+      question: 'Will my insurance cover the extraction?',
+      answer: `Most dental insurance plans cover simple and surgical extractions, sometimes with a copay or after a deductible. We'll verify coverage before treatment.`,
+      answerHtml: `Most <a href="/insurance-and-financing">dental insurance</a> plans cover simple and surgical extractions, sometimes with a copay or after a deductible. We'll verify coverage before treatment.`,
+    },
+  ],
+  footerTitle: 'Need a Tooth Evaluated?',
+  footerText: `Don't wait until pain or infection makes the choice for you. Schedule an evaluation at Elm Ridge Implant and Family Dentistry to talk through your options.`,
+  footerPrimaryLabel: 'Schedule an Evaluation',
+  footerPrimaryHref: '/#contact',
+  footerSecondaryLabel: 'Call 254-699-4127',
+  footerSecondaryHref: 'tel:+12546994127',
+  headSchemas: [
+    medicalProcedureSchema('Tooth Extractions', 'Surgical', 'Teeth'),
+  ],
 });
 
 function blog(file, path, title, desc, body, faq) {
@@ -57,5 +297,5 @@ blog(posts[2][0], posts[2][1], posts[2][2], posts[2][3], `<p><strong>Are dental 
 
 blog(posts[3][0], posts[3][1], posts[3][2], posts[3][3], `<p><strong>Choosing an implant dentist in Killeen, TX</strong> is not the same as choosing a place for a simple filling. Dental implants involve surgery, restorative design, bite planning, maintenance, and a financial decision that can range from a single tooth to full-mouth treatment.</p><h2>Look for Complete Planning</h2><p>The implant is only one part of the result. The final crown, bridge, denture, or fixed full-arch prosthesis determines how treatment looks and functions.</p><h2>Ask About CBCT Imaging</h2><p>CBCT imaging provides a 3D view of bone and anatomy. Dr. Jeff uses CBCT on implant cases because flat x-rays cannot show everything needed for precise implant planning. When extra precision is helpful, in-house 3D printed surgical guides can transfer the digital plan to the appointment.</p><h2>Ask Who Places and Restores the Implant</h2><p>Elm Ridge places and restores implants in-house, which helps patients understand the full plan from one team.</p><h2>Red Flags to Avoid</h2><ul><li>No CBCT imaging for implant planning</li><li>Quotes that do not include the final tooth</li><li>No discussion of alternatives</li><li>Pressure to commit before diagnosis</li><li>No clear maintenance plan</li></ul><p>Start with the <a href="/dental-implants-killeen-tx">dental implants page</a> or <a href="/#contact">request a consultation</a>.</p>`, [['What should I ask an implant dentist?','Ask who places the implant, who restores it, whether CBCT imaging is used, what the final tooth will be, and whether the quote includes all phases.'],['Is CBCT imaging important for implants?','Yes. CBCT imaging helps evaluate bone and anatomy in 3D for safer, more precise planning.']]);
 
-const urls = ['','faq','dental-implants-killeen-tx','single-tooth-implant-killeen-tx','implant-bridges-killeen-tx','full-arch-dental-implants-killeen-tx','all-on-4-dental-implants-killeen-tx','snap-on-dentures-killeen-tx','dentures-killeen-tx','cosmetic-dentistry-killeen-tx','emergency-dentist-killeen-tx','invisalign-killeen-tx','root-canal-killeen-tx','dental-crowns-killeen-tx','sleep-dentistry-killeen-tx','insurance-and-financing','insurance/crowns','insurance/implants','insurance/invisalign','insurance/why-didnt-insurance-pay','insurance/annual-maximum','post-operative-instructions','post-op/fillings','post-op/crowns','post-op/extractions','post-op/implants','post-op/bone-graft','post-op/root-canal','post-op/deep-cleaning','post-op/whitening','post-op/immediate-dentures','accessibility-statement','dentist-harker-heights-tx','dentist-copperas-cove-tx','dentist-belton-tx','dentist-temple-tx','dentist-salado-tx','dentist-nolanville-tx','blog','blog-cosmetic-dentistry-options-killeen-tx','blog-emergency-dentist-killeen-tx',...posts.map(p=>p[1].slice(1))];
+const urls = ['','faq','dental-implants-killeen-tx','single-tooth-implant-killeen-tx','implant-bridges-killeen-tx','full-arch-dental-implants-killeen-tx','all-on-4-dental-implants-killeen-tx','snap-on-dentures-killeen-tx','dentures-killeen-tx','family-dentist-killeen-tx','sedation-dentistry-killeen-tx','tooth-extractions-killeen-tx','cosmetic-dentistry-killeen-tx','emergency-dentist-killeen-tx','invisalign-killeen-tx','root-canal-killeen-tx','dental-crowns-killeen-tx','sleep-dentistry-killeen-tx','insurance-and-financing','insurance/crowns','insurance/implants','insurance/invisalign','insurance/why-didnt-insurance-pay','insurance/annual-maximum','post-operative-instructions','post-op/fillings','post-op/crowns','post-op/extractions','post-op/implants','post-op/bone-graft','post-op/root-canal','post-op/deep-cleaning','post-op/whitening','post-op/immediate-dentures','accessibility-statement','dentist-harker-heights-tx','dentist-copperas-cove-tx','dentist-belton-tx','dentist-temple-tx','dentist-salado-tx','dentist-nolanville-tx','blog','blog-cosmetic-dentistry-options-killeen-tx','blog-emergency-dentist-killeen-tx',...posts.map(p=>p[1].slice(1))];
 fs.writeFileSync('sitemap.xml', `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${urls.map((u,i)=>`  <url><loc>${domain}/${u}</loc><priority>${i===0?'1.0':u.includes('implant')?'0.9':'0.7'}</priority></url>`).join('\n')}\n</urlset>\n`);
