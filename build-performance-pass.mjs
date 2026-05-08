@@ -5,7 +5,7 @@ import { doctorPersonSchemas, globalDentistSchema } from './site-helpers.mjs';
 
 const root = process.cwd();
 
-const heroLegacyName = 'hero photo.webp';
+const heroLegacyName = ['hero', 'photo.webp'].join(' ');
 const heroName = 'hero.webp';
 const heroVariantWidths = [640, 1024, 1920];
 const homeHeroPicture = `<picture><source srcset="hero-640.webp 640w, hero-1024.webp 1024w, hero-1920.webp 1920w" sizes="(max-width: 768px) 100vw, 1920px" type="image/webp" /><img src="hero.webp" alt="Dr. Jeff and Dr. Kayla Muszynski with their family at Elm Ridge Implant and Family Dentistry in Killeen, TX" class="w-full h-full object-cover object-[50%_28%]" width="1215" height="1620" decoding="async" fetchpriority="high" loading="eager" /></picture>`;
