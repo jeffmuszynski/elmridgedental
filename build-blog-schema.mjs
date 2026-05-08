@@ -1,5 +1,5 @@
 import fs from 'fs';
-import { domain } from './site-helpers.mjs';
+import { domain, dentistEntityRef } from './site-helpers.mjs';
 
 const publisher = {
   '@type': 'Organization',
@@ -16,11 +16,7 @@ const defaultAuthor = {
   name: 'Dr. Jeff Muszynski, DDS',
   url: `${domain}/#team`,
   jobTitle: 'Dentist',
-  worksFor: {
-    '@type': 'Dentist',
-    '@id': `${domain}/#dentist`,
-    name: 'Elm Ridge Implant and Family Dentistry',
-  },
+  worksFor: dentistEntityRef,
 };
 
 const posts = [

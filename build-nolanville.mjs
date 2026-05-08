@@ -1,5 +1,5 @@
 import fs from 'fs';
-import { head, header, footer, menuScript, breadcrumb, faqSchema, domain, practiceName } from './site-helpers.mjs';
+import { head, header, footer, menuScript, breadcrumb, faqSchema, domain, practiceName, dentistEntityRef, withHeadSchemas } from './site-helpers.mjs';
 
 const path = '/dentist-nolanville-tx';
 const title = 'Dentist Near Nolanville, TX';
@@ -17,14 +17,10 @@ const webPageSchema = `<script type="application/ld+json" data-schema="nolanvill
   name: title,
   description,
   url: `${domain}${path}`,
-  publisher: {
-    '@type': 'Dentist',
-    '@id': `${domain}/#dentist`,
-    name: practiceName,
-  },
+  publisher: dentistEntityRef,
 })}</script>`;
 
-fs.writeFileSync('dentist-nolanville-tx', `${head(title, description, path)}
+fs.writeFileSync('dentist-nolanville-tx', `${withHeadSchemas(head(title, description, path), faqSchema(faq), breadcrumb(path, 'Nolanville'), webPageSchema)}
 <body class="font-body text-charcoal bg-stone">
 ${header()}
 <main id="main-content">
@@ -56,9 +52,6 @@ ${header()}
   <section class="py-16 bg-charcoal text-white text-center"><div class="max-w-3xl mx-auto px-6"><h2 class="font-display text-4xl mb-4">Looking for a dentist near Nolanville, TX?</h2><p class="text-white/65 mb-8">Schedule your visit with Elm Ridge Implant and Family Dentistry in Killeen.</p><a href="/#contact" class="inline-block bg-teal px-8 py-4 text-xs uppercase tracking-widest font-semibold">Request an Appointment</a></div></section>
 </main>
 ${footer()}
-${faqSchema(faq)}
-${breadcrumb(path, 'Nolanville')}
-${webPageSchema}
 <script src="/accessibility.js" defer></script>
 ${menuScript}
 </body></html>`);

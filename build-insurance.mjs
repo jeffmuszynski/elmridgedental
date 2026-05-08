@@ -1,5 +1,5 @@
 import fs from 'fs';
-import { head, header, footer, menuScript, breadcrumb, faqSchema, domain, practiceName } from './site-helpers.mjs';
+import { head, header, footer, menuScript, breadcrumb, faqSchema, domain, practiceName, dentistEntityRef, withHeadSchemas } from './site-helpers.mjs';
 
 const careCreditUrl = 'https://www.carecredit.com/doctor-locator/killeen-tx/elm-ridge-implant-family-dentistry-927rpj/';
 const cherryUrl = 'https://pay.withcherry.com/elmridgedental?utm_source=finder-revamp&m=15801';
@@ -20,11 +20,7 @@ function pageSchema(path, name, description) {
     name,
     description,
     url: `${domain}${path}`,
-    publisher: {
-      '@type': 'Dentist',
-      '@id': `${domain}/#dentist`,
-      name: practiceName,
-    },
+    publisher: dentistEntityRef,
   })}</script>`;
 }
 
@@ -50,7 +46,7 @@ function supportCoverageTable(page) {
 }
 
 function shell({ file, path, title, description, crumb, intro, body, faq }) {
-  fs.writeFileSync(file, `${head(title, description, path)}
+  fs.writeFileSync(file, `${withHeadSchemas(head(title, description, path), faqSchema(faq), breadcrumb(path, crumb), pageSchema(path, title, description))}
 <body class="font-body text-charcoal bg-stone">
 ${header()}
 <main id="main-content">
@@ -66,9 +62,6 @@ ${header()}
   ${ctaBlock()}
 </main>
 ${footer()}
-${faqSchema(faq)}
-${breadcrumb(path, crumb)}
-${pageSchema(path, title, description)}
 <script src="/accessibility.js" defer></script>
 ${menuScript}
 </body></html>`);

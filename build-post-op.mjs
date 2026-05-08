@@ -1,5 +1,5 @@
 import fs from 'fs';
-import { head, header, footer, menuScript, breadcrumb, domain, faqSchema } from './site-helpers.mjs';
+import { head, header, footer, menuScript, breadcrumb, domain, faqSchema, withHeadSchemas } from './site-helpers.mjs';
 
 const postOpPages = [
   {
@@ -393,7 +393,7 @@ function hubHashScript() {
 function fullPage(page) {
   const path = `/post-op/${page.slug}`;
   const description = `${page.title} post-operative instructions from Elm Ridge in Killeen, TX with clear guidance for healing, comfort, home care, and when to call us.`;
-  return `${head(`${page.title} Post-Operative Instructions`, description, path).replace('content="index, follow"', 'content="noindex, follow"')}
+  return `${withHeadSchemas(head(`${page.title} Post-Operative Instructions`, description, path).replace('content="index, follow"', 'content="noindex, follow"'), breadcrumb(path, `${page.title} Instructions`), page.faq?.length ? faqSchema(page.faq) : '')}
 <body class="font-body text-charcoal bg-stone">
 ${header()}
 <main id="main-content">
@@ -418,8 +418,6 @@ ${header()}
   </section>
 </main>
 ${footer()}
-${breadcrumb(path, `${page.title} Instructions`)}
-${page.faq?.length ? faqSchema(page.faq) : ''}
 <script src="/accessibility.js" defer></script>
 ${menuScript}
 </body></html>`;
@@ -428,7 +426,7 @@ ${menuScript}
 function hubPage() {
   const path = '/post-operative-instructions';
   const description = 'Post-operative dental instructions in Killeen, TX for fillings, crowns, extractions, implants, bone grafts, whitening, and immediate dentures.';
-  return `${head('Post-Operative Instructions', description, path)}
+  return `${withHeadSchemas(head('Post-Operative Instructions', description, path), breadcrumb(path, 'Post-Operative Instructions'))}
 <body class="font-body text-charcoal bg-stone">
 ${header()}
 <main id="main-content">
@@ -449,7 +447,6 @@ ${header()}
   </section>
 </main>
 ${footer()}
-${breadcrumb(path, 'Post-Operative Instructions')}
 <script src="/accessibility.js" defer></script>
 ${hubHashScript()}
 ${menuScript}

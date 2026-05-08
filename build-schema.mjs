@@ -1,31 +1,6 @@
 import fs from 'fs';
 import path from 'path';
-import { domain, practiceName } from './site-helpers.mjs';
-
-const dentistSchema = {
-  '@context': 'https://schema.org',
-  '@type': 'Dentist',
-  '@id': `${domain}/#dentist`,
-  name: practiceName,
-  image: `${domain}/Building.webp`,
-  url: domain,
-  telephone: '+1-254-699-4127',
-  address: {
-    '@type': 'PostalAddress',
-    streetAddress: '2601 E. Elms Rd',
-    addressLocality: 'Killeen',
-    addressRegion: 'TX',
-    postalCode: '76542',
-    addressCountry: 'US',
-  },
-  areaServed: [
-    { '@type': 'City', name: 'Killeen' },
-    { '@type': 'City', name: 'Harker Heights' },
-    { '@type': 'City', name: 'Nolanville' },
-    { '@type': 'City', name: 'Belton' },
-    { '@type': 'City', name: 'Salado' },
-  ],
-};
+import { domain, practiceName, dentistEntityRef, globalDentistSchema } from './site-helpers.mjs';
 
 const postOpFaqSchema = {
   '@context': 'https://schema.org',
@@ -108,12 +83,12 @@ function schemaScript(schema, marker) {
 
 function removeManagedSchemas(html) {
   return html.replace(/<script type="application\/ld\+json"(?: data-schema="[^"]+")?>([\s\S]*?)<\/script>/g, (match, json) => {
-    if (match.includes('data-schema="global-dentist"') || match.includes('data-schema="post-op-faq"') || match.includes('data-schema="medical-procedure"') || match.includes('data-schema="medical-web-page"')) {
+    if (match.includes('data-schema="global-dentist"') || match.includes('data-schema="post-op-faq"') || match.includes('data-schema="medical-procedure"') || match.includes('data-schema="medical-web-page"') || match.includes('data-schema="breadcrumb"')) {
       return '';
     }
     try {
       const parsed = JSON.parse(json);
-      if (parsed?.['@type'] === 'Dentist') return '';
+      if (parsed?.['@type'] === 'Dentist' || parsed?.['@type'] === 'BreadcrumbList') return '';
     } catch {
       return match;
     }
@@ -123,12 +98,44 @@ function removeManagedSchemas(html) {
 
 function injectHeadSchema(html, schema, marker) {
   if (html.includes(`data-schema="${marker}"`)) return html;
-  return html.replace('</head>', `${schemaScript(schema, marker)}</head>`);
+  return html.replace('<script type="application/ld+json"${attrs}>${JSON.stringify(normalized)}</script><script type="application/ld+json"${attrs}>${json}</script></head>', `${schemaScript(schema, marker)}</head>`);
 }
 
-function appendBodySchema(html, schema, marker) {
-  if (html.includes(`data-schema="${marker}"`)) return html;
-  return html.replace('</body>', `${schemaScript(schema, marker)}</body>`);
+function normalizeDentistRefs(value, key = '') {
+  if (Array.isArray(value)) return value.map((item) => normalizeDentistRefs(item));
+  if (!value || typeof value !== 'object') return value;
+  if (
+    ['provider', 'performer', 'serviceProvider', 'publisher', 'worksFor'].includes(key) &&
+    value['@type'] === 'Dentist'
+  ) {
+    return { ...dentistEntityRef };
+  }
+  return Object.fromEntries(Object.entries(value).map(([childKey, childValue]) => [childKey, normalizeDentistRefs(childValue, childKey)]));
+}
+
+function normalizeJsonLdScripts(html) {
+  return html.replace(/<script type="application\/ld\+json"([^>]*)>([\s\S]*?)<\/script>/g, (match, attrs, json) => {
+    try {
+      const parsed = JSON.parse(json);
+      const normalized = normalizeDentistRefs(parsed);
+      return ``;
+    } catch {
+      return match;
+    }
+  });
+}
+
+function moveBodyJsonLdToHead(html) {
+  const headEnd = html.indexOf('</head>');
+  if (headEnd === -1) return html;
+  const head = html.slice(0, headEnd);
+  let body = html.slice(headEnd);
+  const moved = [];
+  body = body.replace(/<script type="application\/ld\+json"([^>]*)>([\s\S]*?)<\/script>/g, (match, attrs, json) => {
+    moved.push(``);
+    return '';
+  });
+  return `${head}${moved.join('')}</head>${body.replace(/^<\/head>/, '')}`;
 }
 
 function medicalProcedureSchema([name, procedureType, bodyLocation]) {
@@ -138,11 +145,7 @@ function medicalProcedureSchema([name, procedureType, bodyLocation]) {
     name,
     procedureType,
     bodyLocation,
-    provider: {
-      '@type': 'Dentist',
-      '@id': `${domain}/#dentist`,
-      name: practiceName,
-    },
+    provider: dentistEntityRef,
   };
 }
 
@@ -155,11 +158,7 @@ function medicalWebPageSchema([name, about]) {
       '@type': 'MedicalProcedure',
       name: about,
     },
-    publisher: {
-      '@type': 'Dentist',
-      '@id': `${domain}/#dentist`,
-      name: practiceName,
-    },
+    publisher: dentistEntityRef,
   };
 }
 
@@ -201,23 +200,26 @@ function htmlFiles(dir = '.') {
 for (const file of htmlFiles()) {
   const route = routeForFile(file);
   let html = removeManagedSchemas(fs.readFileSync(file, 'utf8'));
-  html = injectHeadSchema(html, dentistSchema, 'global-dentist');
+  html = injectHeadSchema(html, globalDentistSchema, 'global-dentist');
 
   if (route === 'post-operative-instructions') {
-    html = appendBodySchema(html, postOpFaqSchema, 'post-op-faq');
+    html = injectHeadSchema(html, postOpFaqSchema, 'post-op-faq');
   }
 
   if (serviceProcedures[route]) {
-    html = appendBodySchema(html, medicalProcedureSchema(serviceProcedures[route]), 'medical-procedure');
+    html = injectHeadSchema(html, medicalProcedureSchema(serviceProcedures[route]), 'medical-procedure');
   }
 
   if (postOpMedicalPages[route]) {
-    html = appendBodySchema(html, medicalWebPageSchema(postOpMedicalPages[route]), 'medical-web-page');
+    html = injectHeadSchema(html, medicalWebPageSchema(postOpMedicalPages[route]), 'medical-web-page');
   }
 
   if (!html.includes('"@type":"BreadcrumbList"') && !html.includes('"@type": "BreadcrumbList"')) {
-    html = appendBodySchema(html, homeBreadcrumbSchema(), 'breadcrumb');
+    html = injectHeadSchema(html, homeBreadcrumbSchema(), 'breadcrumb');
   }
+
+  html = normalizeJsonLdScripts(html);
+  html = moveBodyJsonLdToHead(html);
 
   fs.writeFileSync(file, html);
 }

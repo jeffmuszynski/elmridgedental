@@ -46,6 +46,6 @@ for (const [file, qas] of Object.entries(pages)) {
     .replace(/<section id="implant-faq-enhancement"[\s\S]*?<\/section>/g, '')
     .replace(/<script type="application\/ld\+json" data-schema="implant-faq-enhancement">[\s\S]*?<\/script>/g, '');
   html = html.replace('</main>', `${faqSection(qas)}</main>`);
-  html = html.replace('</body>', `${faqSchema(qas)}</body>`);
+  html = html.replace('</head>', `${faqSchema(qas)}</head>`);
   fs.writeFileSync(file, html);
 }
