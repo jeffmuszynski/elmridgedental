@@ -280,20 +280,16 @@ const postOpPages = [
         'Use mild dish soap if needed.',
         'Do not use toothpaste.',
       ] },
-      { type: 'heading', text: 'Important Expectations:' },
+      { type: 'heading', text: 'Important Expectations for Immediate Dentures' },
+      { type: 'paragraph', text: 'Because immediate dentures are made before teeth are removed, there are some unique challenges:' },
       { type: 'list', items: [
-        'Because dentures are made before teeth are removed:',
         'Esthetics and bite cannot be fully verified beforehand.',
         'Perfect results cannot be guaranteed.',
-        'Fit will change significantly during healing.',
+        'Fit will change significantly during healing, and relines will be necessary to catch up with changes.',
         'Looseness is normal.',
-        'Sore spots are common.',
-        'Call early for adjustments.',
-        'Do not wait for severe sores.',
-        'Relines will be needed.',
-        'Immediate dentures are often temporary.',
-        'A second denture may be needed after healing at full cost.',
+        'Sore spots are common. Call early for adjustments if sore spots develop — do not wait for sores to become severe.',
       ] },
+      { type: 'paragraph', text: 'For these reasons, immediate dentures are often considered "temporary" or "healing dentures." A second denture may be needed after healing (roughly six months) to overcome these challenges.' },
     ],
     warnings: [
       'Severe sores develop',
@@ -342,6 +338,8 @@ function renderContent(page, { includeFaq = false } = {}) {
   for (const block of page.content) {
     if (block.type === 'heading') {
       pieces.push(`<h3 class="font-body text-base font-semibold text-charcoal mt-7 mb-3">${block.text}</h3>`);
+    } else if (block.type === 'paragraph') {
+      pieces.push(`<p class="text-charcoal/70 leading-8 sm:leading-7">${block.text}</p>`);
     } else if (block.type === 'list') {
       pieces.push(`<ul class="space-y-3 sm:space-y-2 text-charcoal/70 leading-8 sm:leading-7">${block.items.map(item => `<li class="flex gap-3"><span class="mt-3 sm:mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-teal"></span><span>${item}</span></li>`).join('')}</ul>`);
     }

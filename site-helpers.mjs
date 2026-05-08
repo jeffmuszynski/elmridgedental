@@ -219,6 +219,10 @@ export function medicalProcedureSchema(name, procedureType, bodyLocation) {
   }, 'medical-procedure');
 }
 
+export function jsonLd(schema, dataSchema = '') {
+  return jsonLdTag(schema, dataSchema);
+}
+
 export function writePage(file, opts) {
   const {
     path,
