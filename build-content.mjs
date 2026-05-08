@@ -91,7 +91,7 @@ writePage('family-dentist-killeen-tx', {
     },
     {
       question: 'What does a routine cleaning and exam cost without insurance?',
-      answer: `A new-patient comprehensive exam at Elm Ridge is around $107, with X-rays and cleaning billed separately. With most PPO insurance, preventive visits are typically covered at or near 100%.`,
+      answer: `Call (254) 699-4127 with your insurance information and we'll give you a clear out-of-pocket estimate before your visit. With most PPO insurance, preventive visits are typically covered at or near 100%.`,
     },
     {
       question: 'Can my whole family book back-to-back appointments?',
