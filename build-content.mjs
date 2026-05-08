@@ -169,12 +169,8 @@ writePage('sedation-dentistry-killeen-tx', {
       answerHtml: `Some plans cover sedation for medically-necessary procedures (like <a href="/tooth-extractions-killeen-tx">surgical extractions</a>). Coverage for sedation due to anxiety alone varies. We'll tell you what your specific <a href="/insurance-and-financing">plan</a> covers before treatment.`,
     },
     {
-      question: 'Can I have sedation for a routine cleaning?',
-      answer: 'Yes, for patients who genuinely need it — anxiety, special needs, or extreme gag reflex are all valid reasons.',
-    },
-    {
       question: `What if I'm afraid of the needle, not the procedure?`,
-      answer: `Tell us. We can use stronger topical numbing, slow injection technique, or nitrous oxide to take the edge off the injection itself. Many patients find this is all they need.`,
+      answer: `We use a stronger, specially formulated and custom compounded topical anesthetic (numbing gel) and a slow injection technique to try to minimize discomfort with the injections. We can also use nitrous oxide (laughing gas) to help take the edge off. Many patients find this is all they need.`,
     },
   ],
   footerTitle: 'Ready for a Calmer Dental Visit?',
