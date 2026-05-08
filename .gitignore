@@ -4,3 +4,5 @@ temporary screenshots/
 *.exe
 .env
 .env.local
+blog-schema-report.json
+elmridge-seo-geo-audit.md (claude audit).pdf

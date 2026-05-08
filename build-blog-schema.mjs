@@ -12,6 +12,7 @@ const publisher = {
 
 const defaultAuthor = {
   '@type': 'Person',
+  '@id': `${domain}/#dr-jeff`,
   name: 'Dr. Jeff Muszynski, DDS',
   url: `${domain}/#team`,
   jobTitle: 'Dentist',

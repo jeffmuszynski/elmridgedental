@@ -85,11 +85,48 @@ export const globalDentistSchema = {
   },
 };
 
+export const doctorPersonSchemas = [
+  {
+    '@context': 'https://schema.org',
+    '@type': 'Person',
+    '@id': 'https://www.elmridgedental.com/#dr-jeff',
+    name: 'Dr. Jeff Muszynski, DDS',
+    jobTitle: 'Dentist',
+    alumniOf: [
+      { '@type': 'CollegeOrUniversity', name: 'Abilene Christian University' },
+      { '@type': 'CollegeOrUniversity', name: 'University of Oklahoma College of Dentistry' },
+    ],
+    worksFor: {
+      '@type': 'Dentist',
+      '@id': 'https://www.elmridgedental.com/#dentist',
+      name: 'Elm Ridge Implant and Family Dentistry',
+    },
+    url: 'https://www.elmridgedental.com/#team',
+  },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'Person',
+    '@id': 'https://www.elmridgedental.com/#dr-kayla',
+    name: 'Dr. Kayla Muszynski, DDS',
+    jobTitle: 'Dentist',
+    alumniOf: [
+      { '@type': 'CollegeOrUniversity', name: 'Abilene Christian University' },
+      { '@type': 'CollegeOrUniversity', name: 'University of Oklahoma College of Dentistry' },
+    ],
+    worksFor: {
+      '@type': 'Dentist',
+      '@id': 'https://www.elmridgedental.com/#dentist',
+      name: 'Elm Ridge Implant and Family Dentistry',
+    },
+    url: 'https://www.elmridgedental.com/#team',
+  },
+];
+
 export function head(title, description, path) {
   const pageTitle = title.includes(practiceName) ? title : `${title} | ${practiceName}`;
   const url = `${domain}${path}`;
-  const image = `${domain}/hero%20photo.webp`;
-  return `<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8" /><meta name="viewport" content="width=device-width, initial-scale=1.0" /><title>${pageTitle}</title><meta name="description" content="${description}" /><meta name="robots" content="index, follow" /><link rel="canonical" href="${url}" /><meta property="og:site_name" content="${practiceName}" /><meta property="og:title" content="${pageTitle}" /><meta property="og:description" content="${description}" /><meta property="og:type" content="website" /><meta property="og:url" content="${url}" /><meta property="og:image" content="${image}" /><meta name="twitter:card" content="summary_large_image" /><meta name="twitter:title" content="${pageTitle}" /><meta name="twitter:description" content="${description}" /><meta name="twitter:image" content="${image}" /><link rel="icon" type="image/webp" href="/square logo.webp" /><link rel="preconnect" href="https://fonts.googleapis.com" /><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin /><link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet" /><script src="https://cdn.tailwindcss.com"></script><script>tailwind.config={theme:{extend:{colors:{teal:{DEFAULT:'#7FBDBD',dark:'#5A9A9A',light:'#A8D4D4',pale:'#EAF4F4'},charcoal:'#2C3E3E',stone:'#F5F0EB'},fontFamily:{display:['Cormorant Garamond','Georgia','serif'],body:['DM Sans','system-ui','sans-serif']}}}}</script><style>html{scroll-behavior:smooth}section{scroll-margin-top:120px}.prose-page p{line-height:1.8;color:rgba(44,62,62,.72)}.prose-page h2{font-family:'Cormorant Garamond',Georgia,serif;font-size:2.35rem;line-height:1.1;color:#2C3E3E;margin-top:2rem}.prose-page h3{font-size:1.05rem;font-weight:700;color:#2C3E3E;margin-top:1.5rem}.prose-page a{color:#5A9A9A;font-weight:600}.prose-page ul{list-style:disc;padding-left:1.25rem;color:rgba(44,62,62,.72);line-height:1.8}.prose-page table{width:100%;border-collapse:collapse;background:white}.prose-page th,.prose-page td{border:1px solid #A8D4D4;padding:.9rem;text-align:left;vertical-align:top}.prose-page th{background:#EAF4F4;color:#2C3E3E}.stop-card input{accent-color:#5A9A9A}</style><script type="application/ld+json" data-schema="global-dentist">${JSON.stringify(globalDentistSchema)}</script></head>`;
+  const image = `${domain}/hero.webp`;
+  return `<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8" /><meta name="viewport" content="width=device-width, initial-scale=1.0" /><title>${pageTitle}</title><meta name="description" content="${description}" /><meta name="robots" content="index, follow" /><link rel="canonical" href="${url}" /><meta property="og:site_name" content="${practiceName}" /><meta property="og:title" content="${pageTitle}" /><meta property="og:description" content="${description}" /><meta property="og:type" content="website" /><meta property="og:url" content="${url}" /><meta property="og:image" content="${image}" /><meta name="twitter:card" content="summary_large_image" /><meta name="twitter:title" content="${pageTitle}" /><meta name="twitter:description" content="${description}" /><meta name="twitter:image" content="${image}" /><link rel="icon" type="image/webp" href="/square logo.webp" /><link rel="preconnect" href="https://fonts.googleapis.com" /><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin /><link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet" /><script src="https://cdn.tailwindcss.com"></script><script>tailwind.config={theme:{extend:{colors:{teal:{DEFAULT:'#7FBDBD',dark:'#5A9A9A',light:'#A8D4D4',pale:'#EAF4F4'},charcoal:'#2C3E3E',stone:'#F5F0EB'},fontFamily:{display:['Cormorant Garamond','Georgia','serif'],body:['DM Sans','system-ui','sans-serif']}}}}</script><style>html{scroll-behavior:smooth}section{scroll-margin-top:120px}.prose-page p{line-height:1.8;color:rgba(44,62,62,.72)}.prose-page h2{font-family:'Cormorant Garamond',Georgia,serif;font-size:2.35rem;line-height:1.1;color:#2C3E3E;margin-top:2rem}.prose-page h3{font-size:1.05rem;font-weight:700;color:#2C3E3E;margin-top:1.5rem}.prose-page a{color:#5A9A9A;font-weight:600}.prose-page ul{list-style:disc;padding-left:1.25rem;color:rgba(44,62,62,.72);line-height:1.8}.prose-page table{width:100%;border-collapse:collapse;background:white}.prose-page th,.prose-page td{border:1px solid #A8D4D4;padding:.9rem;text-align:left;vertical-align:top}.prose-page th{background:#EAF4F4;color:#2C3E3E}.stop-card input{accent-color:#5A9A9A}</style><script type="application/ld+json" data-schema="global-dentist">${JSON.stringify(globalDentistSchema)}</script><script type="application/ld+json" data-schema="doctor-persons">${JSON.stringify(doctorPersonSchemas)}</script></head>`;
 }
 
 export function header() {
