@@ -608,22 +608,114 @@ writePage('dentures-vs-implants-killeen-tx', {
     <p>Fixed full-arch implants are the <strong>gold standard</strong> for replacing a full arch of teeth. They restore function, esthetics, comfort, and bone health more completely than any other option. The cost is real, but framing them as a luxury misses the point: they restore daily function — eating, speaking, smiling — that most patients don't realize they've been compromising on.</p>
     <p><a href="/full-arch-dental-implants-killeen-tx">Full-Arch Dental Implants detail page →</a></p>
     <h2>Side-by-Side Comparison</h2>
-    <table>
-      <thead><tr><th>Feature</th><th>Traditional Denture</th><th>Snap-On Denture</th><th>Full-Arch Implant</th></tr></thead>
-      <tbody>
-        <tr><td>Removable?</td><td>Yes</td><td>Yes</td><td>No</td></tr>
-        <tr><td>Chewing force restored</td><td>~10%</td><td>~50%</td><td>~90%</td></tr>
-        <tr><td>Daily comfort</td><td>Variable, often sore</td><td>Better than traditional</td><td>Indistinguishable from natural teeth (most patients)</td></tr>
-        <tr><td>Bone preservation</td><td>None — accelerates loss</td><td>Around implants only</td><td>Throughout the arch</td></tr>
-        <tr><td>Speech</td><td>Adjustment period; clicking common</td><td>Better than traditional</td><td>Normal</td></tr>
-        <tr><td>Need for adhesive</td><td>Often</td><td>No</td><td>No</td></tr>
-        <tr><td>Surgery required</td><td>No</td><td>Yes (2-4 implants)</td><td>Yes (4-6+ implants)</td></tr>
-        <tr><td>Lifespan of prosthesis</td><td>5-7 years</td><td>7-10 years</td><td>15-25 years</td></tr>
-        <tr><td>Implant lifespan</td><td>N/A</td><td>Long-term, maintenance dependent</td><td>Long-term, maintenance dependent</td></tr>
-        <tr><td>Best suited for</td><td>Cosmetic restoration on a budget</td><td>Lower arch stability</td><td>Patients prioritizing function</td></tr>
-        <tr><td>Long-term cost</td><td>Lower upfront, higher cumulative (remakes, relines)</td><td>Mid-range</td><td>Highest upfront, lowest long-term complication cost</td></tr>
-      </tbody>
-    </table>
+    <div class="md:hidden space-y-4">
+      <div class="border border-teal-light bg-white p-5">
+        <h3 class="font-display text-2xl text-charcoal mb-4">Removable?</h3>
+        <dl class="space-y-3">
+          <div><dt class="text-xs uppercase tracking-[0.28em] text-teal-dark mb-1">Traditional Denture</dt><dd>Yes</dd></div>
+          <div><dt class="text-xs uppercase tracking-[0.28em] text-teal-dark mb-1">Snap-On Denture</dt><dd>Yes</dd></div>
+          <div><dt class="text-xs uppercase tracking-[0.28em] text-teal-dark mb-1">Full-Arch Implant</dt><dd>No</dd></div>
+        </dl>
+      </div>
+      <div class="border border-teal-light bg-white p-5">
+        <h3 class="font-display text-2xl text-charcoal mb-4">Chewing force restored</h3>
+        <dl class="space-y-3">
+          <div><dt class="text-xs uppercase tracking-[0.28em] text-teal-dark mb-1">Traditional Denture</dt><dd>~10%</dd></div>
+          <div><dt class="text-xs uppercase tracking-[0.28em] text-teal-dark mb-1">Snap-On Denture</dt><dd>~50%</dd></div>
+          <div><dt class="text-xs uppercase tracking-[0.28em] text-teal-dark mb-1">Full-Arch Implant</dt><dd>~90%</dd></div>
+        </dl>
+      </div>
+      <div class="border border-teal-light bg-white p-5">
+        <h3 class="font-display text-2xl text-charcoal mb-4">Daily comfort</h3>
+        <dl class="space-y-3">
+          <div><dt class="text-xs uppercase tracking-[0.28em] text-teal-dark mb-1">Traditional Denture</dt><dd>Variable, often sore</dd></div>
+          <div><dt class="text-xs uppercase tracking-[0.28em] text-teal-dark mb-1">Snap-On Denture</dt><dd>Better than traditional</dd></div>
+          <div><dt class="text-xs uppercase tracking-[0.28em] text-teal-dark mb-1">Full-Arch Implant</dt><dd>Indistinguishable from natural teeth (most patients)</dd></div>
+        </dl>
+      </div>
+      <div class="border border-teal-light bg-white p-5">
+        <h3 class="font-display text-2xl text-charcoal mb-4">Bone preservation</h3>
+        <dl class="space-y-3">
+          <div><dt class="text-xs uppercase tracking-[0.28em] text-teal-dark mb-1">Traditional Denture</dt><dd>None — accelerates loss</dd></div>
+          <div><dt class="text-xs uppercase tracking-[0.28em] text-teal-dark mb-1">Snap-On Denture</dt><dd>Around implants only</dd></div>
+          <div><dt class="text-xs uppercase tracking-[0.28em] text-teal-dark mb-1">Full-Arch Implant</dt><dd>Throughout the arch</dd></div>
+        </dl>
+      </div>
+      <div class="border border-teal-light bg-white p-5">
+        <h3 class="font-display text-2xl text-charcoal mb-4">Speech</h3>
+        <dl class="space-y-3">
+          <div><dt class="text-xs uppercase tracking-[0.28em] text-teal-dark mb-1">Traditional Denture</dt><dd>Adjustment period; clicking common</dd></div>
+          <div><dt class="text-xs uppercase tracking-[0.28em] text-teal-dark mb-1">Snap-On Denture</dt><dd>Better than traditional</dd></div>
+          <div><dt class="text-xs uppercase tracking-[0.28em] text-teal-dark mb-1">Full-Arch Implant</dt><dd>Normal</dd></div>
+        </dl>
+      </div>
+      <div class="border border-teal-light bg-white p-5">
+        <h3 class="font-display text-2xl text-charcoal mb-4">Need for adhesive</h3>
+        <dl class="space-y-3">
+          <div><dt class="text-xs uppercase tracking-[0.28em] text-teal-dark mb-1">Traditional Denture</dt><dd>Often</dd></div>
+          <div><dt class="text-xs uppercase tracking-[0.28em] text-teal-dark mb-1">Snap-On Denture</dt><dd>No</dd></div>
+          <div><dt class="text-xs uppercase tracking-[0.28em] text-teal-dark mb-1">Full-Arch Implant</dt><dd>No</dd></div>
+        </dl>
+      </div>
+      <div class="border border-teal-light bg-white p-5">
+        <h3 class="font-display text-2xl text-charcoal mb-4">Surgery required</h3>
+        <dl class="space-y-3">
+          <div><dt class="text-xs uppercase tracking-[0.28em] text-teal-dark mb-1">Traditional Denture</dt><dd>No</dd></div>
+          <div><dt class="text-xs uppercase tracking-[0.28em] text-teal-dark mb-1">Snap-On Denture</dt><dd>Yes (2-4 implants)</dd></div>
+          <div><dt class="text-xs uppercase tracking-[0.28em] text-teal-dark mb-1">Full-Arch Implant</dt><dd>Yes (4-6+ implants)</dd></div>
+        </dl>
+      </div>
+      <div class="border border-teal-light bg-white p-5">
+        <h3 class="font-display text-2xl text-charcoal mb-4">Lifespan of prosthesis</h3>
+        <dl class="space-y-3">
+          <div><dt class="text-xs uppercase tracking-[0.28em] text-teal-dark mb-1">Traditional Denture</dt><dd>5-7 years</dd></div>
+          <div><dt class="text-xs uppercase tracking-[0.28em] text-teal-dark mb-1">Snap-On Denture</dt><dd>7-10 years</dd></div>
+          <div><dt class="text-xs uppercase tracking-[0.28em] text-teal-dark mb-1">Full-Arch Implant</dt><dd>15-25 years</dd></div>
+        </dl>
+      </div>
+      <div class="border border-teal-light bg-white p-5">
+        <h3 class="font-display text-2xl text-charcoal mb-4">Implant lifespan</h3>
+        <dl class="space-y-3">
+          <div><dt class="text-xs uppercase tracking-[0.28em] text-teal-dark mb-1">Traditional Denture</dt><dd>N/A</dd></div>
+          <div><dt class="text-xs uppercase tracking-[0.28em] text-teal-dark mb-1">Snap-On Denture</dt><dd>Long-term, maintenance dependent</dd></div>
+          <div><dt class="text-xs uppercase tracking-[0.28em] text-teal-dark mb-1">Full-Arch Implant</dt><dd>Long-term, maintenance dependent</dd></div>
+        </dl>
+      </div>
+      <div class="border border-teal-light bg-white p-5">
+        <h3 class="font-display text-2xl text-charcoal mb-4">Best suited for</h3>
+        <dl class="space-y-3">
+          <div><dt class="text-xs uppercase tracking-[0.28em] text-teal-dark mb-1">Traditional Denture</dt><dd>Cosmetic restoration on a budget</dd></div>
+          <div><dt class="text-xs uppercase tracking-[0.28em] text-teal-dark mb-1">Snap-On Denture</dt><dd>Lower arch stability</dd></div>
+          <div><dt class="text-xs uppercase tracking-[0.28em] text-teal-dark mb-1">Full-Arch Implant</dt><dd>Patients prioritizing function</dd></div>
+        </dl>
+      </div>
+      <div class="border border-teal-light bg-white p-5">
+        <h3 class="font-display text-2xl text-charcoal mb-4">Long-term cost</h3>
+        <dl class="space-y-3">
+          <div><dt class="text-xs uppercase tracking-[0.28em] text-teal-dark mb-1">Traditional Denture</dt><dd>Lower upfront, higher cumulative (remakes, relines)</dd></div>
+          <div><dt class="text-xs uppercase tracking-[0.28em] text-teal-dark mb-1">Snap-On Denture</dt><dd>Mid-range</dd></div>
+          <div><dt class="text-xs uppercase tracking-[0.28em] text-teal-dark mb-1">Full-Arch Implant</dt><dd>Highest upfront, lowest long-term complication cost</dd></div>
+        </dl>
+      </div>
+    </div>
+    <div class="hidden md:block">
+      <table>
+        <thead><tr><th>Feature</th><th>Traditional Denture</th><th>Snap-On Denture</th><th>Full-Arch Implant</th></tr></thead>
+        <tbody>
+          <tr><td>Removable?</td><td>Yes</td><td>Yes</td><td>No</td></tr>
+          <tr><td>Chewing force restored</td><td>~10%</td><td>~50%</td><td>~90%</td></tr>
+          <tr><td>Daily comfort</td><td>Variable, often sore</td><td>Better than traditional</td><td>Indistinguishable from natural teeth (most patients)</td></tr>
+          <tr><td>Bone preservation</td><td>None — accelerates loss</td><td>Around implants only</td><td>Throughout the arch</td></tr>
+          <tr><td>Speech</td><td>Adjustment period; clicking common</td><td>Better than traditional</td><td>Normal</td></tr>
+          <tr><td>Need for adhesive</td><td>Often</td><td>No</td><td>No</td></tr>
+          <tr><td>Surgery required</td><td>No</td><td>Yes (2-4 implants)</td><td>Yes (4-6+ implants)</td></tr>
+          <tr><td>Lifespan of prosthesis</td><td>5-7 years</td><td>7-10 years</td><td>15-25 years</td></tr>
+          <tr><td>Implant lifespan</td><td>N/A</td><td>Long-term, maintenance dependent</td><td>Long-term, maintenance dependent</td></tr>
+          <tr><td>Best suited for</td><td>Cosmetic restoration on a budget</td><td>Lower arch stability</td><td>Patients prioritizing function</td></tr>
+          <tr><td>Long-term cost</td><td>Lower upfront, higher cumulative (remakes, relines)</td><td>Mid-range</td><td>Highest upfront, lowest long-term complication cost</td></tr>
+        </tbody>
+      </table>
+    </div>
     <h2>The Hidden Costs of Cheaper Options</h2>
     <p>When patients compare prices, they often look at the day-one cost. But the lifetime math of a denture is different.</p>
     <ul>
