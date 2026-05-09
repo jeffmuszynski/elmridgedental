@@ -308,7 +308,7 @@ const postOpPages = [
 
 function painControlBlock() {
   return `<aside class="mt-8 border border-teal-light bg-teal-pale/60 p-6 sm:p-7">
-    <img src="/assets/images/tylenol-ibuprofen-schedule.png" alt="Alternating Tylenol and Ibuprofen schedule for post-operative dental pain control" class="mx-auto w-full max-w-[650px] h-auto object-contain" loading="lazy" decoding="async" />
+    <img src="/assets/images/tylenol-ibuprofen-schedule.png" alt="Alternating Tylenol and Ibuprofen schedule for post-operative dental pain control" class="mx-auto w-full max-w-[390px] h-auto object-contain" loading="lazy" decoding="async" />
     <p class="mt-4 text-center font-body text-sm sm:text-base leading-7 text-charcoal/70">If you are unsure whether you can safely take Acetaminophen (Tylenol) or Ibuprofen (Motrin), consult your medical doctor before taking them.</p>
   </aside>`;
 }
