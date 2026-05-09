@@ -286,7 +286,7 @@ const postOpPages = [
         'Esthetics and bite cannot be fully verified beforehand.',
         'Perfect results cannot be guaranteed.',
         'Fit will change significantly during healing, and relines will be necessary to catch up with changes.',
-        'Looseness is normal.',
+        'Looseness is normal during the healing phase.',
         'Sore spots are common. Call early for adjustments if sore spots develop — do not wait for sores to become severe.',
       ] },
       { type: 'paragraph', text: 'For these reasons, immediate dentures are often considered "temporary" or "healing dentures." A second denture may be needed after healing (roughly six months) to overcome these challenges.' },
@@ -301,7 +301,7 @@ const postOpPages = [
     faq: [
       ['How long should I wear immediate dentures?', 'Leave immediate dentures in for the first 48 hours, removing only to clean. After 48 hours, remove them at night while sleeping.'],
       ['Are sore spots normal with immediate dentures?', 'Sore spots are common. Call early for adjustments instead of waiting for severe sores.'],
-      ['Will immediate dentures get loose?', 'Yes. Fit changes significantly during healing, and looseness is normal. Relines will be needed.'],
+      ['Will immediate dentures get loose?', 'Yes. Fit changes significantly during healing, and looseness is normal during the healing phase. Relines will be needed.'],
     ],
   },
 ];
