@@ -223,8 +223,8 @@ writePage('tooth-extractions-killeen-tx', {
     <ul>
       <li><a href="/dental-implants-killeen-tx"><strong>Dental implants</strong></a> — the gold standard, replacing the tooth root and crown</li>
       <li><a href="/implant-bridges-killeen-tx"><strong>Implant bridges</strong></a> — replacing several teeth with fewer implants</li>
-      <li><strong>Traditional bridges</strong> — using neighboring teeth as anchors</li>
-      <li><a href="/dentures-killeen-tx"><strong>Partial dentures</strong></a> — removable, cost-effective option</li>
+      <li><strong>Traditional bridges</strong> — neighboring teeth are prepped for crowns and used as anchors. Not removable.</li>
+      <li><a href="/dentures-killeen-tx"><strong>Partial dentures</strong></a> — removable, cost-effective option initially, but the least natural feeling replacement option and requires more frequent adjustments, repairs, or remakes</li>
       <li><strong>No replacement</strong> — sometimes appropriate for back molars depending on your bite</li>
     </ul>
     <p>The longer you go without replacing a missing tooth, the more the surrounding teeth shift and the underlying bone resorbs. We give you the time and information to make a real decision, not a pressured one.</p>
