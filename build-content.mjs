@@ -210,7 +210,7 @@ writePage('tooth-extractions-killeen-tx', {
     </ul>
     <p>We never recommend an extraction if the tooth can reasonably be saved. The goal is the long-term health of your bite, not a quick fix.</p>
     <h2>Simple vs. Surgical Extractions</h2>
-    <p>A <strong>simple extraction</strong> removes a tooth that's fully erupted and accessible. With local anesthesia, the procedure is usually quick and comfortable. A <strong>surgical extraction</strong> is needed when a tooth is broken at the gumline, impacted (like most wisdom teeth), or has roots that require careful management. Surgical extractions take longer and have a longer recovery, but Dr. Jeff plans them carefully using CBCT imaging when needed.</p>
+    <p>A <strong>simple extraction</strong> removes a tooth that's fully erupted and accessible. With local anesthesia, the procedure is usually quick and comfortable. A <strong>surgical extraction</strong> is needed when a tooth is broken at the gumline, impacted (like most wisdom teeth), or has roots that require careful management. Dr. Jeff plans them carefully using CBCT (3D) imaging when needed.</p>
     <h2>Wisdom Teeth</h2>
     <p>Most patients have their wisdom teeth evaluated in their late teens or early twenties. We recommend removal when the teeth are impacted (stuck under the gum or angled into adjacent teeth), causing pain, decay, or cysts, or are likely to cause problems based on their position. Not all wisdom teeth need to come out — we'll tell you honestly what we see on the X-ray.</p>
     <h2>Comfort and Sedation Options</h2>
