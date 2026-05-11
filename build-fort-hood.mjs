@@ -28,7 +28,7 @@ writePage('dentist-near-fort-hood', {
   path: '/dentist-near-fort-hood',
   title: 'Dentist Near Fort Hood | Elm Ridge Implant and Family Dentistry',
   description:
-    'Patients near Fort Hood choose Elm Ridge Implant and Family Dentistry for private, relationship-based care, advanced implant treatment, and 550+ five-star reviews in nearby Killeen.',
+    'Near Fort Hood, Elm Ridge Implant and Family Dentistry offers consistent private-practice care, implant expertise, and 550+ five-star reviews nearby.',
   crumb: 'Dentist Near Fort Hood',
   kicker: 'Private Dental Care Near Fort Hood',
   h1: 'Dentist Near Fort Hood',

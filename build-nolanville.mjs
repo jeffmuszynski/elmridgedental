@@ -4,7 +4,7 @@ const file = 'dentist-nolanville-tx';
 const path = '/dentist-nolanville-tx';
 const city = 'Nolanville';
 const title = 'Private Dentist Near Nolanville, TX';
-const description = 'Patients from Nolanville choose Elm Ridge Implant and Family Dentistry for private, relationship-based care, advanced implant treatment, and 550+ five-star reviews in nearby Killeen.';
+const description = 'Nolanville patients come to Elm Ridge Implant and Family Dentistry for a calmer private-practice experience, long-term planning, and 550+ five-star reviews.';
 
 const locationServiceSchema = jsonLd({
   '@context': 'https://schema.org',
