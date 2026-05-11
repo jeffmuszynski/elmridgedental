@@ -5,12 +5,16 @@ export const practiceName = 'Elm Ridge Implant and Family Dentistry';
 export const dentistEntityRef = {
   '@id': 'https://www.elmridgedental.com/#dentist',
 };
+export const organizationEntityRef = {
+  '@id': 'https://www.elmridgedental.com/#organization',
+};
 export const globalDentistSchema = {
   '@context': 'https://schema.org',
   '@type': 'Dentist',
   '@id': 'https://www.elmridgedental.com/#dentist',
   name: 'Elm Ridge Implant and Family Dentistry',
   image: 'https://www.elmridgedental.com/Building.webp',
+  logo: 'https://www.elmridgedental.com/square%20logo.webp',
   url: 'https://www.elmridgedental.com',
   telephone: '+1-254-699-4127',
   email: 'contact@elmridgedental.com',
@@ -44,6 +48,7 @@ export const globalDentistSchema = {
     { '@type': 'City', name: 'Nolanville' },
     { '@type': 'City', name: 'Salado' },
     { '@type': 'City', name: 'Temple' },
+    { '@type': 'Place', name: 'Fort Hood' },
     { '@type': 'Place', name: 'Fort Cavazos' },
   ],
   medicalSpecialty: [
@@ -86,6 +91,31 @@ export const globalDentistSchema = {
       { '@type': 'Offer', itemOffered: { '@type': 'MedicalProcedure', name: 'Emergency Dentistry', url: 'https://www.elmridgedental.com/emergency-dentist-killeen-tx' } },
     ],
   },
+};
+
+export const globalOrganizationSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'Organization',
+  '@id': 'https://www.elmridgedental.com/#organization',
+  name: practiceName,
+  url: domain,
+  logo: {
+    '@type': 'ImageObject',
+    url: `${domain}/square%20logo.webp`,
+  },
+  image: `${domain}/Building.webp`,
+  telephone: '+1-254-699-4127',
+  email: 'contact@elmridgedental.com',
+  sameAs: globalDentistSchema.sameAs,
+};
+
+export const globalWebsiteSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'WebSite',
+  '@id': 'https://www.elmridgedental.com/#website',
+  name: practiceName,
+  url: domain,
+  publisher: organizationEntityRef,
 };
 
 export const doctorPersonSchemas = [
@@ -154,7 +184,7 @@ export function head(title, description, path) {
   const pageTitle = title.includes(practiceName) ? title : `${title} | ${practiceName}`;
   const url = `${domain}${path}`;
   const image = `${domain}/hero.webp`;
-  return `<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8" /><meta name="viewport" content="width=device-width, initial-scale=1.0" /><title>${pageTitle}</title><meta name="description" content="${description}" /><meta name="robots" content="index, follow" /><link rel="canonical" href="${url}" /><meta property="og:site_name" content="${practiceName}" /><meta property="og:title" content="${pageTitle}" /><meta property="og:description" content="${description}" /><meta property="og:type" content="website" /><meta property="og:url" content="${url}" /><meta property="og:image" content="${image}" /><meta name="twitter:card" content="summary_large_image" /><meta name="twitter:title" content="${pageTitle}" /><meta name="twitter:description" content="${description}" /><meta name="twitter:image" content="${image}" /><link rel="icon" type="image/webp" href="/square logo.webp" /><link rel="preconnect" href="https://fonts.googleapis.com" /><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin /><link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet" /><script src="https://cdn.tailwindcss.com"></script><script>tailwind.config={theme:{extend:{colors:{teal:{DEFAULT:'#7FBDBD',dark:'#5A9A9A',light:'#A8D4D4',pale:'#EAF4F4'},charcoal:'#2C3E3E',stone:'#F5F0EB'},fontFamily:{display:['Cormorant Garamond','Georgia','serif'],body:['DM Sans','system-ui','sans-serif']}}}}</script><style>html{scroll-behavior:smooth}section{scroll-margin-top:120px}.prose-page p{line-height:1.8;color:rgba(44,62,62,.72)}.prose-page h2{font-family:'Cormorant Garamond',Georgia,serif;font-size:2.35rem;line-height:1.1;color:#2C3E3E;margin-top:2rem}.prose-page h3{font-size:1.05rem;font-weight:700;color:#2C3E3E;margin-top:1.5rem}.prose-page a{color:#5A9A9A;font-weight:600}.prose-page ul{list-style:disc;padding-left:1.25rem;color:rgba(44,62,62,.72);line-height:1.8}.prose-page table{width:100%;border-collapse:collapse;background:white}.prose-page th,.prose-page td{border:1px solid #A8D4D4;padding:.9rem;text-align:left;vertical-align:top}.prose-page th{background:#EAF4F4;color:#2C3E3E}.stop-card input{accent-color:#5A9A9A}</style>${jsonLdTag(doctorPersonSchemas, 'doctor-persons')}${jsonLdTag(globalDentistSchema, 'global-dentist')}</head>`;
+  return `<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8" /><meta name="viewport" content="width=device-width, initial-scale=1.0" /><title>${pageTitle}</title><meta name="description" content="${description}" /><meta name="robots" content="index, follow" /><meta name="application-name" content="${practiceName}" /><meta name="apple-mobile-web-app-title" content="${practiceName}" /><link rel="canonical" href="${url}" /><meta property="og:site_name" content="${practiceName}" /><meta property="og:title" content="${pageTitle}" /><meta property="og:description" content="${description}" /><meta property="og:type" content="website" /><meta property="og:url" content="${url}" /><meta property="og:image" content="${image}" /><meta property="og:image:alt" content="${practiceName}" /><meta name="twitter:card" content="summary_large_image" /><meta name="twitter:title" content="${pageTitle}" /><meta name="twitter:description" content="${description}" /><meta name="twitter:image" content="${image}" /><link rel="icon" type="image/webp" href="/square logo.webp" /><link rel="apple-touch-icon" href="/square logo.webp" /><link rel="preconnect" href="https://fonts.googleapis.com" /><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin /><link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet" /><script src="https://cdn.tailwindcss.com"></script><script>tailwind.config={theme:{extend:{colors:{teal:{DEFAULT:'#7FBDBD',dark:'#5A9A9A',light:'#A8D4D4',pale:'#EAF4F4'},charcoal:'#2C3E3E',stone:'#F5F0EB'},fontFamily:{display:['Cormorant Garamond','Georgia','serif'],body:['DM Sans','system-ui','sans-serif']}}}}</script><style>html{scroll-behavior:smooth}section{scroll-margin-top:120px}.prose-page p{line-height:1.8;color:rgba(44,62,62,.72)}.prose-page h2{font-family:'Cormorant Garamond',Georgia,serif;font-size:2.35rem;line-height:1.1;color:#2C3E3E;margin-top:2rem}.prose-page h3{font-size:1.05rem;font-weight:700;color:#2C3E3E;margin-top:1.5rem}.prose-page a{color:#5A9A9A;font-weight:600}.prose-page ul{list-style:disc;padding-left:1.25rem;color:rgba(44,62,62,.72);line-height:1.8}.prose-page table{width:100%;border-collapse:collapse;background:white}.prose-page th,.prose-page td{border:1px solid #A8D4D4;padding:.9rem;text-align:left;vertical-align:top}.prose-page th{background:#EAF4F4;color:#2C3E3E}.stop-card input{accent-color:#5A9A9A}</style>${jsonLdTag(doctorPersonSchemas, 'doctor-persons')}${jsonLdTag(globalOrganizationSchema, 'global-organization')}${jsonLdTag(globalWebsiteSchema, 'global-website')}${jsonLdTag(globalDentistSchema, 'global-dentist')}</head>`;
 }
 
 export function withHeadSchemas(documentHtml, ...schemas) {
@@ -168,7 +198,7 @@ export function header() {
 }
 
 export function footer() {
-  return `<footer class="bg-charcoal pt-16 pb-8"><div class="max-w-7xl mx-auto px-6"><div class="grid grid-cols-1 md:grid-cols-3 gap-12 mb-12"><div><div class="inline-flex items-center justify-center w-24 h-24 bg-teal overflow-hidden mb-5"><img src="/square logo.webp" alt="${practiceName} logo" class="w-20 h-20 object-contain" loading="lazy" decoding="async" /></div><h3 class="font-display text-xl font-light text-white mb-3" style="letter-spacing:0.04em;">Elm Ridge Implant<br />and Family Dentistry</h3><p class="font-body text-sm text-white/45 leading-relaxed">A practice built on lasting relationships and exceptional care.</p></div><div><p class="font-body text-xs tracking-widest uppercase text-teal mb-5">Navigation</p><ul class="space-y-3"><li><a href="/#services" class="font-body text-sm text-white/55 hover:text-white">Services</a></li><li><a href="/dental-implants-killeen-tx" class="font-body text-sm text-white/55 hover:text-white">Implants</a></li><li><a href="/cosmetic-dentistry-killeen-tx" class="font-body text-sm text-white/55 hover:text-white">Cosmetic</a></li><li><a href="/faq" class="font-body text-sm text-white/55 hover:text-white">FAQ</a></li><li><a href="/#team" class="font-body text-sm text-white/55 hover:text-white">Our Doctors</a></li><li><a href="/#before-after" class="font-body text-sm text-white/55 hover:text-white">Before &amp; After</a></li><li><a href="/#contact" class="font-body text-sm text-white/55 hover:text-white">Contact</a></li><li><a href="/insurance-and-financing" class="font-body text-sm text-white/55 hover:text-white">Insurance &amp; Financing</a></li><li><a href="/post-operative-instructions" class="font-body text-sm text-white/55 hover:text-white">Post-Op Instructions</a></li><li><a href="/blog" class="font-body text-sm text-white/55 hover:text-white">Blog</a></li><li><a href="/accessibility-statement" class="font-body text-sm text-white/55 hover:text-white">Accessibility</a></li></ul></div><div><p class="font-body text-xs tracking-widest uppercase text-teal mb-5">Contact</p><address class="not-italic space-y-3"><p class="font-body text-sm text-white/55">2601 E Elms Rd<br />Killeen, TX 76542</p><p><a href="tel:+12546994127" class="font-body text-sm text-white/55 hover:text-white">254-699-4127</a></p><p class="font-body text-sm text-white/55">Monday - Thursday: 8am - 5pm<br />Friday - Sunday: Closed</p></address></div></div><div class="border-t border-white/10 pt-6 flex flex-col md:flex-row items-center justify-between gap-3"><p class="font-body text-xs text-white/30">&copy; 2026 ${practiceName}. All rights reserved.</p><p class="font-body text-xs text-white/30">Designed for the community we serve.</p></div></div></footer>`;
+  return `<footer class="bg-charcoal pt-16 pb-8"><div class="max-w-7xl mx-auto px-6"><div class="grid grid-cols-1 md:grid-cols-[1.1fr,1.2fr,0.9fr] gap-12 mb-12"><div><div class="inline-flex items-center justify-center w-24 h-24 bg-teal overflow-hidden mb-5"><img src="/square logo.webp" alt="${practiceName} logo" class="w-20 h-20 object-contain" loading="lazy" decoding="async" /></div><h3 class="font-display text-xl font-light text-white mb-3" style="letter-spacing:0.04em;">Elm Ridge Implant<br />and Family Dentistry</h3><p class="font-body text-sm text-white/45 leading-relaxed">A practice built on lasting relationships and exceptional care.</p></div><div class="grid grid-cols-1 sm:grid-cols-2 gap-x-8 gap-y-6"><div><p class="font-body text-xs tracking-widest uppercase text-teal mb-5">Navigation</p><ul class="space-y-3"><li><a href="/#services" class="font-body text-sm text-white/55 hover:text-white">Services</a></li><li><a href="/cosmetic-dentistry-killeen-tx" class="font-body text-sm text-white/55 hover:text-white">Cosmetic</a></li><li><a href="/dental-implants-killeen-tx" class="font-body text-sm text-white/55 hover:text-white">Implants</a></li><li><a href="/#before-after" class="font-body text-sm text-white/55 hover:text-white">Before &amp; After</a></li><li><a href="/#team" class="font-body text-sm text-white/55 hover:text-white">Our Doctors</a></li><li><a href="/#contact" class="font-body text-sm text-white/55 hover:text-white">Contact</a></li></ul></div><div><p class="font-body text-xs tracking-widest uppercase text-teal mb-5">Patient Resources</p><ul class="space-y-3"><li><a href="/insurance-and-financing" class="font-body text-sm text-white/55 hover:text-white">Insurance &amp; Financing</a></li><li><a href="/post-operative-instructions" class="font-body text-sm text-white/55 hover:text-white">Post-Op Instructions</a></li><li><a href="/faq" class="font-body text-sm text-white/55 hover:text-white">FAQ</a></li><li><a href="/blog" class="font-body text-sm text-white/55 hover:text-white">Patient Education</a></li><li><a href="/accessibility-statement" class="font-body text-sm text-white/55 hover:text-white">Accessibility</a></li></ul></div></div><div><p class="font-body text-xs tracking-widest uppercase text-teal mb-5">Contact</p><address class="not-italic space-y-3"><p class="font-body text-sm text-white/55">2601 E Elms Rd<br />Killeen, TX 76542</p><p><a href="tel:+12546994127" class="font-body text-sm text-white/55 hover:text-white">254-699-4127</a></p><p class="font-body text-sm text-white/55">Monday - Thursday: 8am - 5pm<br />Friday - Sunday: Closed</p></address></div></div><div class="border-t border-white/10 pt-6 flex flex-col md:flex-row items-center justify-between gap-3"><p class="font-body text-xs text-white/30">&copy; 2026 ${practiceName}. All rights reserved.</p><p class="font-body text-xs text-white/30">Designed for the community we serve.</p></div></div></footer>`;
 }
 
 export const menuScript = `<script>const menuBtn=document.getElementById('menu-btn'),mobileMenu=document.getElementById('mobile-menu'),iconMenu=document.getElementById('icon-menu'),iconClose=document.getElementById('icon-close');if(menuBtn&&mobileMenu){menuBtn.addEventListener('click',()=>{const open=!mobileMenu.classList.contains('hidden');mobileMenu.classList.toggle('hidden');mobileMenu.classList.toggle('flex');iconMenu&&iconMenu.classList.toggle('hidden',!open);iconClose&&iconClose.classList.toggle('hidden',open)});mobileMenu.querySelectorAll('a').forEach(a=>a.addEventListener('click',()=>{mobileMenu.classList.add('hidden');mobileMenu.classList.remove('flex');iconMenu&&iconMenu.classList.remove('hidden');iconClose&&iconClose.classList.add('hidden')}));}</script>`;

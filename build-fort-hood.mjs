@@ -28,7 +28,7 @@ writePage('dentist-near-fort-hood', {
   path: '/dentist-near-fort-hood',
   title: 'Dentist Near Fort Hood | Elm Ridge Implant and Family Dentistry',
   description:
-    'Looking for a private dentist near Fort Hood? Elm Ridge Implant and Family Dentistry in Killeen offers family, emergency, cosmetic, and implant care with a focus on comfort, consistency, and long-term results.',
+    'Patients near Fort Hood choose Elm Ridge Implant and Family Dentistry for private, relationship-based care, advanced implant treatment, and 550+ five-star reviews in nearby Killeen.',
   crumb: 'Dentist Near Fort Hood',
   kicker: 'Private Dental Care Near Fort Hood',
   h1: 'Dentist Near Fort Hood',
@@ -36,16 +36,16 @@ writePage('dentist-near-fort-hood', {
     'Private dental care in Killeen for families, service members, spouses, and retirees who want consistent, high-quality care close to home.',
   heroPrimaryLabel: 'Schedule an Appointment',
   heroPrimaryHref: '/#contact',
-  heroSecondaryLabel: 'Call for Emergency Dental Care',
+  heroSecondaryLabel: 'Call 254-699-4127',
   heroSecondaryHref: 'tel:+12546994127',
   body: `<section class="py-16 bg-white"><div class="max-w-4xl mx-auto px-6 prose-page space-y-7">
     <h2>Why Choose a Private Dentist Near Fort Hood?</h2>
-    <p>Many patients searching for a dentist near Fort Hood are not looking for a "military dentist." They are looking for a high-quality private practice nearby: familiar faces, clear communication, organized records, and treatment that feels thoughtful rather than rushed.</p>
-    <p>Elm Ridge Implant and Family Dentistry is a privately owned practice in Killeen. That matters. You are not walking into a rotating-provider environment or a corporate office where the treatment tone changes every few months. You see a stable team, you build a relationship with your dentists, and your care is planned with the long view in mind.</p>
-    <p>For families juggling PCS uncertainty, training schedules, kids' appointments, and work, that kind of consistency is practical. It means fewer surprises, clearer records, and a dental home that still feels organized when life around it is not.</p>
+    <p>Many patients searching for a dentist near Fort Hood are not looking for a "military dentist." They are looking for a private office nearby that feels stable, personal, and well run: familiar faces, clear communication, organized records, and care that does not feel rushed.</p>
+    <p>Elm Ridge Implant and Family Dentistry is a privately owned practice in Killeen. That matters to patients who are tired of rotating providers, corporate treatment pacing, or having to start over every time life changes. With 550+ five-star reviews, the practice has earned trust from patients who want quality and continuity, not just the fastest opening on the schedule.</p>
+    <p>For families juggling PCS uncertainty, shift changes, kids' appointments, training schedules, and ordinary life, that kind of consistency is practical. It means fewer surprises, clearer records, and a dental home that still feels organized when everything else is moving around it.</p>
 
     <h2>Dental Services for Fort Hood Families</h2>
-    <p>We provide comprehensive private dental care close to Fort Hood, including routine preventive care and more advanced treatment when needed.</p>
+    <p>We provide comprehensive private dental care close to Fort Hood, from routine cleanings and exams to implants, urgent treatment, cosmetic dentistry, and larger restorative planning when the case is more involved.</p>
     <div class="grid md:grid-cols-2 gap-5 not-prose">
       <a href="/family-dentist-killeen-tx" class="block bg-stone border border-teal-light p-6 hover:border-teal transition-colors"><h3 class="font-display text-3xl text-charcoal mb-3">Family Dentistry</h3><p class="text-charcoal/65 leading-7">Wellness exams, cleanings, preventive care, and practical long-term care for every age.</p></a>
       <a href="/emergency-dentist-killeen-tx" class="block bg-stone border border-teal-light p-6 hover:border-teal transition-colors"><h3 class="font-display text-3xl text-charcoal mb-3">Emergency Dentistry</h3><p class="text-charcoal/65 leading-7">Urgent care for tooth pain, swelling, broken teeth, lost crowns, and dental infections.</p></a>
@@ -57,6 +57,14 @@ writePage('dentist-near-fort-hood', {
       <a href="/root-canal-killeen-tx" class="block bg-stone border border-teal-light p-6 hover:border-teal transition-colors"><h3 class="font-display text-3xl text-charcoal mb-3">Root Canal Therapy</h3><p class="text-charcoal/65 leading-7">Save painful or infected teeth when extraction is not the best answer.</p></a>
     </div>
     <p>Patients also come to us for <a href="/invisalign-killeen-tx">Invisalign</a>, crowns, root canals, cleanings, and preventive care when they want one private office that can coordinate both the everyday and the more complex parts of dentistry.</p>
+
+    <h2>Why Patients Near Fort Hood Say It Is Worth the Drive</h2>
+    <div class="grid sm:grid-cols-2 gap-4 not-prose">
+      <div class="border border-teal-light p-5 bg-white"><p class="text-xs uppercase tracking-[0.28em] text-teal-dark mb-2">Private Practice</p><p class="text-charcoal/65 leading-7">Patients see familiar doctors and a stable team instead of a rotating cast of providers.</p></div>
+      <div class="border border-teal-light p-5 bg-white"><p class="text-xs uppercase tracking-[0.28em] text-teal-dark mb-2">Social Proof</p><p class="text-charcoal/65 leading-7">With 550+ five-star reviews, Elm Ridge has become a trusted option for patients who want more than convenience alone.</p></div>
+      <div class="border border-teal-light p-5 bg-white"><p class="text-xs uppercase tracking-[0.28em] text-teal-dark mb-2">Implant Expertise</p><p class="text-charcoal/65 leading-7">Dr. Jeff plans and restores implants in-house, from single-tooth cases to full-arch treatment.</p></div>
+      <div class="border border-teal-light p-5 bg-white"><p class="text-xs uppercase tracking-[0.28em] text-teal-dark mb-2">Comfort</p><p class="text-charcoal/65 leading-7">A curated music playlist, ceiling-mounted TVs, headphones, blankets, and thoughtful details help visits feel calmer and more personal.</p></div>
+    </div>
 
     <h2>Dental Implants and Military Moves</h2>
     <p>Military families move. That is real, and it is one reason some people hesitate to start implant treatment. We understand that concern. We prefer to complete our own implant cases from start to finish whenever possible because that is how treatment is ideally coordinated. But a possible move should not automatically mean delaying needed care.</p>
@@ -74,8 +82,11 @@ writePage('dentist-near-fort-hood', {
     <p>If you are looking for an <a href="/emergency-dentist-killeen-tx">emergency dentist near Fort Hood</a>, call as early in the day as you can. We do our best to accommodate urgent needs quickly and explain the diagnosis clearly so you know what needs to happen next.</p>
 
     <h2>A Better Experience Than Starting Over Every Time You Move</h2>
-    <p>One of the frustrations many patients describe is having to retell their story every time they switch offices. Old treatment plans are unclear. Records are incomplete. Nobody seems to know what was started, what was recommended, or what matters most to the patient.</p>
-    <p>We work hard to make the opposite experience feel normal here. That means organized records, clear explanations, careful treatment planning, and helping patients understand not just what we recommend, but why. Whether you stay in the area for years or life eventually takes you somewhere else, the goal is the same: leave each visit knowing what is happening, what comes next, and what options are still on the table.</p>
+    <p>One of the frustrations many patients describe is having to retell their story every time they switch offices. Old recommendations are vague, records are incomplete, and nobody seems to know what was started or what matters most to the patient.</p>
+    <p>We work hard to make the opposite experience feel normal here. That means organized records, careful documentation, clear explanations, and treatment planning that makes sense whether you stay in the area for years or life eventually sends you somewhere else. The goal is to leave each visit knowing what is happening, what comes next, and what options are still open.</p>
+
+    <h2>A Calmer, More Personal Office Experience</h2>
+    <p>Patients choosing a private dentist near Fort Hood are often also choosing a better day-to-day experience. Familiar music, TVs above each treatment chair, headphones, blankets, and other comfort details help the office feel calmer without making it feel gimmicky. It is a small part of the experience, but for anxious patients and busy families, it matters.</p>
 
     <h2>Conveniently Located in Killeen</h2>
     <p>Elm Ridge Implant and Family Dentistry is conveniently located in Killeen and regularly serves patients from Fort Hood, Fort Cavazos, Harker Heights, Nolanville, Copperas Cove, and nearby communities. For many patients, private care nearby is worth the short drive because they want a stable office that feels personal, organized, and genuinely invested in the outcome.</p>
@@ -96,7 +107,7 @@ writePage('dentist-near-fort-hood', {
   ],
   footerTitle: 'Looking for a Private Dentist Near Fort Hood?',
   footerText:
-    'Schedule with Elm Ridge Implant and Family Dentistry in Killeen for family, emergency, cosmetic, and implant care with a consistent private-practice team.',
+    'Schedule with Elm Ridge Implant and Family Dentistry in Killeen for private, relationship-based dental care with a consistent team and a long-term point of view.',
   footerPrimaryLabel: 'Schedule an Appointment',
   footerPrimaryHref: '/#contact',
   footerSecondaryLabel: 'Call 254-699-4127',
