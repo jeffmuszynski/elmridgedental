@@ -785,6 +785,6 @@ createServer(async (req, res) => {
     res.writeHead(404, { 'Content-Type': 'text/plain' });
     res.end('404 Not Found');
   }
-}).listen(PORT, () => {
-  console.log(`Server running at http://localhost:${PORT}`);
+}).listen(PORT, '0.0.0.0', () => {
+  console.log(`Server running at http://0.0.0.0:${PORT}`);
 });

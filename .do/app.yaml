@@ -9,12 +9,18 @@ services:
       deploy_on_push: true
     dockerfile_path: Dockerfile
     source_dir: /
+    run_command: npm start
     http_port: 8080
     instance_count: 1
     instance_size_slug: apps-s-1vcpu-0.5gb
 
 ingress:
   rules:
+    - match:
+        path:
+          prefix: /api
+      component:
+        name: web
     - match:
         path:
           prefix: /dentalimplants
