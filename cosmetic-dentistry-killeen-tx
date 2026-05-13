@@ -84,9 +84,14 @@
     ></textarea>
   </div>
 </div>
-    <label style="display: block; font-weight: 700; margin-bottom: 10px;">
-      Upload a clear smile photo
-    </label>
+    <div style="display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 6px 16px; margin-bottom: 10px;">
+      <label for="smilePhoto" style="font-weight: 700;">
+        Upload a clear smile photo
+      </label>
+      <span style="font-size: 13px; color: #6b7280; line-height: 1.4;">
+        For best results, use a straight-on smile photo with teeth clearly visible, good lighting, and minimal blur.
+      </span>
+    </div>
 
     <input
       id="smilePhoto"
@@ -180,17 +185,6 @@
   </p>
 </div>
     </div>
-
-    <div style="background: #ffffff; padding: 16px; border-radius: 18px;">
-      <h3 style="margin: 0 0 12px; font-size: 16px;">Simulated Cosmetic Result</h3>
-      <img id="afterSmileImage" alt="Simulated cosmetic smile result" style="width: 100%; border-radius: 14px;" />
-    </div>
-  </div>
-
-  <p style="margin-top: 18px; font-size: 13px; color: #6b7280;">
-    For best results, use a straight-on smile photo with teeth clearly visible,
-    good lighting, and minimal blur.
-  </p>
 </section>
 
 <script>
@@ -288,13 +282,15 @@ async function downloadSmileCompositeImage() {
     const ctx = canvas.getContext("2d");
 
     const width = 1600;
-    const height = 1050;
+    const height = 1220;
     const padding = 60;
     const headerHeight = 120;
-    const labelHeight = 50;
+    const labelHeight = 52;
     const imageGap = 40;
     const imageWidth = (width - padding * 2 - imageGap) / 2;
-    const imageHeight = 700;
+    const imageHeight = 760;
+    const footerY = headerHeight + labelHeight + imageHeight + 56;
+    const footerHeight = height - footerY - padding;
 
     canvas.width = width;
     canvas.height = height;
@@ -326,20 +322,25 @@ async function downloadSmileCompositeImage() {
     drawImageCover(ctx, beforeImage, beforeX, imageY, imageWidth, imageHeight);
     drawImageCover(ctx, afterImage, afterX, imageY, imageWidth, imageHeight);
 
-    ctx.strokeStyle = "#d1d5db";
-    ctx.lineWidth = 3;
-    ctx.strokeRect(beforeX, imageY, imageWidth, imageHeight);
-    ctx.strokeRect(afterX, imageY, imageWidth, imageHeight);
-
-    ctx.fillStyle = "#374151";
-    ctx.font = "22px Arial, sans-serif";
-    ctx.fillText("This image is a simulation and is not a diagnosis, treatment plan, or guarantee of outcome.", padding, 930);
-
     ctx.fillStyle = "#2C3E3E";
+    ctx.fillRect(padding, footerY, width - padding * 2, footerHeight);
+
+    ctx.fillStyle = "#ffffff";
+    ctx.font = "bold 34px Arial, sans-serif";
+    ctx.fillText("Elm Ridge Implant and Family Dentistry", padding + 34, footerY + 54);
+
+    ctx.font = "24px Arial, sans-serif";
+    ctx.fillText("Cosmetic Dentistry Consultation", padding + 34, footerY + 92);
+
+    ctx.fillStyle = "#A8D4D4";
     ctx.font = "bold 24px Arial, sans-serif";
-    ctx.fillText("Elm Ridge Implant and Family Dentistry", padding, 980);
-    ctx.font = "22px Arial, sans-serif";
-    ctx.fillText("Cosmetic Dentistry Consultation", padding, 1015);
+    ctx.fillText("254-699-4127", padding + 34, footerY + 136);
+    ctx.fillText("www.elmridgedental.com", padding + 250, footerY + 136);
+    ctx.fillText("2601 E. Elms Rd, Killeen, TX 76542", padding + 610, footerY + 136);
+
+    ctx.fillStyle = "rgba(255,255,255,0.72)";
+    ctx.font = "20px Arial, sans-serif";
+    ctx.fillText("This image is a simulation and is not a diagnosis, treatment plan, or guarantee of outcome.", padding + 34, footerY + footerHeight - 30);
 
     const link = document.createElement("a");
     link.download = "elm-ridge-smile-simulation-before-after.png";
@@ -431,7 +432,14 @@ smileLoadingInterval = setInterval(() => {
         body: formData
       });
 
-      const data = await response.json();
+      const responseText = await response.text();
+      let data = {};
+
+      try {
+        data = responseText ? JSON.parse(responseText) : {};
+      } catch {
+        throw new Error("Smile simulation failed. Please refresh the page and try again.");
+      }
 
       if (!response.ok) {
         throw new Error(data.error || "Smile simulation failed.");
@@ -456,22 +464,34 @@ smileLoadingInterval = setInterval(() => {
 }
   });
 </script>
-      <h2 class="font-display text-4xl text-charcoal">Cosmetic Options We Offer</h2>
-      <div class="grid md:grid-cols-2 gap-5">
-        <p><strong>Veneers</strong><br />Thin porcelain restorations can improve shape, shade, spacing, and symmetry for selected front teeth.</p>
-        <p><strong>Cosmetic Bonding</strong><br />Tooth-colored resin can repair small chips, reshape edges, or close minor spaces in a conservative way.</p>
-        <p><strong>Whitening</strong><br />Professional whitening can brighten natural enamel before other cosmetic decisions are made.</p>
-        <p><strong>Invisalign</strong><br />Clear aligners can improve crowding, spacing, and tooth position before or alongside cosmetic treatment.</p>
-        <p><strong>Cosmetic Crowns</strong><br />Crowns can rebuild teeth that need both cosmetic improvement and structural support.</p>
-        <p><strong>Smile Makeovers</strong><br />For bigger changes, we can coordinate several treatments into one clear plan.</p>
-        <p><strong>Implant and Restorative Coordination</strong><br />When missing teeth are part of the concern, implant and crown planning can be integrated with cosmetic goals.</p>
+      <div class="bg-stone border border-teal-light px-6 py-10 md:px-10 md:py-12 text-center">
+        <h2 class="font-display text-4xl text-charcoal mb-8">Cosmetic Options We Offer</h2>
+        <div class="grid md:grid-cols-2 gap-x-10 gap-y-8 max-w-3xl mx-auto">
+          <p><strong class="block font-body text-lg font-bold text-charcoal mb-1">Veneers</strong>Thin porcelain restorations can improve shape, shade, spacing, and symmetry for selected front teeth.</p>
+          <p><strong class="block font-body text-lg font-bold text-charcoal mb-1">Cosmetic Bonding</strong>Tooth-colored resin can repair small chips, reshape edges, or close minor spaces in a conservative way.</p>
+          <p><strong class="block font-body text-lg font-bold text-charcoal mb-1">Whitening</strong>Professional whitening can brighten natural enamel before other cosmetic decisions are made.</p>
+          <p><strong class="block font-body text-lg font-bold text-charcoal mb-1">Invisalign</strong>Clear aligners can improve crowding, spacing, and tooth position before or alongside cosmetic treatment.</p>
+          <p><strong class="block font-body text-lg font-bold text-charcoal mb-1">Cosmetic Crowns</strong>Crowns can rebuild teeth that need both cosmetic improvement and structural support.</p>
+          <p><strong class="block font-body text-lg font-bold text-charcoal mb-1">Smile Makeovers</strong>For bigger changes, we can coordinate several treatments into one clear plan.</p>
+          <p class="md:col-span-2 max-w-2xl mx-auto"><strong class="block font-body text-lg font-bold text-charcoal mb-1">Implant and Restorative Coordination</strong>When missing teeth are part of the concern, implant and crown planning can be integrated with cosmetic goals.</p>
+        </div>
       </div>
-      <h2 class="font-display text-4xl text-charcoal">Natural-Looking Results Matter</h2>
-      <p>Patients often tell us they want their smile to look better without looking fake. That is why we pay attention to tooth shape, gum display, bite, facial balance, and the small details that make dentistry blend in. Cosmetic dentistry should give you confidence, not make you feel like you are wearing someone else's smile.</p>
-      <h2 class="font-display text-4xl text-charcoal">What Happens at a Cosmetic Consultation?</h2>
-      <p>We start by listening to what bothers you and what you hope to change. From there, we evaluate your teeth, gums, bite, existing dental work, and smile photos. If there are health concerns, we explain what should be handled first. If several cosmetic paths are possible, we compare them clearly so the plan matches your expectations and budget.</p>
-      <h2 class="font-display text-4xl text-charcoal">Is Cosmetic Dentistry Right for You?</h2>
-      <p>Cosmetic dentistry can be a good fit if you avoid smiling, hide your teeth in photos, feel self-conscious about old dental work, or want a more polished look for personal or professional reasons. The right plan may be small and conservative, or it may involve a larger transformation. Either way, the first step is a conversation.</p>
+      <div class="bg-white border border-teal-light px-6 py-10 md:px-10 md:py-12">
+        <div class="max-w-3xl mx-auto text-center">
+          <h2 class="font-body text-3xl font-bold text-charcoal">Natural-Looking Results Matter</h2>
+          <p class="text-charcoal/70 leading-8">Patients often tell us they want their smile to look better without looking fake. That is why we pay attention to tooth shape, gum display, bite, facial balance, and the small details that make dentistry blend in. Cosmetic dentistry should give you confidence, not make you feel like you are wearing someone else's smile.</p>
+        </div>
+        <div class="mt-10 grid md:grid-cols-2 gap-8 max-w-4xl mx-auto">
+          <div class="flex flex-col">
+            <h2 class="font-body text-2xl font-bold text-charcoal md:min-h-[4rem]">What Happens at a Cosmetic Consultation?</h2>
+            <p class="text-charcoal/70 leading-8 mt-4">We start by listening to what bothers you and what you hope to change. From there, we evaluate your teeth, gums, bite, existing dental work, and smile photos. If there are health concerns, we explain what should be handled first. If several cosmetic paths are possible, we compare them clearly so the plan matches your expectations and budget.</p>
+          </div>
+          <div class="flex flex-col">
+            <h2 class="font-body text-2xl font-bold text-charcoal md:min-h-[4rem]">Is Cosmetic Dentistry Right for You?</h2>
+            <p class="text-charcoal/70 leading-8 mt-4">Cosmetic dentistry can be a good fit if you avoid smiling, hide your teeth in photos, feel self-conscious about old dental work, or want a more polished look for personal or professional reasons. The right plan may be small and conservative, or it may involve a larger transformation. Either way, the first step is a conversation.</p>
+          </div>
+        </div>
+      </div>
     </div></section>
     <section class="py-16 bg-stone"><div class="max-w-4xl mx-auto px-6"><h2 class="font-display text-4xl mb-8">Cosmetic Dentistry FAQ</h2><div class="space-y-4"><details class="bg-white border border-teal-light p-6"><summary class="font-semibold">What is the best cosmetic dental treatment?</summary><p class="mt-3 text-charcoal/65">It depends on the problem. Whitening, bonding, veneers, crowns, Invisalign, and implants all solve different concerns.</p></details><details class="bg-white border border-teal-light p-6"><summary class="font-semibold">Can cosmetic dentistry look natural?</summary><p class="mt-3 text-charcoal/65">Yes. Natural-looking cosmetic dentistry depends on shade, shape, proportions, bite, and careful planning.</p></details><details class="bg-white border border-teal-light p-6"><summary class="font-semibold">Do you offer smile makeovers?</summary><p class="mt-3 text-charcoal/65">Yes. A smile makeover may combine several treatments into one coordinated plan.</p></details><details class="bg-white border border-teal-light p-6"><summary class="font-semibold">Can you fix chipped or worn teeth?</summary><p class="mt-3 text-charcoal/65">Often, yes. Depending on the amount of damage, bonding, veneers, crowns, or bite-related treatment may be recommended.</p></details></div></div></section>
     <section class="py-16 bg-charcoal text-white text-center"><div class="max-w-3xl mx-auto px-6"><h2 class="font-display text-4xl mb-4">Ready to talk about your smile?</h2><p class="text-white/65 mb-8">Schedule a cosmetic consultation with Elm Ridge Implant and Family Dentistry in Killeen.</p><a href="/#contact" class="inline-block bg-teal px-8 py-4 text-xs uppercase tracking-widest font-semibold">Request a Consultation</a></div></section>
