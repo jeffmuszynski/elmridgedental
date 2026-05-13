@@ -22,6 +22,7 @@ const SMTP_PORT = Number(process.env.SMTP_PORT || 465);
 const RECAPTCHA_ACTION = 'contact_form';
 const RECAPTCHA_MIN_SCORE = 0.5;
 const SMILE_PREVIEW_JOB_TTL_MS = 15 * 60 * 1000;
+const SMILE_UPLOAD_LIMIT_BYTES = 20 * 1024 * 1024;
 const smilePreviewJobs = new Map();
 const openai = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY,
@@ -111,6 +112,14 @@ function json(res, statusCode, payload) {
     'X-Content-Type-Options': 'nosniff',
   });
   res.end(JSON.stringify(payload));
+}
+
+class SmileUploadError extends Error {
+  constructor(message, statusCode = 400) {
+    super(message);
+    this.name = 'SmileUploadError';
+    this.statusCode = statusCode;
+  }
 }
 
 async function readJsonBody(req) {
@@ -294,10 +303,17 @@ async function handleContactForm(req, res) {
 
 function parseSmileUpload(req) {
   return new Promise((resolve, reject) => {
+    let failed = false;
+    const rejectOnce = (error) => {
+      if (failed) return;
+      failed = true;
+      reject(error);
+    };
+
     const busboy = Busboy({
       headers: req.headers,
       limits: {
-        fileSize: 10 * 1024 * 1024,
+        fileSize: SMILE_UPLOAD_LIMIT_BYTES,
         files: 1,
         fieldSize: 10 * 1024,
       },
@@ -310,14 +326,17 @@ function parseSmileUpload(req) {
       const chunks = [];
 
       file.on('data', (chunk) => {
+        if (failed) return;
         chunks.push(chunk);
       });
 
       file.on('limit', () => {
-        reject(new Error('Image is too large. Please upload a file under 10MB.'));
+        rejectOnce(new SmileUploadError('Image is too large. Please upload a file under 20MB.', 413));
+        file.resume();
       });
 
       file.on('end', () => {
+        if (failed) return;
         uploadedFile = {
           fieldname,
           filename: info.filename || 'smile-photo.jpg',
@@ -328,13 +347,21 @@ function parseSmileUpload(req) {
     });
 
     busboy.on('field', (fieldname, value) => {
+      if (failed) return;
       fields[fieldname] = value;
     });
 
-    busboy.on('error', reject);
+    busboy.on('error', (error) => {
+      rejectOnce(new SmileUploadError(error.message || 'The smile photo upload could not be read. Please try another image.', 400));
+    });
 
     busboy.on('finish', () => {
+      if (failed) return;
       resolve({ uploadedFile, fields });
+    });
+
+    req.on('aborted', () => {
+      rejectOnce(new SmileUploadError('The upload was interrupted. Please try again from a stable connection.', 400));
     });
 
     req.pipe(busboy);
@@ -597,8 +624,10 @@ async function handleSmileSimulationStart(req, res) {
   } catch (error) {
     if (!isProduction) console.error('Smile simulation start error:', error);
 
-    json(res, 500, {
-      error: 'Smile simulation failed to start. Please try another clear smile photo.',
+    json(res, error instanceof SmileUploadError ? error.statusCode : 500, {
+      error: error instanceof SmileUploadError
+        ? error.message
+        : 'Smile simulation failed to start. Please try another clear smile photo.',
     });
   }
 }

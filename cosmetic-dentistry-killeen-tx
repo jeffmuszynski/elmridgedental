@@ -206,6 +206,9 @@ let smileLoadingInterval = null;
 const SMILE_ATTEMPT_WINDOW_HOURS = 24;
 const SMILE_POLL_INTERVAL_MS = 5000;
 const SMILE_MAX_WAIT_MS = 3 * 60 * 1000;
+const SMILE_MAX_UPLOAD_BYTES = 8 * 1024 * 1024;
+const SMILE_TARGET_UPLOAD_BYTES = 4.5 * 1024 * 1024;
+const SMILE_MAX_IMAGE_DIMENSION = 1800;
 
 function getSmileAttempts() {
   try {
@@ -247,6 +250,79 @@ async function readSmileJsonResponse(response, fallbackMessage) {
 
 function wait(ms) {
   return new Promise((resolve) => setTimeout(resolve, ms));
+}
+
+function loadSmileUploadImage(file) {
+  return new Promise((resolve, reject) => {
+    const image = new Image();
+    const imageUrl = URL.createObjectURL(file);
+
+    image.onload = () => {
+      URL.revokeObjectURL(imageUrl);
+      resolve(image);
+    };
+
+    image.onerror = () => {
+      URL.revokeObjectURL(imageUrl);
+      reject(new Error("This photo could not be read. Please try a clear JPG, PNG, or WebP image."));
+    };
+
+    image.src = imageUrl;
+  });
+}
+
+function canvasToBlob(canvas, type, quality) {
+  return new Promise((resolve) => {
+    canvas.toBlob(resolve, type, quality);
+  });
+}
+
+async function prepareSmileUploadFile(file) {
+  const allowedTypes = ["image/jpeg", "image/png", "image/webp"];
+
+  if (!allowedTypes.includes(file.type)) {
+    throw new Error("Please upload a JPG, PNG, or WebP image.");
+  }
+
+  if (file.size <= SMILE_MAX_UPLOAD_BYTES) {
+    return file;
+  }
+
+  const image = await loadSmileUploadImage(file);
+  const largestSide = Math.max(image.naturalWidth || image.width, image.naturalHeight || image.height);
+  const scale = Math.min(1, SMILE_MAX_IMAGE_DIMENSION / largestSide);
+  let width = Math.max(1, Math.round((image.naturalWidth || image.width) * scale));
+  let height = Math.max(1, Math.round((image.naturalHeight || image.height) * scale));
+  let quality = 0.84;
+  let compressedBlob = null;
+
+  for (let attempt = 0; attempt < 5; attempt += 1) {
+    const canvas = document.createElement("canvas");
+    const ctx = canvas.getContext("2d");
+
+    canvas.width = width;
+    canvas.height = height;
+    ctx.drawImage(image, 0, 0, width, height);
+
+    compressedBlob = await canvasToBlob(canvas, "image/jpeg", quality);
+
+    if (compressedBlob && compressedBlob.size <= SMILE_TARGET_UPLOAD_BYTES) {
+      break;
+    }
+
+    width = Math.max(1, Math.round(width * 0.86));
+    height = Math.max(1, Math.round(height * 0.86));
+    quality = Math.max(0.68, quality - 0.06);
+  }
+
+  if (!compressedBlob || compressedBlob.size > SMILE_MAX_UPLOAD_BYTES) {
+    throw new Error("This photo is too large to upload from mobile. Please choose a smaller image or screenshot of the smile photo.");
+  }
+
+  return new File([compressedBlob], "smile-photo.jpg", {
+    type: "image/jpeg",
+    lastModified: Date.now(),
+  });
 }
 
 async function startSmilePreviewJob(formData) {
@@ -513,6 +589,16 @@ if (!smilePhone.value.trim()) {
   return;
 }
 
+    let uploadFile;
+
+    try {
+      uploadFile = await prepareSmileUploadFile(file);
+    } catch (error) {
+      smileError.textContent = error.message || "This photo could not be prepared. Please try another clear smile photo.";
+      smileError.style.display = "block";
+      return;
+    }
+
     const beforeImageUrl = URL.createObjectURL(file);
     beforeSmileImage.src = beforeImageUrl;
     afterSmileImage.removeAttribute("src");
@@ -548,7 +634,7 @@ smileLoadingInterval = setInterval(() => {
       formData.append("phone", smilePhone.value.trim());
       formData.append("email", smileEmail.value.trim());
       formData.append("message", smileMessage.value.trim());
-      formData.append("image", file);
+      formData.append("image", uploadFile);
 
       const jobId = await startSmilePreviewJob(formData);
       const imageUrl = await waitForSmilePreview(jobId);
