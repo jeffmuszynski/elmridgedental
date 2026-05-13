@@ -2,6 +2,7 @@ import { createServer } from 'http';
 import { readFile } from 'fs/promises';
 import { extname, join } from 'path';
 import { fileURLToPath } from 'url';
+import { randomUUID } from 'crypto';
 import { getSpamPhraseMatch } from './spam-protection.mjs';
 import dotenv from 'dotenv';
 import OpenAI, { toFile } from 'openai';
@@ -15,10 +16,13 @@ const PORT = process.env.PORT || 3000;
 const CANONICAL_ORIGIN = 'https://www.elmridgedental.com';
 const CONTACT_FORM_ENDPOINT = process.env.CONTACT_FORM_ENDPOINT || 'https://formsubmit.co/ajax/contact@elmridgedental.com';
 const SMILE_EMAIL_TO = process.env.SMILE_EMAIL_TO || 'contact@elmridgedental.com';
+const CONTACT_EMAIL_TO = process.env.CONTACT_EMAIL_TO || SMILE_EMAIL_TO;
 const SMTP_HOST = process.env.SMTP_HOST || 'smtp.gmail.com';
 const SMTP_PORT = Number(process.env.SMTP_PORT || 465);
 const RECAPTCHA_ACTION = 'contact_form';
 const RECAPTCHA_MIN_SCORE = 0.5;
+const SMILE_PREVIEW_JOB_TTL_MS = 15 * 60 * 1000;
+const smilePreviewJobs = new Map();
 const openai = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY,
 });
@@ -132,6 +136,11 @@ async function readLargeJsonBody(req) {
 }
 
 async function verifyRecaptcha(token) {
+  if (!process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY && !process.env.RECAPTCHA_SECRET_KEY) {
+    if (isProduction) console.warn('Contact form reCAPTCHA skipped: env vars are missing.');
+    return { ok: true, skipped: true };
+  }
+
   if (!isProduction && process.env.RECAPTCHA_SKIP_VERIFY === 'true') {
     return { ok: true, skipped: true };
   }
@@ -166,6 +175,9 @@ async function verifyRecaptcha(token) {
 async function forwardContactLead(fields) {
   if (!isProduction && CONTACT_FORM_ENDPOINT === 'mock') return;
 
+  const sentBySmtp = await sendContactLeadEmail(fields);
+  if (sentBySmtp) return;
+
   const body = new URLSearchParams();
   for (const [key, value] of Object.entries(fields)) {
     if (key === 'recaptcha_token' || key === 'website' || key === 'company') continue;
@@ -182,6 +194,64 @@ async function forwardContactLead(fields) {
   });
 
   if (!response.ok) throw new Error('Contact form provider rejected submission');
+}
+
+function getGoogleWorkspaceTransport() {
+  if (!process.env.GOOGLE_WORKSPACE_SMTP_USER || !process.env.GOOGLE_WORKSPACE_SMTP_PASS) {
+    return null;
+  }
+
+  return nodemailer.createTransport({
+    host: SMTP_HOST,
+    port: SMTP_PORT,
+    secure: SMTP_PORT === 465,
+    auth: {
+      user: process.env.GOOGLE_WORKSPACE_SMTP_USER,
+      pass: process.env.GOOGLE_WORKSPACE_SMTP_PASS,
+    },
+  });
+}
+
+async function sendContactLeadEmail(fields) {
+  const transport = getGoogleWorkspaceTransport();
+
+  if (!transport) return false;
+
+  const excludedFields = new Set(['recaptcha_token', 'website', 'company', '_template', '_captcha']);
+  const rows = Object.entries(fields)
+    .filter(([key, value]) => !excludedFields.has(key) && String(value || '').trim())
+    .map(([key, value]) => ({ key, value: String(value) }));
+  const patientName = fields['Patient name'] || `${fields['First name'] || ''} ${fields['Last name'] || ''}`.trim() || 'Unknown patient';
+  const subject = fields._subject || `WEBSITE APPOINTMENT REQUEST - ${patientName}`;
+  const fromAddress = process.env.CONTACT_EMAIL_FROM || process.env.SMILE_EMAIL_FROM || process.env.GOOGLE_WORKSPACE_SMTP_USER;
+  const from = {
+    name: process.env.CONTACT_EMAIL_FROM_NAME || 'Elm Ridge Appointment Requests',
+    address: fromAddress,
+  };
+  const text = [
+    'New appointment request',
+    '',
+    ...rows.flatMap(({ key, value }) => [`${key}: ${value}`, '']),
+  ].join('\n').trim();
+  const htmlRows = rows
+    .map(({ key, value }) => `<tr><th style="text-align:left;padding:10px;border:1px solid #d8e8e8;background:#EAF4F4;color:#2C3E3E;">${escapeHtml(key)}</th><td style="padding:10px;border:1px solid #d8e8e8;color:#2C3E3E;">${escapeHtml(value).replaceAll('\n', '<br />')}</td></tr>`)
+    .join('');
+
+  await transport.sendMail({
+    from,
+    to: CONTACT_EMAIL_TO,
+    replyTo: fields.Email || undefined,
+    subject,
+    text,
+    html: [
+      '<div style="font-family:Arial,sans-serif;color:#2C3E3E;">',
+      '<h2 style="margin:0 0 16px;">New appointment request</h2>',
+      `<table style="border-collapse:collapse;width:100%;max-width:720px;">${htmlRows}</table>`,
+      '</div>',
+    ].join(''),
+  });
+
+  return true;
 }
 
 async function handleContactForm(req, res) {
@@ -272,19 +342,7 @@ function parseSmileUpload(req) {
 }
 
 function getSmileEmailTransport() {
-  if (!process.env.GOOGLE_WORKSPACE_SMTP_USER || !process.env.GOOGLE_WORKSPACE_SMTP_PASS) {
-    return null;
-  }
-
-  return nodemailer.createTransport({
-    host: SMTP_HOST,
-    port: SMTP_PORT,
-    secure: SMTP_PORT === 465,
-    auth: {
-      user: process.env.GOOGLE_WORKSPACE_SMTP_USER,
-      pass: process.env.GOOGLE_WORKSPACE_SMTP_PASS,
-    },
-  });
+  return getGoogleWorkspaceTransport();
 }
 
 function escapeHtml(value) {
@@ -294,6 +352,85 @@ function escapeHtml(value) {
     .replaceAll('>', '&gt;')
     .replaceAll('"', '&quot;')
     .replaceAll("'", '&#39;');
+}
+
+function validateSmileUpload(uploadedFile) {
+  if (!process.env.OPENAI_API_KEY) {
+    return 'OpenAI API key is missing on the server.';
+  }
+
+  if (!uploadedFile) {
+    return 'Please upload a smile photo.';
+  }
+
+  const allowedTypes = ['image/jpeg', 'image/png', 'image/webp'];
+
+  if (!allowedTypes.includes(uploadedFile.mimeType)) {
+    return 'Please upload a JPG, PNG, or WebP image.';
+  }
+
+  return '';
+}
+
+async function generateSmileSimulationImage(uploadedFile) {
+  const imageFile = await toFile(
+    uploadedFile.buffer,
+    uploadedFile.filename,
+    {
+      type: uploadedFile.mimeType,
+    }
+  );
+
+  const result = await openai.images.edit({
+    model: 'gpt-image-1',
+    image: imageFile,
+    prompt: SMILE_PROMPT,
+    size: '1024x1536',
+    quality: 'high',
+    n: 1,
+    input_fidelity: 'high',
+  });
+
+  const b64 = result.data?.[0]?.b64_json;
+
+  if (!b64) {
+    throw new Error('The smile simulation could not be created.');
+  }
+
+  return `data:image/png;base64,${b64}`;
+}
+
+function scheduleSmilePreviewJobCleanup(jobId) {
+  const job = smilePreviewJobs.get(jobId);
+  if (!job || job.cleanupTimer) return;
+
+  job.cleanupTimer = setTimeout(() => {
+    smilePreviewJobs.delete(jobId);
+  }, SMILE_PREVIEW_JOB_TTL_MS);
+
+  job.cleanupTimer.unref?.();
+}
+
+async function processSmilePreviewJob(jobId, uploadedFile) {
+  try {
+    const imageUrl = await generateSmileSimulationImage(uploadedFile);
+    const job = smilePreviewJobs.get(jobId);
+    if (!job) return;
+
+    job.status = 'complete';
+    job.imageUrl = imageUrl;
+    job.completedAt = Date.now();
+  } catch (error) {
+    if (!isProduction) console.error('Smile simulation job error:', error);
+    const job = smilePreviewJobs.get(jobId);
+    if (!job) return;
+
+    job.status = 'error';
+    job.error = error.message || 'Smile simulation failed. Please try another clear smile photo.';
+    job.completedAt = Date.now();
+  } finally {
+    scheduleSmilePreviewJobCleanup(jobId);
+  }
 }
 
 async function sendSmileSimulationEmail({ fields, compositeImageBuffer }) {
@@ -404,60 +541,20 @@ async function handleSmileSimulation(req, res) {
   }
 
   try {
-    if (!process.env.OPENAI_API_KEY) {
-      json(res, 500, {
-        error: 'OpenAI API key is missing on the server.',
+    const { uploadedFile } = await parseSmileUpload(req);
+    const validationError = validateSmileUpload(uploadedFile);
+
+    if (validationError) {
+      json(res, validationError.includes('OpenAI API key') ? 500 : 400, {
+        error: validationError,
       });
       return;
     }
 
-    const { uploadedFile, fields } = await parseSmileUpload(req);
-
-    if (!uploadedFile) {
-      json(res, 400, {
-        error: 'Please upload a smile photo.',
-      });
-      return;
-    }
-
-    const allowedTypes = ['image/jpeg', 'image/png', 'image/webp'];
-
-    if (!allowedTypes.includes(uploadedFile.mimeType)) {
-      json(res, 400, {
-        error: 'Please upload a JPG, PNG, or WebP image.',
-      });
-      return;
-    }
-
-    const imageFile = await toFile(
-      uploadedFile.buffer,
-      uploadedFile.filename,
-      {
-        type: uploadedFile.mimeType,
-      }
-    );
-
-    const result = await openai.images.edit({
-  model: "gpt-image-1",
-  image: imageFile,
-  prompt: SMILE_PROMPT,
-  size: "1024x1536",
-  quality: "high",
-  n: 1,
-  input_fidelity: "high",
-});
-
-    const b64 = result.data?.[0]?.b64_json;
-
-    if (!b64) {
-      json(res, 500, {
-        error: 'The smile simulation could not be created.',
-      });
-      return;
-    }
+    const imageUrl = await generateSmileSimulationImage(uploadedFile);
 
     json(res, 200, {
-      imageUrl: `data:image/png;base64,${b64}`,
+      imageUrl,
     });
   } catch (error) {
     if (!isProduction) console.error('Smile simulation error:', error);
@@ -466,6 +563,83 @@ async function handleSmileSimulation(req, res) {
       error: 'Smile simulation failed. Please try another clear smile photo.',
     });
   }
+}
+
+async function handleSmileSimulationStart(req, res) {
+  if (req.method !== 'POST') {
+    res.writeHead(405, { Allow: 'POST' });
+    res.end();
+    return;
+  }
+
+  try {
+    const { uploadedFile } = await parseSmileUpload(req);
+    const validationError = validateSmileUpload(uploadedFile);
+
+    if (validationError) {
+      json(res, validationError.includes('OpenAI API key') ? 500 : 400, {
+        error: validationError,
+      });
+      return;
+    }
+
+    const jobId = randomUUID();
+    smilePreviewJobs.set(jobId, {
+      status: 'pending',
+      createdAt: Date.now(),
+    });
+
+    processSmilePreviewJob(jobId, uploadedFile);
+
+    json(res, 202, {
+      jobId,
+    });
+  } catch (error) {
+    if (!isProduction) console.error('Smile simulation start error:', error);
+
+    json(res, 500, {
+      error: 'Smile simulation failed to start. Please try another clear smile photo.',
+    });
+  }
+}
+
+async function handleSmileSimulationStatus(req, res, requestUrl) {
+  if (req.method !== 'GET') {
+    res.writeHead(405, { Allow: 'GET' });
+    res.end();
+    return;
+  }
+
+  const jobId = requestUrl.searchParams.get('jobId') || '';
+  const job = smilePreviewJobs.get(jobId);
+
+  if (!job) {
+    json(res, 404, {
+      status: 'error',
+      error: 'Smile preview job was not found. Please start a new preview.',
+    });
+    return;
+  }
+
+  if (job.status === 'complete') {
+    json(res, 200, {
+      status: 'complete',
+      imageUrl: job.imageUrl,
+    });
+    return;
+  }
+
+  if (job.status === 'error') {
+    json(res, 200, {
+      status: 'error',
+      error: job.error || 'Smile simulation failed. Please try another clear smile photo.',
+    });
+    return;
+  }
+
+  json(res, 200, {
+    status: 'pending',
+  });
 }
 
 async function handleSmileSimulationEmail(req, res) {
@@ -514,10 +688,20 @@ createServer(async (req, res) => {
     return;
   }
 
+  if (normalizedPath === '/api/smile-simulation/start') {
+    await handleSmileSimulationStart(req, res);
+    return;
+  }
+
+  if (normalizedPath === '/api/smile-simulation/status') {
+    await handleSmileSimulationStatus(req, res, requestUrl);
+    return;
+  }
+
   if (normalizedPath === '/api/smile-simulation') {
-  await handleSmileSimulation(req, res);
-  return;
-}
+    await handleSmileSimulation(req, res);
+    return;
+  }
 
   if (normalizedPath === '/api/smile-simulation-email') {
     await handleSmileSimulationEmail(req, res);

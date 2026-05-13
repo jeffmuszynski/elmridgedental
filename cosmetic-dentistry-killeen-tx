@@ -204,6 +204,8 @@ let smileLoadingInterval = null;
 
   const SMILE_ATTEMPT_LIMIT = 2;
 const SMILE_ATTEMPT_WINDOW_HOURS = 24;
+const SMILE_POLL_INTERVAL_MS = 5000;
+const SMILE_MAX_WAIT_MS = 3 * 60 * 1000;
 
 function getSmileAttempts() {
   try {
@@ -232,6 +234,98 @@ function saveSmileAttempt() {
 function hasReachedSmileLimit() {
   return getSmileAttempts().length >= SMILE_ATTEMPT_LIMIT;
 }
+
+async function readSmileJsonResponse(response, fallbackMessage) {
+  const responseText = await response.text();
+
+  try {
+    return responseText ? JSON.parse(responseText) : {};
+  } catch {
+    throw new Error(fallbackMessage);
+  }
+}
+
+function wait(ms) {
+  return new Promise((resolve) => setTimeout(resolve, ms));
+}
+
+async function startSmilePreviewJob(formData) {
+  const response = await fetch("/api/smile-simulation/start", {
+    method: "POST",
+    body: formData
+  });
+  const data = await readSmileJsonResponse(response, "Smile simulation failed to start. Please refresh the page and try again.");
+
+  if (!response.ok || !data.jobId) {
+    throw new Error(data.error || "Smile simulation failed to start.");
+  }
+
+  return data.jobId;
+}
+
+async function getSmilePreviewStatus(jobId) {
+  const response = await fetch(`/api/smile-simulation/status?jobId=${encodeURIComponent(jobId)}`, {
+    method: "GET",
+    headers: {
+      Accept: "application/json"
+    }
+  });
+  const data = await readSmileJsonResponse(response, "Smile simulation status could not be read. Please try again.");
+
+  if (!response.ok) {
+    throw new Error(data.error || "Smile simulation status could not be read.");
+  }
+
+  return data;
+}
+
+async function waitForSmilePreview(jobId) {
+  const startedAt = Date.now();
+
+  while (Date.now() - startedAt < SMILE_MAX_WAIT_MS) {
+    await wait(SMILE_POLL_INTERVAL_MS);
+    let data;
+
+    try {
+      data = await getSmilePreviewStatus(jobId);
+    } catch (error) {
+      if (error.name === "TypeError") {
+        continue;
+      }
+
+      throw error;
+    }
+
+    if (data.status === "complete") {
+      if (!data.imageUrl) {
+        throw new Error("Smile simulation completed without an image. Please try again.");
+      }
+
+      return data.imageUrl;
+    }
+
+    if (data.status === "error") {
+      throw new Error(data.error || "Smile simulation failed. Please try another clear smile photo.");
+    }
+  }
+
+  throw new Error("Your smile preview is taking longer than expected. Please try again, or call our office and we can help.");
+}
+
+async function decodeSmileImage(image) {
+  if (image.decode) {
+    await image.decode();
+    return;
+  }
+
+  if (image.complete && image.naturalWidth > 0) return;
+
+  await new Promise((resolve, reject) => {
+    image.onload = resolve;
+    image.onerror = reject;
+  });
+}
+
 function loadImageForCanvas(src) {
   return new Promise((resolve, reject) => {
     const image = new Image();
@@ -419,10 +513,10 @@ if (!smilePhone.value.trim()) {
   return;
 }
 
-    beforeSmileImage.src = URL.createObjectURL(file);
+    const beforeImageUrl = URL.createObjectURL(file);
+    beforeSmileImage.src = beforeImageUrl;
     afterSmileImage.removeAttribute("src");
     smileResults.style.display = "none";
-    smileCta.style.display = "none";
     smileCta.style.display = "none";
 
     smileButton.disabled = true;
@@ -456,28 +550,12 @@ smileLoadingInterval = setInterval(() => {
       formData.append("message", smileMessage.value.trim());
       formData.append("image", file);
 
-      const response = await fetch("/api/smile-simulation", {
-        method: "POST",
-        body: formData
-      });
-
-      const responseText = await response.text();
-      let data = {};
-
-      try {
-        data = responseText ? JSON.parse(responseText) : {};
-      } catch {
-        throw new Error("Smile simulation failed. Please refresh the page and try again.");
-      }
-
-      if (!response.ok) {
-        throw new Error(data.error || "Smile simulation failed.");
-      }
-
-      afterSmileImage.src = data.imageUrl;
+      const jobId = await startSmilePreviewJob(formData);
+      const imageUrl = await waitForSmilePreview(jobId);
+      afterSmileImage.src = imageUrl;
       await Promise.all([
-        beforeSmileImage.decode ? beforeSmileImage.decode().catch(() => {}) : Promise.resolve(),
-        afterSmileImage.decode ? afterSmileImage.decode().catch(() => {}) : Promise.resolve(),
+        decodeSmileImage(beforeSmileImage),
+        decodeSmileImage(afterSmileImage),
       ]);
       smileResults.style.display = "grid";
       saveSmileAttempt();
