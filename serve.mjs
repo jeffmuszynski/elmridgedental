@@ -3,6 +3,11 @@ import { readFile } from 'fs/promises';
 import { extname, join } from 'path';
 import { fileURLToPath } from 'url';
 import { getSpamPhraseMatch } from './spam-protection.mjs';
+import dotenv from 'dotenv';
+import OpenAI, { toFile } from 'openai';
+import Busboy from 'busboy';
+
+dotenv.config({ path: '.env.local' });
 
 const __dirname = fileURLToPath(new URL('.', import.meta.url));
 const PORT = process.env.PORT || 3000;
@@ -10,6 +15,22 @@ const CANONICAL_ORIGIN = 'https://www.elmridgedental.com';
 const CONTACT_FORM_ENDPOINT = process.env.CONTACT_FORM_ENDPOINT || 'https://formsubmit.co/ajax/contact@elmridgedental.com';
 const RECAPTCHA_ACTION = 'contact_form';
 const RECAPTCHA_MIN_SCORE = 0.5;
+const openai = new OpenAI({
+  apiKey: process.env.OPENAI_API_KEY,
+});
+
+const SMILE_PROMPT = `
+Edit only the transparent masked teeth area.
+Keep every unmasked pixel identical to the source image.
+Within the visible teeth only, create a photorealistic simulated cosmetic dental result: improved alignment, natural proportions, dominant centrals, slightly narrower laterals, gently tapered canines, natural enamel texture, subtle incisal translucency, realistic highlights, and a bright natural tooth shade.
+Prioritize natural individual tooth anatomy over idealized uniformity. 
+Keep slight natural variation between teeth. 
+Avoid making the upper anterior teeth look like one continuous white band.
+Use realistic embrasures, subtle line angles, and natural surface texture.
+Keep shade bright but slightly warm, not pure white.
+Do not edit lips, gums, mouth opening, smile width, skin, face, lighting, shadows, background, camera angle, crop, or expression.
+Avoid piano-key veneers, over-whitening, plastic texture, excessive symmetry, cartoon teeth, glow, beauty filter effects, or face reshaping.
+`;
 
 const oldUrlRedirects = new Map([
   ['/contact-us', '/#contact'],
@@ -186,6 +207,120 @@ async function handleContactForm(req, res) {
   }
 }
 
+function parseSmileUpload(req) {
+  return new Promise((resolve, reject) => {
+    const busboy = Busboy({
+      headers: req.headers,
+      limits: {
+        fileSize: 10 * 1024 * 1024,
+        files: 1,
+      },
+    });
+
+    let uploadedFile = null;
+
+    busboy.on('file', (fieldname, file, info) => {
+      const chunks = [];
+
+      file.on('data', (chunk) => {
+        chunks.push(chunk);
+      });
+
+      file.on('limit', () => {
+        reject(new Error('Image is too large. Please upload a file under 10MB.'));
+      });
+
+      file.on('end', () => {
+        uploadedFile = {
+          fieldname,
+          filename: info.filename || 'smile-photo.jpg',
+          mimeType: info.mimeType,
+          buffer: Buffer.concat(chunks),
+        };
+      });
+    });
+
+    busboy.on('error', reject);
+
+    busboy.on('finish', () => {
+      resolve(uploadedFile);
+    });
+
+    req.pipe(busboy);
+  });
+}
+
+async function handleSmileSimulation(req, res) {
+  if (req.method !== 'POST') {
+    res.writeHead(405, { Allow: 'POST' });
+    res.end();
+    return;
+  }
+
+  try {
+    if (!process.env.OPENAI_API_KEY) {
+      json(res, 500, {
+        error: 'OpenAI API key is missing on the server.',
+      });
+      return;
+    }
+
+    const uploadedFile = await parseSmileUpload(req);
+
+    if (!uploadedFile) {
+      json(res, 400, {
+        error: 'Please upload a smile photo.',
+      });
+      return;
+    }
+
+    const allowedTypes = ['image/jpeg', 'image/png', 'image/webp'];
+
+    if (!allowedTypes.includes(uploadedFile.mimeType)) {
+      json(res, 400, {
+        error: 'Please upload a JPG, PNG, or WebP image.',
+      });
+      return;
+    }
+
+    const imageFile = await toFile(
+      uploadedFile.buffer,
+      uploadedFile.filename,
+      {
+        type: uploadedFile.mimeType,
+      }
+    );
+
+    const result = await openai.images.edit({
+  model: "gpt-image-1",
+  image: imageFile,
+  prompt: SMILE_PROMPT,
+  size: "1024x1536",
+  quality: "high",
+  n: 1,
+  input_fidelity: "high",
+});
+
+    const b64 = result.data?.[0]?.b64_json;
+
+    if (!b64) {
+      json(res, 500, {
+        error: 'The smile simulation could not be created.',
+      });
+      return;
+    }
+
+    json(res, 200, {
+      imageUrl: `data:image/png;base64,${b64}`,
+    });
+  } catch (error) {
+    if (!isProduction) console.error('Smile simulation error:', error);
+
+    json(res, 500, {
+      error: 'Smile simulation failed. Please try another clear smile photo.',
+    });
+  }
+}
 createServer(async (req, res) => {
   const requestUrl = new URL(req.url, `http://${req.headers.host || 'localhost'}`);
   const host = (req.headers.host || '').split(':')[0].toLowerCase();
@@ -196,6 +331,11 @@ createServer(async (req, res) => {
     await handleContactForm(req, res);
     return;
   }
+
+  if (normalizedPath === '/api/smile-simulation') {
+  await handleSmileSimulation(req, res);
+  return;
+}
 
   if (oldDestination || host === 'elmridgedental.com') {
     const destination = new URL(oldDestination || requestUrl.pathname, CANONICAL_ORIGIN);

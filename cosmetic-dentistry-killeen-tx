@@ -19,6 +19,443 @@
     <section class="py-16 bg-white"><div class="max-w-4xl mx-auto px-6 space-y-8 leading-8 text-charcoal/70">
       <p>Cosmetic dentistry is not about giving every patient the same smile. The best results fit your face, your bite, your personality, and the way you want to feel when you talk or laugh. At Elm Ridge, Dr. Jeff Muszynski and Dr. Kayla Muszynski take a careful, health-first approach so cosmetic treatment improves appearance without ignoring function or long-term stability.</p>
       <p>Patients visit us for many reasons: old dental work that no longer matches, teeth that have chipped or worn down, discoloration that whitening alone cannot fix, spacing, uneven edges, missing teeth, or a smile that has changed over time. Some plans are simple. Others combine whitening, bonding, veneers, crowns, Invisalign, or implant treatment. We explain the tradeoffs so you can choose the right level of care for your goals.</p>
+      <section id="smile-simulator" style="margin: 60px auto; max-width: 1100px; padding: 32px; background: #f7f4ef; border-radius: 24px;">
+  <div style="max-width: 720px;">
+    <p style="font-size: 14px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: #8a6a3f; margin-bottom: 8px;">
+      Simulated Cosmetic Result
+    </p>
+
+    <h2 style="font-size: 36px; line-height: 1.1; margin: 0 0 16px; color: #111827;">
+      Preview Your Smile Possibilities
+    </h2>
+
+    <p style="font-size: 17px; line-height: 1.6; color: #374151;">
+      Upload a clear smile photo to create an AI-assisted cosmetic smile preview.
+      This simulation is for education and consultation planning only. Actual
+      treatment recommendations require an evaluation with our dental team.
+    </p>
+  </div>
+
+  <form id="smileSimulatorForm" style="margin-top: 28px; background: #ffffff; padding: 24px; border-radius: 18px;">
+    <div style="display: grid; gap: 14px; margin-bottom: 22px;">
+  <div>
+    <label style="display: block; font-weight: 700; margin-bottom: 8px;">Name</label>
+    <input
+      id="smileName"
+      name="name"
+      type="text"
+      required
+      placeholder="Your name"
+      style="display: block; width: 100%; padding: 14px; border: 1px solid #d1d5db; border-radius: 12px;"
+    />
+  </div>
+
+  <div>
+    <label style="display: block; font-weight: 700; margin-bottom: 8px;">Phone</label>
+    <input
+      id="smilePhone"
+      name="phone"
+      type="tel"
+      required
+      placeholder="Your phone number"
+      style="display: block; width: 100%; padding: 14px; border: 1px solid #d1d5db; border-radius: 12px;"
+    />
+  </div>
+
+  <div>
+    <label style="display: block; font-weight: 700; margin-bottom: 8px;">Email</label>
+    <input
+      id="smileEmail"
+      name="email"
+      type="email"
+      placeholder="you@example.com"
+      style="display: block; width: 100%; padding: 14px; border: 1px solid #d1d5db; border-radius: 12px;"
+    />
+  </div>
+
+  <div>
+    <label style="display: block; font-weight: 700; margin-bottom: 8px;">What would you like to improve? <span style="font-weight: 400; color: #6b7280;">(optional)</span></label>
+    <textarea
+      id="smileMessage"
+      name="message"
+      rows="3"
+      placeholder="Whiter teeth, straighter smile, worn edges, old dental work, etc."
+      style="display: block; width: 100%; padding: 14px; border: 1px solid #d1d5db; border-radius: 12px;"
+    ></textarea>
+  </div>
+</div>
+    <label style="display: block; font-weight: 700; margin-bottom: 10px;">
+      Upload a clear smile photo
+    </label>
+
+    <input
+      id="smilePhoto"
+      name="image"
+      type="file"
+      accept="image/jpeg,image/png,image/webp"
+      required
+      style="display: block; width: 100%; padding: 14px; border: 1px solid #d1d5db; border-radius: 12px;"
+    />
+
+    <label style="display: flex; gap: 10px; margin-top: 18px; font-size: 14px; line-height: 1.5; color: #374151;">
+      <input id="smileConsent" type="checkbox" required style="margin-top: 3px;" />
+      <span>
+        I understand this creates a simulated cosmetic preview for educational
+        purposes only. It is not a diagnosis, treatment plan, or guarantee of outcome.
+      </span>
+    </label>
+
+    <button
+      id="smileSubmitButton"
+      type="submit"
+      style="margin-top: 22px; background: #111827; color: #ffffff; border: none; padding: 14px 22px; border-radius: 12px; font-weight: 700; cursor: pointer;"
+    >
+      Generate Smile Preview
+    </button>
+
+    <div id="smileLoading" style="display: none; margin-top: 18px; padding: 16px; background: #eef6f6; border: 1px solid #a8d4d4; border-radius: 14px; color: #2C3E3E;">
+  <div style="display: flex; align-items: center; gap: 12px;">
+    <div style="width: 22px; height: 22px; border: 3px solid #a8d4d4; border-top-color: #5A9A9A; border-radius: 50%; animation: smileSpin 1s linear infinite; flex-shrink: 0;"></div>
+    <div>
+      <strong>Creating your smile preview...</strong>
+      <div id="smileLoadingText" style="font-size: 13px; margin-top: 3px;">
+        Results may take 1–2 minutes. Please keep this page open.
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>
+  @keyframes smileSpin {
+    to {
+      transform: rotate(360deg);
+    }
+  }
+</style>
+
+<p style="margin-top: 12px; font-size: 13px; color: #6b7280;">
+  Smile previews may take 1–2 minutes. To keep the tool available for patients, previews are limited.
+</p>
+
+    <p id="smileError" style="display: none; margin-top: 18px; padding: 12px; background: #fef2f2; color: #991b1b; border-radius: 12px;"></p>
+  </form>
+
+  <div id="smileResults" style="display: none; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 24px; margin-top: 28px;">
+  <div style="background: #ffffff; padding: 16px; border-radius: 18px;">
+    <h3 style="margin: 0 0 12px; font-size: 16px;">Uploaded Photo</h3>
+    <img id="beforeSmileImage" alt="Uploaded smile photo" style="width: 100%; border-radius: 14px;" />
+  </div>
+
+  <div style="background: #ffffff; padding: 16px; border-radius: 18px;">
+    <h3 style="margin: 0 0 12px; font-size: 16px;">Simulated Cosmetic Result</h3>
+    <img id="afterSmileImage" alt="Simulated cosmetic smile result" style="width: 100%; border-radius: 14px;" />
+
+    <div id="smileCta" style="display: none; margin-top: 18px; padding: 20px; background: #f7f4ef; border: 1px solid #e5ded4; border-radius: 16px;">
+      <h3 style="margin: 0 0 8px; font-size: 22px; color: #2C3E3E;">
+        Ready to talk about your smile preview?
+      </h3>
+
+      <p style="margin: 0 0 16px; font-size: 14px; color: #6b7280; line-height: 1.5;">
+        This is a simulated cosmetic preview. A personalized treatment plan requires an evaluation with our dental team.
+      </p>
+
+      <button
+        id="downloadSmileComposite"
+        type="button"
+        style="display: inline-block; margin-right: 10px; margin-bottom: 10px; background: #2C3E3E; color: #ffffff; padding: 14px 22px; border-radius: 12px; font-weight: 700; border: none; cursor: pointer; letter-spacing: 0.04em;"
+      >
+        Download Your Smile Simulation Images
+      </button>
+
+      <a
+        href="/#contact"
+        style="display: inline-block; background: #7FBDBD; color: #ffffff; padding: 14px 22px; border-radius: 12px; font-weight: 700; text-decoration: none; letter-spacing: 0.04em;"
+      >
+        Schedule a Cosmetic Consultation
+      </a>
+    </div>
+
+  <p style="margin-top: 10px; font-size: 13px; color: #6b7280; line-height: 1.5;">
+    This is a simulated cosmetic preview. A personalized treatment plan requires an evaluation with our dental team.
+  </p>
+</div>
+    </div>
+
+    <div style="background: #ffffff; padding: 16px; border-radius: 18px;">
+      <h3 style="margin: 0 0 12px; font-size: 16px;">Simulated Cosmetic Result</h3>
+      <img id="afterSmileImage" alt="Simulated cosmetic smile result" style="width: 100%; border-radius: 14px;" />
+    </div>
+  </div>
+
+  <p style="margin-top: 18px; font-size: 13px; color: #6b7280;">
+    For best results, use a straight-on smile photo with teeth clearly visible,
+    good lighting, and minimal blur.
+  </p>
+</section>
+
+<script>
+  const smileForm = document.getElementById("smileSimulatorForm");
+  const smilePhoto = document.getElementById("smilePhoto");
+  const smileConsent = document.getElementById("smileConsent");
+  const smileButton = document.getElementById("smileSubmitButton");
+  const smileName = document.getElementById("smileName");
+const smilePhone = document.getElementById("smilePhone");
+const smileEmail = document.getElementById("smileEmail");
+const smileMessage = document.getElementById("smileMessage");
+  const smileError = document.getElementById("smileError");
+  const smileLoading = document.getElementById("smileLoading");
+const smileLoadingText = document.getElementById("smileLoadingText");
+let smileLoadingInterval = null;
+  const smileResults = document.getElementById("smileResults");
+  const beforeSmileImage = document.getElementById("beforeSmileImage");
+  const afterSmileImage = document.getElementById("afterSmileImage");
+  const smileCta = document.getElementById("smileCta");
+  const downloadSmileComposite = document.getElementById("downloadSmileComposite");
+
+  const SMILE_ATTEMPT_LIMIT = 2;
+const SMILE_ATTEMPT_WINDOW_HOURS = 24;
+
+function getSmileAttempts() {
+  try {
+    const stored = localStorage.getItem("smilePreviewAttempts");
+
+    if (!stored) {
+      return [];
+    }
+
+    const attempts = JSON.parse(stored);
+    const now = Date.now();
+    const windowMs = SMILE_ATTEMPT_WINDOW_HOURS * 60 * 60 * 1000;
+
+    return attempts.filter((timestamp) => now - timestamp < windowMs);
+  } catch {
+    return [];
+  }
+}
+
+function saveSmileAttempt() {
+  const attempts = getSmileAttempts();
+  attempts.push(Date.now());
+  localStorage.setItem("smilePreviewAttempts", JSON.stringify(attempts));
+}
+
+function hasReachedSmileLimit() {
+  return getSmileAttempts().length >= SMILE_ATTEMPT_LIMIT;
+}
+function loadImageForCanvas(src) {
+  return new Promise((resolve, reject) => {
+    const image = new Image();
+    image.onload = () => resolve(image);
+    image.onerror = reject;
+    image.src = src;
+  });
+}
+
+function drawImageCover(ctx, image, x, y, width, height) {
+  const imageRatio = image.width / image.height;
+  const boxRatio = width / height;
+
+  let drawWidth = width;
+  let drawHeight = height;
+  let offsetX = 0;
+  let offsetY = 0;
+
+  if (imageRatio > boxRatio) {
+    drawHeight = height;
+    drawWidth = height * imageRatio;
+    offsetX = (width - drawWidth) / 2;
+  } else {
+    drawWidth = width;
+    drawHeight = width / imageRatio;
+    offsetY = (height - drawHeight) / 2;
+  }
+
+  ctx.drawImage(image, x + offsetX, y + offsetY, drawWidth, drawHeight);
+}
+
+async function downloadSmileCompositeImage() {
+  if (!beforeSmileImage.src || !afterSmileImage.src) {
+    smileError.textContent = "Please generate a smile preview before downloading.";
+    smileError.style.display = "block";
+    return;
+  }
+
+  try {
+    const beforeImage = await loadImageForCanvas(beforeSmileImage.src);
+    const afterImage = await loadImageForCanvas(afterSmileImage.src);
+
+    const canvas = document.createElement("canvas");
+    const ctx = canvas.getContext("2d");
+
+    const width = 1600;
+    const height = 1050;
+    const padding = 60;
+    const headerHeight = 120;
+    const labelHeight = 50;
+    const imageGap = 40;
+    const imageWidth = (width - padding * 2 - imageGap) / 2;
+    const imageHeight = 700;
+
+    canvas.width = width;
+    canvas.height = height;
+
+    ctx.fillStyle = "#f7f4ef";
+    ctx.fillRect(0, 0, width, height);
+
+    ctx.fillStyle = "#2C3E3E";
+    ctx.font = "bold 42px Arial, sans-serif";
+    ctx.fillText("Elm Ridge Smile Simulation", padding, 65);
+
+    ctx.fillStyle = "#6b7280";
+    ctx.font = "24px Arial, sans-serif";
+    ctx.fillText("Simulated cosmetic result for consultation purposes only", padding, 102);
+
+    const beforeX = padding;
+    const afterX = padding + imageWidth + imageGap;
+    const imageY = headerHeight + labelHeight;
+
+    ctx.fillStyle = "#2C3E3E";
+    ctx.font = "bold 28px Arial, sans-serif";
+    ctx.fillText("Uploaded Photo", beforeX, headerHeight + 28);
+    ctx.fillText("Simulated Cosmetic Result", afterX, headerHeight + 28);
+
+    ctx.fillStyle = "#ffffff";
+    ctx.fillRect(beforeX, imageY, imageWidth, imageHeight);
+    ctx.fillRect(afterX, imageY, imageWidth, imageHeight);
+
+    drawImageCover(ctx, beforeImage, beforeX, imageY, imageWidth, imageHeight);
+    drawImageCover(ctx, afterImage, afterX, imageY, imageWidth, imageHeight);
+
+    ctx.strokeStyle = "#d1d5db";
+    ctx.lineWidth = 3;
+    ctx.strokeRect(beforeX, imageY, imageWidth, imageHeight);
+    ctx.strokeRect(afterX, imageY, imageWidth, imageHeight);
+
+    ctx.fillStyle = "#374151";
+    ctx.font = "22px Arial, sans-serif";
+    ctx.fillText("This image is a simulation and is not a diagnosis, treatment plan, or guarantee of outcome.", padding, 930);
+
+    ctx.fillStyle = "#2C3E3E";
+    ctx.font = "bold 24px Arial, sans-serif";
+    ctx.fillText("Elm Ridge Implant and Family Dentistry", padding, 980);
+    ctx.font = "22px Arial, sans-serif";
+    ctx.fillText("Cosmetic Dentistry Consultation", padding, 1015);
+
+    const link = document.createElement("a");
+    link.download = "elm-ridge-smile-simulation-before-after.png";
+    link.href = canvas.toDataURL("image/png");
+    link.click();
+  } catch (error) {
+    smileError.textContent = "Could not download the smile simulation image. Please try again.";
+    smileError.style.display = "block";
+  }
+}
+
+if (downloadSmileComposite) {
+  downloadSmileComposite.addEventListener("click", downloadSmileCompositeImage);
+}
+
+  smileForm.addEventListener("submit", async function (event) {
+    event.preventDefault();
+
+    smileError.style.display = "none";
+    smileError.textContent = "";
+
+    const file = smilePhoto.files[0];
+
+    if (!smileName.value.trim()) {
+  smileError.textContent = "Please enter your name before generating a smile preview.";
+  smileError.style.display = "block";
+  return;
+}
+
+if (!smilePhone.value.trim()) {
+  smileError.textContent = "Please enter your phone number before generating a smile preview.";
+  smileError.style.display = "block";
+  return;
+}
+
+    if (!file) {
+      smileError.textContent = "Please upload a clear smile photo.";
+      smileError.style.display = "block";
+      return;
+    }
+
+    if (!smileConsent.checked) {
+      smileError.textContent = "Please confirm the simulation disclaimer before continuing.";
+      smileError.style.display = "block";
+      return;
+    }
+
+    if (hasReachedSmileLimit()) {
+  smileError.textContent = "You have reached the smile preview limit. Please contact our office to schedule a cosmetic consultation.";
+  smileError.style.display = "block";
+  return;
+}
+
+    beforeSmileImage.src = URL.createObjectURL(file);
+    afterSmileImage.removeAttribute("src");
+    smileResults.style.display = "none";
+    smileCta.style.display = "none";
+    smileCta.style.display = "none";
+
+    smileButton.disabled = true;
+smileButton.textContent = "Creating smile preview...";
+smileLoading.style.display = "block";
+
+let secondsElapsed = 0;
+smileLoadingText.textContent = "Results may take 1–2 minutes. Please keep this page open.";
+
+smileLoadingInterval = setInterval(() => {
+  secondsElapsed += 15;
+
+  if (secondsElapsed === 30) {
+    smileLoadingText.textContent = "Still working. The AI is creating your simulated cosmetic result.";
+  }
+
+  if (secondsElapsed === 60) {
+    smileLoadingText.textContent = "Almost there. Smile previews can take 1–2 minutes.";
+  }
+
+  if (secondsElapsed === 90) {
+    smileLoadingText.textContent = "Still processing. Please do not refresh or close this page.";
+  }
+}, 15000);
+
+    try {
+      const formData = new FormData();
+      formData.append("image", file);
+
+      const response = await fetch("/api/smile-simulation", {
+        method: "POST",
+        body: formData
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.error || "Smile simulation failed.");
+      }
+
+      afterSmileImage.src = data.imageUrl;
+      smileResults.style.display = "grid";
+      saveSmileAttempt();
+      smileCta.style.display = "block";
+    } catch (error) {
+      smileError.textContent = error.message || "Smile simulation failed. Please try another photo.";
+      smileError.style.display = "block";
+    } finally {
+  smileButton.disabled = false;
+  smileButton.textContent = "Generate Smile Preview";
+  smileLoading.style.display = "none";
+
+  if (smileLoadingInterval) {
+    clearInterval(smileLoadingInterval);
+    smileLoadingInterval = null;
+  }
+}
+  });
+</script>
       <h2 class="font-display text-4xl text-charcoal">Cosmetic Options We Offer</h2>
       <div class="grid md:grid-cols-2 gap-5">
         <p><strong>Veneers</strong><br />Thin porcelain restorations can improve shape, shade, spacing, and symmetry for selected front teeth.</p>
