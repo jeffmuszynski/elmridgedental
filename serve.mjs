@@ -24,9 +24,17 @@ const RECAPTCHA_MIN_SCORE = 0.5;
 const SMILE_PREVIEW_JOB_TTL_MS = 15 * 60 * 1000;
 const SMILE_UPLOAD_LIMIT_BYTES = 20 * 1024 * 1024;
 const smilePreviewJobs = new Map();
-const openai = new OpenAI({
-  apiKey: process.env.OPENAI_API_KEY,
-});
+let openaiClient = null;
+
+function getOpenAIClient() {
+  if (!openaiClient) {
+    openaiClient = new OpenAI({
+      apiKey: process.env.OPENAI_API_KEY,
+    });
+  }
+
+  return openaiClient;
+}
 
 const SMILE_PROMPT = `
 Edit only the transparent masked teeth area.
@@ -423,7 +431,7 @@ async function generateSmileSimulationImage(uploadedFile) {
     }
   );
 
-  const result = await openai.images.edit({
+  const result = await getOpenAIClient().images.edit({
     model: 'gpt-image-1',
     image: imageFile,
     prompt: SMILE_PROMPT,
