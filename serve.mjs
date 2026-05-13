@@ -735,27 +735,27 @@ createServer(async (req, res) => {
   const normalizedPath = requestUrl.pathname.replace(/\/+$/, '') || '/';
   const oldDestination = oldUrlRedirects.get(normalizedPath.toLowerCase());
 
-  if (normalizedPath === '/api/contact') {
+  if (normalizedPath === '/api/contact' || normalizedPath === '/contact') {
     await handleContactForm(req, res);
     return;
   }
 
-  if (normalizedPath === '/api/smile-simulation/start') {
+  if (normalizedPath === '/api/smile-simulation/start' || normalizedPath === '/smile-simulation/start') {
     await handleSmileSimulationStart(req, res);
     return;
   }
 
-  if (normalizedPath === '/api/smile-simulation/status') {
+  if (normalizedPath === '/api/smile-simulation/status' || normalizedPath === '/smile-simulation/status') {
     await handleSmileSimulationStatus(req, res, requestUrl);
     return;
   }
 
-  if (normalizedPath === '/api/smile-simulation') {
+  if (normalizedPath === '/api/smile-simulation' || normalizedPath === '/smile-simulation') {
     await handleSmileSimulation(req, res);
     return;
   }
 
-  if (normalizedPath === '/api/smile-simulation-email') {
+  if (normalizedPath === '/api/smile-simulation-email' || normalizedPath === '/smile-simulation-email') {
     await handleSmileSimulationEmail(req, res);
     return;
   }
