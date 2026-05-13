@@ -6,6 +6,7 @@ import { getSpamPhraseMatch } from './spam-protection.mjs';
 import dotenv from 'dotenv';
 import OpenAI, { toFile } from 'openai';
 import Busboy from 'busboy';
+import nodemailer from 'nodemailer';
 
 dotenv.config({ path: '.env.local' });
 
@@ -13,6 +14,9 @@ const __dirname = fileURLToPath(new URL('.', import.meta.url));
 const PORT = process.env.PORT || 3000;
 const CANONICAL_ORIGIN = 'https://www.elmridgedental.com';
 const CONTACT_FORM_ENDPOINT = process.env.CONTACT_FORM_ENDPOINT || 'https://formsubmit.co/ajax/contact@elmridgedental.com';
+const SMILE_EMAIL_TO = process.env.SMILE_EMAIL_TO || 'contact@elmridgedental.com';
+const SMTP_HOST = process.env.SMTP_HOST || 'smtp.gmail.com';
+const SMTP_PORT = Number(process.env.SMTP_PORT || 465);
 const RECAPTCHA_ACTION = 'contact_form';
 const RECAPTCHA_MIN_SCORE = 0.5;
 const openai = new OpenAI({
@@ -116,6 +120,17 @@ async function readJsonBody(req) {
   return JSON.parse(Buffer.concat(chunks).toString('utf8') || '{}');
 }
 
+async function readLargeJsonBody(req) {
+  const chunks = [];
+  let size = 0;
+  for await (const chunk of req) {
+    size += chunk.length;
+    if (size > 15 * 1024 * 1024) throw new Error('Request body too large');
+    chunks.push(chunk);
+  }
+  return JSON.parse(Buffer.concat(chunks).toString('utf8') || '{}');
+}
+
 async function verifyRecaptcha(token) {
   if (!isProduction && process.env.RECAPTCHA_SKIP_VERIFY === 'true') {
     return { ok: true, skipped: true };
@@ -214,10 +229,12 @@ function parseSmileUpload(req) {
       limits: {
         fileSize: 10 * 1024 * 1024,
         files: 1,
+        fieldSize: 10 * 1024,
       },
     });
 
     let uploadedFile = null;
+    const fields = {};
 
     busboy.on('file', (fieldname, file, info) => {
       const chunks = [];
@@ -240,14 +257,143 @@ function parseSmileUpload(req) {
       });
     });
 
+    busboy.on('field', (fieldname, value) => {
+      fields[fieldname] = value;
+    });
+
     busboy.on('error', reject);
 
     busboy.on('finish', () => {
-      resolve(uploadedFile);
+      resolve({ uploadedFile, fields });
     });
 
     req.pipe(busboy);
   });
+}
+
+function getSmileEmailTransport() {
+  if (!process.env.GOOGLE_WORKSPACE_SMTP_USER || !process.env.GOOGLE_WORKSPACE_SMTP_PASS) {
+    return null;
+  }
+
+  return nodemailer.createTransport({
+    host: SMTP_HOST,
+    port: SMTP_PORT,
+    secure: SMTP_PORT === 465,
+    auth: {
+      user: process.env.GOOGLE_WORKSPACE_SMTP_USER,
+      pass: process.env.GOOGLE_WORKSPACE_SMTP_PASS,
+    },
+  });
+}
+
+function escapeHtml(value) {
+  return String(value || '')
+    .replaceAll('&', '&amp;')
+    .replaceAll('<', '&lt;')
+    .replaceAll('>', '&gt;')
+    .replaceAll('"', '&quot;')
+    .replaceAll("'", '&#39;');
+}
+
+async function sendSmileSimulationEmail({ fields, compositeImageBuffer }) {
+  const transport = getSmileEmailTransport();
+
+  if (!transport) {
+    if (!isProduction) console.warn('Smile simulation email skipped: Google Workspace SMTP env vars are missing.');
+    return false;
+  }
+
+  const name = fields.name || 'Not provided';
+  const phone = fields.phone || 'Not provided';
+  const email = fields.email || 'Not provided';
+  const message = fields.message || 'Not provided';
+  const safeName = escapeHtml(name);
+  const safePhone = escapeHtml(phone);
+  const safeEmail = escapeHtml(email);
+  const safeMessage = escapeHtml(message).replaceAll('\n', '<br />');
+  const fromAddress = process.env.SMILE_EMAIL_FROM || process.env.GOOGLE_WORKSPACE_SMTP_USER;
+  const from = {
+    name: process.env.SMILE_EMAIL_FROM_NAME || 'Elm Ridge Implant and Family Dentistry',
+    address: fromAddress,
+  };
+  const attachments = [{
+    filename: 'elm-ridge-smile-simulation-before-after.png',
+    content: compositeImageBuffer,
+    contentType: 'image/png',
+    cid: 'smile-composite',
+    contentDisposition: 'inline',
+  }];
+  const introHtml = '<p style="font-size:17px;line-height:1.5;color:#2C3E3E;margin:0 0 16px;"><strong>Ready to talk about your smile makeover?</strong> Call us at <a href="tel:+12546994127" style="color:#5A9A9A;">254-699-4127</a> to schedule a cosmetic consult.</p>';
+  const imageHtml = '<p style="margin:20px 0 0;"><img src="cid:smile-composite" alt="Elm Ridge smile simulation before and after" style="display:block;max-width:100%;height:auto;border:0;" /></p>';
+
+  await transport.sendMail({
+    from,
+    to: SMILE_EMAIL_TO,
+    replyTo: fields.email || undefined,
+    subject: `New smile simulation lead: ${name}`,
+    text: [
+      'New smile simulation request',
+      '',
+      `Name: ${name}`,
+      `Phone: ${phone}`,
+      `Email: ${email}`,
+      '',
+      'What would they like to improve?',
+      message,
+      '',
+      'Ready to talk about your smile makeover? Call us at 254-699-4127 to schedule a cosmetic consult.',
+      '',
+      'This smile simulation is for consultation planning only and is not a diagnosis, treatment plan, or guarantee of outcome.',
+    ].join('\n'),
+    html: [
+      '<div style="font-family:Arial,sans-serif;color:#2C3E3E;">',
+      '<h2 style="margin:0 0 12px;">New smile simulation request</h2>',
+      `<p style="line-height:1.6;margin:0 0 16px;"><strong>Name:</strong> ${safeName}<br /><strong>Phone:</strong> ${safePhone}<br /><strong>Email:</strong> ${safeEmail}</p>`,
+      `<p style="line-height:1.6;margin:0 0 18px;"><strong>What would they like to improve?</strong><br />${safeMessage}</p>`,
+      introHtml,
+      imageHtml,
+      '<p style="font-size:13px;line-height:1.5;color:#667;margin:16px 0 0;">This smile simulation is for consultation planning only and is not a diagnosis, treatment plan, or guarantee of outcome.</p>',
+      '</div>',
+    ].join(''),
+    attachments,
+  });
+
+  if (fields.email) {
+    await transport.sendMail({
+      from,
+      to: fields.email,
+      replyTo: SMILE_EMAIL_TO,
+      subject: 'Your Elm Ridge smile simulation',
+      text: [
+        `Hi ${fields.name || 'there'},`,
+        '',
+        'Thank you for trying the Elm Ridge smile simulation tool.',
+        '',
+        'Ready to talk about your smile makeover? Call us at 254-699-4127 to schedule a cosmetic consult.',
+        '',
+        'This image is a simulation for education and consultation planning only. It is not a diagnosis, treatment plan, or guarantee of outcome. A personalized recommendation requires an evaluation with our dental team.',
+        '',
+        'Elm Ridge Implant and Family Dentistry',
+        '2601 E. Elms Rd, Killeen, TX 76542',
+        '254-699-4127',
+        'https://www.elmridgedental.com',
+      ].join('\n'),
+      html: [
+        '<div style="font-family:Arial,sans-serif;color:#2C3E3E;">',
+        `<p style="font-size:16px;line-height:1.5;margin:0 0 14px;">Hi ${escapeHtml(fields.name || 'there')},</p>`,
+        '<p style="font-size:16px;line-height:1.5;margin:0 0 14px;">Thank you for trying the Elm Ridge smile simulation tool.</p>',
+        introHtml,
+        imageHtml,
+        '<p style="font-size:13px;line-height:1.5;color:#667;margin:16px 0 20px;">This image is a simulation for education and consultation planning only. It is not a diagnosis, treatment plan, or guarantee of outcome. A personalized recommendation requires an evaluation with our dental team.</p>',
+        '<p style="font-size:15px;line-height:1.5;margin:0;"><strong>Elm Ridge Implant and Family Dentistry</strong><br />2601 E. Elms Rd, Killeen, TX 76542<br />254-699-4127<br /><a href="https://www.elmridgedental.com" style="color:#5A9A9A;">www.elmridgedental.com</a></p>',
+        '</div>',
+      ].join(''),
+      attachments,
+    });
+  }
+
+  return true;
 }
 
 async function handleSmileSimulation(req, res) {
@@ -265,7 +411,7 @@ async function handleSmileSimulation(req, res) {
       return;
     }
 
-    const uploadedFile = await parseSmileUpload(req);
+    const { uploadedFile, fields } = await parseSmileUpload(req);
 
     if (!uploadedFile) {
       json(res, 400, {
@@ -321,6 +467,42 @@ async function handleSmileSimulation(req, res) {
     });
   }
 }
+
+async function handleSmileSimulationEmail(req, res) {
+  if (req.method !== 'POST') {
+    res.writeHead(405, { Allow: 'POST' });
+    res.end();
+    return;
+  }
+
+  try {
+    const fields = await readLargeJsonBody(req);
+    const match = /^data:image\/png;base64,([A-Za-z0-9+/=]+)$/.exec(fields.compositeImage || '');
+
+    if (!match) {
+      json(res, 400, {
+        error: 'Missing smile simulation image.',
+      });
+      return;
+    }
+
+    const compositeImageBuffer = Buffer.from(match[1], 'base64');
+    await sendSmileSimulationEmail({
+      fields,
+      compositeImageBuffer,
+    });
+
+    json(res, 200, {
+      ok: true,
+    });
+  } catch (error) {
+    if (!isProduction) console.error('Smile simulation email error:', error);
+
+    json(res, 500, {
+      error: 'Smile simulation email failed.',
+    });
+  }
+}
 createServer(async (req, res) => {
   const requestUrl = new URL(req.url, `http://${req.headers.host || 'localhost'}`);
   const host = (req.headers.host || '').split(':')[0].toLowerCase();
@@ -336,6 +518,11 @@ createServer(async (req, res) => {
   await handleSmileSimulation(req, res);
   return;
 }
+
+  if (normalizedPath === '/api/smile-simulation-email') {
+    await handleSmileSimulationEmail(req, res);
+    return;
+  }
 
   if (oldDestination || host === 'elmridgedental.com') {
     const destination = new URL(oldDestination || requestUrl.pathname, CANONICAL_ORIGIN);
