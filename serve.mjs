@@ -304,20 +304,35 @@ async function handleContactForm(req, res) {
 function parseSmileUpload(req) {
   return new Promise((resolve, reject) => {
     let failed = false;
+    const contentLength = Number(req.headers['content-length'] || 0);
     const rejectOnce = (error) => {
       if (failed) return;
       failed = true;
       reject(error);
     };
 
-    const busboy = Busboy({
-      headers: req.headers,
-      limits: {
-        fileSize: SMILE_UPLOAD_LIMIT_BYTES,
-        files: 1,
-        fieldSize: 10 * 1024,
-      },
-    });
+    if (contentLength > SMILE_UPLOAD_LIMIT_BYTES) {
+      rejectOnce(new SmileUploadError('Image is too large. Please upload a file under 20MB.', 413));
+      req.resume();
+      return;
+    }
+
+    let busboy;
+
+    try {
+      busboy = Busboy({
+        headers: req.headers,
+        limits: {
+          fileSize: SMILE_UPLOAD_LIMIT_BYTES,
+          files: 1,
+          fieldSize: 10 * 1024,
+        },
+      });
+    } catch (error) {
+      rejectOnce(new SmileUploadError(error.message || 'The smile photo upload could not be read. Please try another image.', 400));
+      req.resume();
+      return;
+    }
 
     let uploadedFile = null;
     const fields = {};
