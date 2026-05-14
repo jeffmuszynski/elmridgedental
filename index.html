@@ -653,6 +653,71 @@
     </div>
   </section>
 
+  <!-- SMILE SIMULATOR -->
+  <section id="smile-simulator" class="py-20 bg-stone">
+    <div class="max-w-7xl mx-auto px-6">
+      <div class="grid grid-cols-1 lg:grid-cols-[minmax(0,1fr),300px] gap-10 items-start">
+        <div class="bg-white/75 border border-white p-7 sm:p-9 card-shadow">
+          <p class="font-body text-xs tracking-widest uppercase text-teal-dark mb-3">Simulated Cosmetic Result</p>
+          <h2 class="font-display text-4xl md:text-5xl font-light italic text-charcoal mb-4 leading-snug">Preview Your Smile Possibilities.</h2>
+          <p class="font-body text-sm text-charcoal/65 leading-7 mb-8 max-w-3xl">
+            Upload a clear smile photo to create an AI-assisted cosmetic smile preview. This simulation is for education and consultation planning only. Actual treatment recommendations require an evaluation with our dental team.
+          </p>
+
+          <form id="smile-preview-form" class="bg-white p-6 sm:p-7 space-y-5" enctype="multipart/form-data">
+            <div>
+              <label for="smile-name" class="block font-body text-xs font-semibold text-charcoal/55 mb-2">Name</label>
+              <input id="smile-name" name="name" type="text" placeholder="Your name" autocomplete="name" required class="w-full px-4 py-3 border border-teal-light bg-white text-charcoal font-body text-base sm:text-sm placeholder:text-charcoal/30 focus:outline-none focus:border-teal transition-[border-color] duration-200" />
+            </div>
+            <div>
+              <label for="smile-phone" class="block font-body text-xs font-semibold text-charcoal/55 mb-2">Phone</label>
+              <input id="smile-phone" name="phone" type="tel" placeholder="Your phone number" autocomplete="tel" inputmode="tel" required class="w-full px-4 py-3 border border-teal-light bg-white text-charcoal font-body text-base sm:text-sm placeholder:text-charcoal/30 focus:outline-none focus:border-teal transition-[border-color] duration-200" />
+            </div>
+            <div>
+              <label for="smile-email" class="block font-body text-xs font-semibold text-charcoal/55 mb-2">Email</label>
+              <input id="smile-email" name="email" type="email" placeholder="you@example.com" autocomplete="email" required class="w-full px-4 py-3 border border-teal-light bg-white text-charcoal font-body text-base sm:text-sm placeholder:text-charcoal/30 focus:outline-none focus:border-teal transition-[border-color] duration-200" />
+            </div>
+            <div>
+              <label for="smile-message" class="block font-body text-xs font-semibold text-charcoal/55 mb-2">What would you like to improve? <span class="font-normal">(optional)</span></label>
+              <textarea id="smile-message" name="message" rows="4" placeholder="Whiter teeth, straighter smile, worn edges, old dental work, etc." class="w-full px-4 py-3 border border-teal-light bg-white text-charcoal font-body text-base sm:text-sm placeholder:text-charcoal/30 focus:outline-none focus:border-teal transition-[border-color] duration-200 resize-y"></textarea>
+            </div>
+            <div>
+              <label for="smile-photo" class="block font-body text-xs font-semibold text-charcoal/55 mb-2">Upload a clear smile photo</label>
+              <p class="font-body text-xs text-charcoal/50 leading-5 mb-3">For best results, use a straight-on smile photo with teeth clearly visible, good lighting, and minimal blur.</p>
+              <input id="smile-photo" name="smile-photo" type="file" accept="image/png,image/jpeg,image/webp" required class="w-full rounded-none border border-teal-light bg-white px-3 py-3 font-body text-sm text-charcoal file:mr-4 file:border-0 file:bg-teal-pale file:px-4 file:py-2 file:text-xs file:font-semibold file:uppercase file:tracking-widest file:text-charcoal hover:file:bg-teal-light/35" />
+            </div>
+            <label class="flex items-start gap-3 font-body text-xs text-charcoal/65 leading-5">
+              <input id="smile-consent" type="checkbox" required class="mt-1 accent-teal-dark" />
+              <span>I understand this creates a simulated cosmetic preview for educational purposes only. It is not a diagnosis, treatment plan, or guarantee of outcome.</span>
+            </label>
+            <button id="smile-preview-submit" type="submit" class="inline-flex items-center justify-center bg-charcoal px-7 py-4 font-body text-xs font-semibold uppercase tracking-widest text-white hover:bg-teal-dark active:scale-95 transition-[background-color,transform] duration-200 disabled:cursor-not-allowed disabled:opacity-65">
+              Generate Smile Preview
+            </button>
+            <p class="font-body text-xs text-charcoal/45 leading-5">Smile previews may take 1-2 minutes. To keep the tool available for patients, previews are limited.</p>
+            <div id="smile-preview-status" class="hidden border border-teal-light bg-teal-pale/60 p-4 font-body text-sm leading-6 text-charcoal" role="status" aria-live="polite"></div>
+            <div id="smile-preview-result" class="hidden border border-teal-light bg-stone p-4">
+              <p class="font-body text-xs tracking-widest uppercase text-teal-dark mb-3">Your simulated smile</p>
+              <img id="smile-preview-result-image" src="" alt="Generated smile simulation preview" class="w-full h-auto bg-white" />
+            </div>
+          </form>
+        </div>
+
+        <aside class="bg-white/75 border border-white p-4 card-shadow" aria-label="Example smile simulator result">
+          <figure class="space-y-3">
+            <div>
+              <figcaption class="font-display text-2xl text-center text-charcoal mb-2">Submitted photo</figcaption>
+              <img src="simulator before.png" alt="Example submitted smile photo for the Elm Ridge smile simulator" class="w-full h-auto bg-white" loading="lazy" decoding="async" width="556" height="797" />
+            </div>
+            <div>
+              <figcaption class="font-display text-2xl text-center text-charcoal mb-2">Simulated smile</figcaption>
+              <img src="simulator after.png" alt="Example simulated smile result from the Elm Ridge smile simulator" class="w-full h-auto bg-white" loading="lazy" decoding="async" width="553" height="798" />
+            </div>
+          </figure>
+        </aside>
+      </div>
+    </div>
+  </section>
+
   <!-- IMPLANTS (dark) -->
   <section id="implants" class="py-20 bg-charcoal">
     <div class="max-w-7xl mx-auto px-6">
@@ -1140,6 +1205,156 @@
           }
         });
       }
+
+    const smilePreviewForm = document.getElementById('smile-preview-form');
+
+    if (smilePreviewForm) {
+      const smileSubmit = document.getElementById('smile-preview-submit');
+      const smileStatus = document.getElementById('smile-preview-status');
+      const smileResult = document.getElementById('smile-preview-result');
+      const smileResultImage = document.getElementById('smile-preview-result-image');
+      const smilePhotoInput = document.getElementById('smile-photo');
+      const defaultSmileSubmitText = smileSubmit ? smileSubmit.textContent.trim() : 'Generate Smile Preview';
+
+      const showSmileStatus = (message, type = 'info') => {
+        if (!smileStatus) return;
+        smileStatus.textContent = message;
+        smileStatus.classList.remove('hidden', 'border-teal-light', 'bg-teal-pale/60', 'text-charcoal', 'border-red-200', 'bg-red-50', 'text-red-800');
+        smileStatus.classList.add(...(type === 'error'
+          ? ['border-red-200', 'bg-red-50', 'text-red-800']
+          : ['border-teal-light', 'bg-teal-pale/60', 'text-charcoal']));
+      };
+
+      const loadImage = src => new Promise((resolve, reject) => {
+        const img = new Image();
+        img.onload = () => resolve(img);
+        img.onerror = reject;
+        img.src = src;
+      });
+
+      const readFileAsDataUrl = file => new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.onload = () => resolve(reader.result);
+        reader.onerror = reject;
+        reader.readAsDataURL(file);
+      });
+
+      const drawCoverImage = (ctx, img, x, y, width, height) => {
+        const scale = Math.max(width / img.width, height / img.height);
+        const sourceWidth = width / scale;
+        const sourceHeight = height / scale;
+        const sourceX = (img.width - sourceWidth) / 2;
+        const sourceY = (img.height - sourceHeight) / 2;
+        ctx.drawImage(img, sourceX, sourceY, sourceWidth, sourceHeight, x, y, width, height);
+      };
+
+      const createSmileComposite = async (beforeUrl, afterUrl) => {
+        const [beforeImg, afterImg] = await Promise.all([loadImage(beforeUrl), loadImage(afterUrl)]);
+        const canvas = document.createElement('canvas');
+        canvas.width = 1600;
+        canvas.height = 980;
+        const ctx = canvas.getContext('2d');
+        ctx.fillStyle = '#F5F0EB';
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+        ctx.fillStyle = '#2C3E3E';
+        ctx.font = '600 34px Arial, sans-serif';
+        ctx.textAlign = 'center';
+        ctx.fillText('Submitted photo', 400, 56);
+        ctx.fillText('Simulated smile', 1200, 56);
+        drawCoverImage(ctx, beforeImg, 70, 88, 660, 830);
+        drawCoverImage(ctx, afterImg, 870, 88, 660, 830);
+        return canvas.toDataURL('image/png');
+      };
+
+      const pollSmileJob = async jobId => {
+        for (let attempt = 0; attempt < 90; attempt += 1) {
+          await new Promise(resolve => setTimeout(resolve, 2000));
+          const response = await fetch(`/api/smile-simulation/status?jobId=${encodeURIComponent(jobId)}`, {
+            headers: { Accept: 'application/json' },
+          });
+          const payload = await response.json();
+
+          if (!response.ok) throw new Error(payload.error || 'Smile preview failed.');
+          if (payload.status === 'complete' && payload.imageUrl) return payload.imageUrl;
+          if (payload.status === 'error') throw new Error(payload.error || 'Smile preview failed.');
+        }
+
+        throw new Error('The smile preview is taking longer than expected. Please try again.');
+      };
+
+      smilePreviewForm.addEventListener('submit', async event => {
+        event.preventDefault();
+
+        if (!smilePreviewForm.checkValidity()) {
+          smilePreviewForm.reportValidity();
+          return;
+        }
+
+        const uploadedFile = smilePhotoInput?.files?.[0];
+        if (!uploadedFile) {
+          showSmileStatus('Please upload a clear smile photo.', 'error');
+          return;
+        }
+
+        if (smileSubmit) {
+          smileSubmit.disabled = true;
+          smileSubmit.textContent = 'Creating preview...';
+        }
+        if (smileResult) smileResult.classList.add('hidden');
+        showSmileStatus('Creating your smile preview. This may take a minute or two.');
+
+        try {
+          const formData = new FormData();
+          formData.append('smile-photo', uploadedFile);
+
+          const startResponse = await fetch('/api/smile-simulation/start', {
+            method: 'POST',
+            body: formData,
+            headers: { Accept: 'application/json' },
+          });
+          const startPayload = await startResponse.json();
+
+          if (!startResponse.ok || !startPayload.jobId) {
+            throw new Error(startPayload.error || 'Smile preview could not be started.');
+          }
+
+          const imageUrl = await pollSmileJob(startPayload.jobId);
+          if (smileResultImage) smileResultImage.src = imageUrl;
+          if (smileResult) smileResult.classList.remove('hidden');
+          showSmileStatus('Your simulated smile preview is ready.');
+
+          try {
+            const beforeUrl = await readFileAsDataUrl(uploadedFile);
+            const compositeImage = await createSmileComposite(beforeUrl, imageUrl);
+            await fetch('/api/smile-simulation-email', {
+              method: 'POST',
+              headers: {
+                Accept: 'application/json',
+                'Content-Type': 'application/json',
+              },
+              body: JSON.stringify({
+                fields: {
+                  name: smilePreviewForm.elements.name?.value || '',
+                  phone: smilePreviewForm.elements.phone?.value || '',
+                  email: smilePreviewForm.elements.email?.value || '',
+                  message: smilePreviewForm.elements.message?.value || '',
+                },
+                compositeImage,
+              }),
+            });
+          } catch {
+            // The preview should stay usable even if lead email delivery is unavailable.
+          }
+        } catch (error) {
+          showSmileStatus(error.message || 'Sorry, something went wrong. Please try another clear smile photo.', 'error');
+        } finally {
+          if (smileSubmit) {
+            smileSubmit.disabled = false;
+            smileSubmit.textContent = defaultSmileSubmitText;
+          }
+        }
+      });
+    }
 
     const carousel = document.getElementById('ba-carousel');
     const track = document.getElementById('ba-track');
