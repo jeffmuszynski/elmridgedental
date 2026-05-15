@@ -63,6 +63,13 @@ const posts = [
     datePublished: '2026-05-05',
     dateModified: '2026-05-07',
   },
+  {
+    file: 'dental-implants-near-me-in-killeen-how-to-choose-the-right-fit',
+    path: '/dental-implants-near-me-in-killeen-how-to-choose-the-right-fit',
+    image: `${domain}/cbct-implant-planning-killeen.webp`,
+    datePublished: '2026-05-15',
+    dateModified: '2026-05-15',
+  },
 ];
 
 function readMeta(file) {
