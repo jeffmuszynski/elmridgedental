@@ -42,11 +42,13 @@ Keep every unmasked pixel identical to the source image.
 Within the visible teeth only, create a photorealistic simulated cosmetic dental result with realistic ideal dental proportions: improved alignment, teeth sized to the face, balanced central incisors, slightly smaller lateral incisors, natural canine shape, natural enamel texture, subtle incisal translucency, realistic highlights, and a bright natural tooth shade.
 Prioritize natural individual tooth anatomy over idealized uniformity.
 Keep slight natural variation between teeth, including gentle incisal edge variation and believable width-to-height ratios.
+Keep tooth length conservative and anatomically plausible. Do not elongate the upper front teeth beyond the patient's natural smile line; preserve realistic central incisor width-to-height proportions, roughly 75-85% width-to-height, and keep incisal edges following the lower lip curve.
+If improving tooth shape, shorten rather than lengthen when uncertain. The final smile should look like natural cosmetic dentistry, not extended veneer mockups.
 Avoid making the upper anterior teeth look like one continuous white band.
 Use realistic embrasures, subtle line angles, and natural surface texture.
 Keep shade bright but slightly warm, not pure white.
 Do not edit lips, gums, mouth opening, smile width, skin, face, lighting, shadows, background, camera angle, crop, or expression.
-Avoid oversized teeth, square blocky teeth, piano-key veneers, over-whitening, plastic texture, excessive symmetry, cartoon teeth, glow, beauty filter effects, or face reshaping.
+Avoid oversized teeth, long rectangular veneer shapes, teeth that extend too far downward into the smile, square blocky teeth, piano-key veneers, over-whitening, plastic texture, excessive symmetry, cartoon teeth, glow, beauty filter effects, or face reshaping.
 `;
 
 const oldUrlRedirects = new Map([
