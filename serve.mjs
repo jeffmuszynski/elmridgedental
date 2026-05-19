@@ -55,6 +55,7 @@ const oldUrlRedirects = new Map([
   ['/contact-us', '/#contact'],
   ['/reviews', '/#reviews'],
   ['/before-and-after', '/#before-after'],
+  ['/dentistnearme', '/'],
   ['/dentalimplants', '/dental-implants-killeen-tx'],
   ['/dental-implants', '/dental-implants-killeen-tx'],
   ['/implants', '/dental-implants-killeen-tx'],
@@ -87,6 +88,16 @@ const oldUrlRedirects = new Map([
   ['/cleanings', '/#services'],
   ['/wellnessexams', '/#services'],
   ['/sedation', '/#services'],
+  ['/blog-cosmetic-dentistry-options-killeen-tx', '/blog/cosmetic-dentistry-options-killeen-tx'],
+  ['/blog-emergency-dentist-killeen-tx', '/blog/emergency-dentist-killeen-tx'],
+  ['/blog-dental-implant-cost-killeen-tx', '/blog/dental-implant-cost-killeen-tx'],
+  ['/blog-implants-vs-dentures-vs-bridges', '/blog/implants-vs-dentures-vs-bridges'],
+  ['/blog-are-dental-implants-painful', '/blog/are-dental-implants-painful'],
+  ['/blog-implant-dentist-killeen-tx', '/blog/implant-dentist-killeen-tx'],
+]);
+
+const goneUrls = new Set([
+  '/_api/one-app-session-web/v3/businesses',
 ]);
 
 const mime = {
@@ -742,6 +753,16 @@ createServer(async (req, res) => {
     return;
   }
 
+  if (goneUrls.has(normalizedPath.toLowerCase())) {
+    res.writeHead(410, {
+      'Content-Type': 'text/plain; charset=utf-8',
+      'Cache-Control': 'public, max-age=86400',
+      'X-Robots-Tag': 'noindex',
+    });
+    res.end('410 Gone');
+    return;
+  }
+
   if (normalizedPath === '/api/smile-simulation/start' || normalizedPath === '/smile-simulation/start') {
     await handleSmileSimulationStart(req, res);
     return;
@@ -776,11 +797,18 @@ createServer(async (req, res) => {
   let url = normalizedPath;
   if (url === '/') url = '/index.html';
   const filePath = join(__dirname, decodeURIComponent(url));
-  const ext = extname(filePath).toLowerCase();
-  const contentType = ext ? (mime[ext] || 'application/octet-stream') : 'text/html; charset=utf-8';
 
   try {
-    const data = await readFile(filePath);
+    let servedPath = filePath;
+    let data;
+    try {
+      data = await readFile(servedPath);
+    } catch {
+      servedPath = join(filePath, 'index.html');
+      data = await readFile(servedPath);
+    }
+    const ext = extname(servedPath).toLowerCase();
+    const contentType = ext ? (mime[ext] || 'application/octet-stream') : 'text/html; charset=utf-8';
     const longCacheExts = new Set(['.png', '.jpg', '.jpeg', '.gif', '.svg', '.ico', '.webp']);
     const body = contentType.startsWith('text/html')
       ? data.toString('utf8').replaceAll('__RECAPTCHA_SITE_KEY__', process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY || '')

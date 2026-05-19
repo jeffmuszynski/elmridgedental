@@ -23,6 +23,62 @@ ingress:
         name: web
     - match:
         path:
+          prefix: /dentistnearme
+      redirect:
+        uri: /
+        authority: www.elmridgedental.com
+        scheme: https
+        redirect_code: 301
+    - match:
+        path:
+          prefix: /blog-dental-implant-cost-killeen-tx
+      redirect:
+        uri: /blog/dental-implant-cost-killeen-tx
+        authority: www.elmridgedental.com
+        scheme: https
+        redirect_code: 301
+    - match:
+        path:
+          prefix: /blog-emergency-dentist-killeen-tx
+      redirect:
+        uri: /blog/emergency-dentist-killeen-tx
+        authority: www.elmridgedental.com
+        scheme: https
+        redirect_code: 301
+    - match:
+        path:
+          prefix: /blog-implant-dentist-killeen-tx
+      redirect:
+        uri: /blog/implant-dentist-killeen-tx
+        authority: www.elmridgedental.com
+        scheme: https
+        redirect_code: 301
+    - match:
+        path:
+          prefix: /blog-implants-vs-dentures-vs-bridges
+      redirect:
+        uri: /blog/implants-vs-dentures-vs-bridges
+        authority: www.elmridgedental.com
+        scheme: https
+        redirect_code: 301
+    - match:
+        path:
+          prefix: /blog-are-dental-implants-painful
+      redirect:
+        uri: /blog/are-dental-implants-painful
+        authority: www.elmridgedental.com
+        scheme: https
+        redirect_code: 301
+    - match:
+        path:
+          prefix: /blog-cosmetic-dentistry-options-killeen-tx
+      redirect:
+        uri: /blog/cosmetic-dentistry-options-killeen-tx
+        authority: www.elmridgedental.com
+        scheme: https
+        redirect_code: 301
+    - match:
+        path:
           prefix: /dentalimplants
       redirect:
         uri: /dental-implants-killeen-tx

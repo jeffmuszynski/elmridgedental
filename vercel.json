@@ -1,6 +1,41 @@
 {
   "redirects": [
     {
+      "source": "/dentistnearme",
+      "destination": "https://www.elmridgedental.com/",
+      "permanent": true
+    },
+    {
+      "source": "/blog-dental-implant-cost-killeen-tx",
+      "destination": "https://www.elmridgedental.com/blog/dental-implant-cost-killeen-tx",
+      "permanent": true
+    },
+    {
+      "source": "/blog-emergency-dentist-killeen-tx",
+      "destination": "https://www.elmridgedental.com/blog/emergency-dentist-killeen-tx",
+      "permanent": true
+    },
+    {
+      "source": "/blog-implant-dentist-killeen-tx",
+      "destination": "https://www.elmridgedental.com/blog/implant-dentist-killeen-tx",
+      "permanent": true
+    },
+    {
+      "source": "/blog-implants-vs-dentures-vs-bridges",
+      "destination": "https://www.elmridgedental.com/blog/implants-vs-dentures-vs-bridges",
+      "permanent": true
+    },
+    {
+      "source": "/blog-are-dental-implants-painful",
+      "destination": "https://www.elmridgedental.com/blog/are-dental-implants-painful",
+      "permanent": true
+    },
+    {
+      "source": "/blog-cosmetic-dentistry-options-killeen-tx",
+      "destination": "https://www.elmridgedental.com/blog/cosmetic-dentistry-options-killeen-tx",
+      "permanent": true
+    },
+    {
       "source": "/:path*",
       "has": [
         {

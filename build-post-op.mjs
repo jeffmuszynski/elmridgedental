@@ -391,7 +391,7 @@ function hubHashScript() {
 function fullPage(page) {
   const path = `/post-op/${page.slug}`;
   const description = `${page.title} post-operative instructions from Elm Ridge in Killeen, TX with clear guidance for healing, comfort, home care, and when to call us.`;
-  return `${withHeadSchemas(head(`${page.title} Post-Operative Instructions`, description, path).replace('content="index, follow"', 'content="noindex, follow"'), breadcrumb(path, `${page.title} Instructions`), page.faq?.length ? faqSchema(page.faq) : '')}
+  return `${withHeadSchemas(head(`${page.title} Post-Operative Instructions`, description, path), breadcrumb(path, `${page.title} Instructions`), page.faq?.length ? faqSchema(page.faq) : '')}
 <body class="font-body text-charcoal bg-stone">
 ${header()}
 <main id="main-content">

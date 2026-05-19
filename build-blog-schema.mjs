@@ -21,44 +21,44 @@ const defaultAuthor = {
 
 const posts = [
   {
-    file: 'blog-are-dental-implants-painful',
-    path: '/blog-are-dental-implants-painful',
+    file: 'blog/are-dental-implants-painful/index.html',
+    path: '/blog/are-dental-implants-painful',
     image: `${domain}/blog-implant-comfort.webp`,
     datePublished: '2026-05-05',
     dateModified: '2026-05-07',
   },
   {
-    file: 'blog-cosmetic-dentistry-options-killeen-tx',
-    path: '/blog-cosmetic-dentistry-options-killeen-tx',
+    file: 'blog/cosmetic-dentistry-options-killeen-tx/index.html',
+    path: '/blog/cosmetic-dentistry-options-killeen-tx',
     image: `${domain}/blog-cosmetic-options.webp`,
     likelyKayla: true,
     datePublished: '2026-05-05',
     dateModified: '2026-05-07',
   },
   {
-    file: 'blog-dental-implant-cost-killeen-tx',
-    path: '/blog-dental-implant-cost-killeen-tx',
+    file: 'blog/dental-implant-cost-killeen-tx/index.html',
+    path: '/blog/dental-implant-cost-killeen-tx',
     image: `${domain}/blog-implant-cost.webp`,
     datePublished: '2026-05-05',
     dateModified: '2026-05-07',
   },
   {
-    file: 'blog-emergency-dentist-killeen-tx',
-    path: '/blog-emergency-dentist-killeen-tx',
+    file: 'blog/emergency-dentist-killeen-tx/index.html',
+    path: '/blog/emergency-dentist-killeen-tx',
     image: `${domain}/blog-emergency-dentist.webp`,
     datePublished: '2026-05-05',
     dateModified: '2026-05-07',
   },
   {
-    file: 'blog-implant-dentist-killeen-tx',
-    path: '/blog-implant-dentist-killeen-tx',
+    file: 'blog/implant-dentist-killeen-tx/index.html',
+    path: '/blog/implant-dentist-killeen-tx',
     image: `${domain}/blog-implant-dentist.webp`,
     datePublished: '2026-05-05',
     dateModified: '2026-05-07',
   },
   {
-    file: 'blog-implants-vs-dentures-vs-bridges',
-    path: '/blog-implants-vs-dentures-vs-bridges',
+    file: 'blog/implants-vs-dentures-vs-bridges/index.html',
+    path: '/blog/implants-vs-dentures-vs-bridges',
     image: `${domain}/blog-implants-vs-options.webp`,
     datePublished: '2026-05-05',
     dateModified: '2026-05-07',
@@ -123,7 +123,7 @@ for (const post of posts) {
   });
 }
 
-let blogIndex = fs.readFileSync('blog', 'utf8');
+let blogIndex = fs.readFileSync('blog/index.html', 'utf8');
 const blogSchema = {
   '@context': 'https://schema.org',
   '@type': 'Blog',
@@ -135,7 +135,7 @@ const blogSchema = {
   blogPost: blogPostSummaries,
 };
 blogIndex = upsertHeadSchema(blogIndex, 'blog-index', blogSchema);
-fs.writeFileSync('blog', blogIndex);
+fs.writeFileSync('blog/index.html', blogIndex);
 
 fs.writeFileSync(
   'blog-schema-report.json',
