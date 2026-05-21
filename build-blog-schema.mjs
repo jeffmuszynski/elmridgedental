@@ -21,6 +21,13 @@ const defaultAuthor = {
 
 const posts = [
   {
+    file: 'blog/dental-implants-near-harker-heights-how-to-choose-the-right-fit/index.html',
+    path: '/blog/dental-implants-near-harker-heights-how-to-choose-the-right-fit',
+    image: `${domain}/cbct-implant-planning-killeen.webp`,
+    datePublished: '2026-05-21',
+    dateModified: '2026-05-21',
+  },
+  {
     file: 'blog/are-dental-implants-painful/index.html',
     path: '/blog/are-dental-implants-painful',
     image: `${domain}/blog-implant-comfort.webp`,
