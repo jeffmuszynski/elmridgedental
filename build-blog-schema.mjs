@@ -21,6 +21,13 @@ const defaultAuthor = {
 
 const posts = [
   {
+    file: 'blog/dentist-for-dentures-near-me-in-killeen-options-that-fit/index.html',
+    path: '/blog/dentist-for-dentures-near-me-in-killeen-options-that-fit',
+    image: `${domain}/cbct-implant-planning-killeen.webp`,
+    datePublished: '2026-05-22',
+    dateModified: '2026-05-22',
+  },
+  {
     file: 'blog/dental-implants-near-harker-heights-how-to-choose-the-right-fit/index.html',
     path: '/blog/dental-implants-near-harker-heights-how-to-choose-the-right-fit',
     image: `${domain}/cbct-implant-planning-killeen.webp`,
