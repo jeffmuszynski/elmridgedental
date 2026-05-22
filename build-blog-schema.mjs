@@ -1,5 +1,6 @@
 import fs from 'fs';
 import { domain, dentistEntityRef } from './site-helpers.mjs';
+import { wave1SchemaPosts } from './wave1-guides.mjs';
 
 const publisher = {
   '@type': 'Organization',
@@ -84,6 +85,7 @@ const posts = [
     datePublished: '2026-05-15',
     dateModified: '2026-05-15',
   },
+  ...wave1SchemaPosts,
 ];
 
 function readMeta(file) {
