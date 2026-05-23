@@ -1,6 +1,7 @@
 import fs from 'fs';
 import { head, header, footer, menuScript, breadcrumb, faqSchema, writePage, domain, withHeadSchemas, medicalProcedureSchema, jsonLd, dentistEntityRef } from './site-helpers.mjs';
 import { wave1Guides } from './wave1-guides.mjs';
+import { wave2Guides } from './wave2-guides.mjs';
 
 writePage('sleep-dentistry-killeen-tx', {
   path: '/sleep-dentistry-killeen-tx',
@@ -810,7 +811,8 @@ const posts = [
   ['blog/are-dental-implants-painful/index.html','/blog/are-dental-implants-painful','Are Dental Implants Painful? What to Expect Before, During, and After','Dental implants pain guide for Killeen, TX patients covering anesthesia, healing, soreness, sedation options, and what to expect before and after.'],
   ['blog/implant-dentist-killeen-tx/index.html','/blog/implant-dentist-killeen-tx','What to Look for in an Implant Dentist in Killeen, TX','Implant dentist in Killeen, TX guide covering experience, CBCT imaging, guided surgery, treatment planning, and private practice care.'],
   ['blog/dental-implants-near-harker-heights-how-to-choose-the-right-fit/index.html','/blog/dental-implants-near-harker-heights-how-to-choose-the-right-fit','Dental Implants Near Harker Heights: How to Choose the Right Fit','Considering dental implants near Harker Heights? Learn options, timeline, cost factors, and how Elm Ridge plans implant care near Killeen.'],
-  ...wave1Guides.map((guide) => [guide.file, guide.path, guide.title, guide.description, guide.category])
+  ...wave1Guides.map((guide) => [guide.file, guide.path, guide.title, guide.description, guide.category]),
+  ...wave2Guides.map((guide) => [guide.file, guide.path, guide.title, guide.description, guide.category])
 ];
 
 const extraPosts = [
@@ -821,6 +823,10 @@ const extraPosts = [
 writeHtmlFile('blog/index.html', `${withHeadSchemas(head('Dental Blog | Elm Ridge Implant and Family Dentistry','Dental blog from Elm Ridge Implant and Family Dentistry in Killeen, TX covering implants, cosmetic dentistry, emergencies, Invisalign, and more.','/blog'), breadcrumb('/blog','Blog'))}<body class="font-body text-charcoal bg-stone">${header()}<main><section class="bg-charcoal text-white py-20"><div class="max-w-5xl mx-auto px-6"><h1 class="font-display text-5xl md:text-6xl font-light mb-6">Dental Blog</h1><p class="text-white/70 leading-8 text-lg max-w-3xl">Decision-focused dental guides for patients in Killeen, Harker Heights, Copperas Cove, Belton, Temple, and Salado.</p></div></section><section class="py-16 bg-white"><div class="max-w-5xl mx-auto px-6 grid md:grid-cols-2 gap-6">${[...extraPosts, ...posts].map(([f,p,t,d,c])=>`<a href="${p}" class="block bg-stone border border-teal-light p-7 hover:border-teal transition-colors"><p class="text-xs uppercase tracking-widest text-teal-dark mb-3">${c || 'Implant Dentistry'}</p><h2 class="font-display text-3xl text-charcoal mb-4">${t}</h2><p class="text-charcoal/65 leading-7">${d}</p></a>`).join('')}</div></section></main>${footer(false)}${menuScript}</body></html>`);
 
 for (const guide of wave1Guides) {
+  blog(guide.file, guide.path, guide.title, guide.description, guide.body, guide.faq, guide);
+}
+
+for (const guide of wave2Guides) {
   blog(guide.file, guide.path, guide.title, guide.description, guide.body, guide.faq, guide);
 }
 
