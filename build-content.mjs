@@ -2,6 +2,7 @@ import fs from 'fs';
 import { head, header, footer, menuScript, breadcrumb, faqSchema, writePage, domain, withHeadSchemas, medicalProcedureSchema, jsonLd, dentistEntityRef } from './site-helpers.mjs';
 import { wave1Guides } from './wave1-guides.mjs';
 import { wave2Guides } from './wave2-guides.mjs';
+import { wave3Guides } from './wave3-guides.mjs';
 
 writePage('sleep-dentistry-killeen-tx', {
   path: '/sleep-dentistry-killeen-tx',
@@ -812,7 +813,8 @@ const posts = [
   ['blog/implant-dentist-killeen-tx/index.html','/blog/implant-dentist-killeen-tx','What to Look for in an Implant Dentist in Killeen, TX','Implant dentist in Killeen, TX guide covering experience, CBCT imaging, guided surgery, treatment planning, and private practice care.'],
   ['blog/dental-implants-near-harker-heights-how-to-choose-the-right-fit/index.html','/blog/dental-implants-near-harker-heights-how-to-choose-the-right-fit','Dental Implants Near Harker Heights: How to Choose the Right Fit','Considering dental implants near Harker Heights? Learn options, timeline, cost factors, and how Elm Ridge plans implant care near Killeen.'],
   ...wave1Guides.map((guide) => [guide.file, guide.path, guide.title, guide.description, guide.category]),
-  ...wave2Guides.map((guide) => [guide.file, guide.path, guide.title, guide.description, guide.category])
+  ...wave2Guides.map((guide) => [guide.file, guide.path, guide.title, guide.description, guide.category]),
+  ...wave3Guides.map((guide) => [guide.file, guide.path, guide.title, guide.description, guide.category])
 ];
 
 const extraPosts = [
@@ -827,6 +829,10 @@ for (const guide of wave1Guides) {
 }
 
 for (const guide of wave2Guides) {
+  blog(guide.file, guide.path, guide.title, guide.description, guide.body, guide.faq, guide);
+}
+
+for (const guide of wave3Guides) {
   blog(guide.file, guide.path, guide.title, guide.description, guide.body, guide.faq, guide);
 }
 
