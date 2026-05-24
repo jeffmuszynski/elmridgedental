@@ -54,8 +54,8 @@ export const globalDentistSchema = {
   medicalSpecialty: [
     'Dentistry',
     'Cosmetic Dentistry',
-    'Implant Dentistry',
-    'Sleep Dentistry',
+    'Dental Implants',
+    'Sleep Apnea Oral Appliance Therapy',
   ],
   sameAs: [
     'https://www.facebook.com/ElmRidgeDental/',
@@ -65,13 +65,6 @@ export const globalDentistSchema = {
     'https://killeenchamber.com/ElmRidgeImplantandFamilyDentistry?i=Nzg%3D',
     'https://nextdoor.com/pages/elm-ridge-implant-and-family-dentistry-killeen-tx/',
   ],
-  aggregateRating: {
-    '@type': 'AggregateRating',
-    ratingValue: '5.0',
-    reviewCount: '559',
-    bestRating: '5',
-    worstRating: '1',
-  },
   hasOfferCatalog: {
     '@type': 'OfferCatalog',
     name: 'Dental Services',
@@ -80,14 +73,14 @@ export const globalDentistSchema = {
       { '@type': 'Offer', itemOffered: { '@type': 'MedicalProcedure', name: 'All-on-4 Dental Implants', url: 'https://www.elmridgedental.com/all-on-4-dental-implants-killeen-tx' } },
       { '@type': 'Offer', itemOffered: { '@type': 'MedicalProcedure', name: 'Full-Arch Dental Implants', url: 'https://www.elmridgedental.com/full-arch-dental-implants-killeen-tx' } },
       { '@type': 'Offer', itemOffered: { '@type': 'MedicalProcedure', name: 'Single Tooth Implants', url: 'https://www.elmridgedental.com/single-tooth-implant-killeen-tx' } },
-      { '@type': 'Offer', itemOffered: { '@type': 'MedicalProcedure', name: 'Implant Bridges', url: 'https://www.elmridgedental.com/implant-bridges-killeen-tx' } },
+      { '@type': 'Offer', itemOffered: { '@type': 'MedicalProcedure', name: 'Implant Bridges', url: 'https://www.elmridgedental.com/implant-bridge-killeen-tx' } },
       { '@type': 'Offer', itemOffered: { '@type': 'MedicalProcedure', name: 'Snap-On Dentures', url: 'https://www.elmridgedental.com/snap-on-dentures-killeen-tx' } },
       { '@type': 'Offer', itemOffered: { '@type': 'MedicalProcedure', name: 'Dentures', url: 'https://www.elmridgedental.com/dentures-killeen-tx' } },
       { '@type': 'Offer', itemOffered: { '@type': 'MedicalProcedure', name: 'Cosmetic Dentistry', url: 'https://www.elmridgedental.com/cosmetic-dentistry-killeen-tx' } },
-      { '@type': 'Offer', itemOffered: { '@type': 'MedicalProcedure', name: 'Invisalign', url: 'https://www.elmridgedental.com/invisalign-killeen-tx' } },
+      { '@type': 'Offer', itemOffered: { '@type': 'MedicalProcedure', name: 'Clear Aligners', url: 'https://www.elmridgedental.com/clear-aligners-killeen-tx' } },
       { '@type': 'Offer', itemOffered: { '@type': 'MedicalProcedure', name: 'Dental Crowns', url: 'https://www.elmridgedental.com/dental-crowns-killeen-tx' } },
       { '@type': 'Offer', itemOffered: { '@type': 'MedicalProcedure', name: 'Root Canals', url: 'https://www.elmridgedental.com/root-canal-killeen-tx' } },
-      { '@type': 'Offer', itemOffered: { '@type': 'MedicalProcedure', name: 'Sleep Dentistry', url: 'https://www.elmridgedental.com/sleep-dentistry-killeen-tx' } },
+      { '@type': 'Offer', itemOffered: { '@type': 'MedicalProcedure', name: 'Sleep Apnea Oral Appliances', url: 'https://www.elmridgedental.com/sleep-apnea-dentist-killeen-tx' } },
       { '@type': 'Offer', itemOffered: { '@type': 'MedicalProcedure', name: 'Emergency Dentistry', url: 'https://www.elmridgedental.com/emergency-dentist-killeen-tx' } },
     ],
   },
@@ -123,27 +116,50 @@ export const doctorPersonSchemas = [
     '@context': 'https://schema.org',
     '@type': 'Person',
     '@id': 'https://www.elmridgedental.com/#dr-jeff',
-    name: 'Dr. Jeff Muszynski, DDS',
+    name: 'Jeff Muszynski, DDS',
     jobTitle: 'Dentist',
+    image: 'https://www.elmridgedental.com/Jeff%20photo.webp',
     alumniOf: [
       { '@type': 'CollegeOrUniversity', name: 'Abilene Christian University' },
       { '@type': 'CollegeOrUniversity', name: 'University of Oklahoma College of Dentistry' },
     ],
     worksFor: dentistEntityRef,
-    url: 'https://www.elmridgedental.com/#team',
+    url: 'https://www.elmridgedental.com/dr-jeff-muszynski-dds',
+    knowsAbout: [
+      'Dental implants',
+      'Full-arch dental implants',
+      'Oral surgery',
+      'Root canals',
+      'Sedation dentistry',
+      'Sleep apnea oral appliances',
+      'Cosmetic dentistry',
+      'Family dentistry',
+    ],
   },
   {
     '@context': 'https://schema.org',
     '@type': 'Person',
     '@id': 'https://www.elmridgedental.com/#dr-kayla',
-    name: 'Dr. Kayla Muszynski, DDS',
+    name: 'Kayla Muszynski, DDS',
     jobTitle: 'Dentist',
+    image: 'https://www.elmridgedental.com/kayla%20photo.webp',
     alumniOf: [
       { '@type': 'CollegeOrUniversity', name: 'Abilene Christian University' },
       { '@type': 'CollegeOrUniversity', name: 'University of Oklahoma College of Dentistry' },
     ],
     worksFor: dentistEntityRef,
-    url: 'https://www.elmridgedental.com/#team',
+    url: 'https://www.elmridgedental.com/dr-kayla-muszynski-dds',
+    knowsAbout: [
+      'Cosmetic dentistry',
+      'Family dentistry',
+      'Pediatric and family care',
+      'Restorative dentistry',
+      'Cleanings and exams',
+      'Crowns',
+      'Bridges',
+      'Veneers',
+      'Whitening',
+    ],
   },
 ];
 
@@ -194,11 +210,11 @@ export function withHeadSchemas(documentHtml, ...schemas) {
 }
 
 export function header() {
-  return `<header id="nav" class="sticky top-0 z-50 bg-white/85 backdrop-blur-sm border-b border-white/80"><div class="max-w-7xl mx-auto px-4 sm:px-6 py-3 sm:py-4 flex items-center justify-between gap-3 lg:gap-6"><a href="/" class="flex-shrink-0"><img src="/ELMRIDGE.webp" alt="${practiceName}" class="h-14 sm:h-16 lg:h-[80px] w-auto max-w-[min(68vw,260px)] sm:max-w-none object-contain" /></a><nav class="hidden lg:flex flex-1 justify-center items-center gap-6"><a href="/#services" class="font-body text-xs tracking-[0.38em] uppercase text-charcoal/55 hover:text-charcoal">Services</a><a href="/dental-implants-killeen-tx" class="font-body text-xs tracking-[0.38em] uppercase text-charcoal/55 hover:text-charcoal">Implants</a><a href="/cosmetic-dentistry-killeen-tx" class="font-body text-xs tracking-[0.38em] uppercase text-charcoal/55 hover:text-charcoal">Cosmetic</a><a href="/faq" class="font-body text-xs tracking-[0.38em] uppercase text-charcoal/55 hover:text-charcoal">FAQ</a><a href="/#team" class="font-body text-xs tracking-[0.38em] uppercase text-charcoal/55 hover:text-charcoal">About</a><a href="/#reviews" class="font-body text-xs tracking-[0.38em] uppercase text-charcoal/55 hover:text-charcoal">Reviews</a></nav><div class="hidden lg:flex items-center gap-3"><a href="tel:+12546994127" class="font-body text-xs font-semibold tracking-[0.08em] text-charcoal/75 whitespace-nowrap">254-699-4127</a><a href="/#contact" class="px-7 py-3 bg-teal text-white font-body font-semibold tracking-[0.2em] uppercase text-xs hover:bg-teal-dark whitespace-nowrap">Request Appointment</a></div><button id="menu-btn" aria-label="Open menu" class="lg:hidden p-2 text-charcoal"><svg id="icon-menu" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6"><path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5"/></svg><svg id="icon-close" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6 hidden"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/></svg></button></div><div id="mobile-menu" class="hidden lg:hidden bg-white border-t border-teal-light px-6 pb-6 pt-4 flex-col gap-3"><a href="/#services" class="block font-body text-xs tracking-widest uppercase text-charcoal py-2">Services</a><a href="/dental-implants-killeen-tx" class="block font-body text-xs tracking-widest uppercase text-charcoal py-2">Implants</a><a href="/cosmetic-dentistry-killeen-tx" class="block font-body text-xs tracking-widest uppercase text-charcoal py-2">Cosmetic</a><a href="/faq" class="block font-body text-xs tracking-widest uppercase text-charcoal py-2">FAQ</a><a href="/#team" class="block font-body text-xs tracking-widest uppercase text-charcoal py-2">Our Doctors</a><a href="/#contact" class="mt-2 inline-block px-6 py-3 bg-teal text-white font-body font-semibold tracking-widest uppercase text-xs">Request an Appointment</a></div></header>`;
+  return `<header id="nav" class="sticky top-0 z-50 bg-white/85 backdrop-blur-sm border-b border-white/80"><div class="max-w-7xl mx-auto px-4 sm:px-6 py-3 sm:py-4 flex items-center justify-between gap-3 lg:gap-6"><a href="/" class="flex-shrink-0"><img src="/ELMRIDGE.webp" alt="${practiceName}" class="h-14 sm:h-16 lg:h-[80px] w-auto max-w-[min(68vw,260px)] sm:max-w-none object-contain" /></a><nav class="hidden lg:flex flex-1 justify-center items-center gap-6"><a href="/services" class="font-body text-xs tracking-[0.38em] uppercase text-charcoal/55 hover:text-charcoal">Services</a><a href="/dental-implants-killeen-tx" class="font-body text-xs tracking-[0.38em] uppercase text-charcoal/55 hover:text-charcoal">Implants</a><a href="/cosmetic-dentistry-killeen-tx" class="font-body text-xs tracking-[0.38em] uppercase text-charcoal/55 hover:text-charcoal">Cosmetic</a><a href="/doctors" class="font-body text-xs tracking-[0.38em] uppercase text-charcoal/55 hover:text-charcoal">Doctors</a><a href="/new-patients" class="font-body text-xs tracking-[0.38em] uppercase text-charcoal/55 hover:text-charcoal">New Patients</a><a href="/reviews" class="font-body text-xs tracking-[0.38em] uppercase text-charcoal/55 hover:text-charcoal">Reviews</a></nav><div class="hidden lg:flex items-center gap-3"><a href="tel:+12546994127" class="font-body text-xs font-semibold tracking-[0.08em] text-charcoal/75 whitespace-nowrap">254-699-4127</a><a href="/request-appointment" class="px-7 py-3 bg-teal text-white font-body font-semibold tracking-[0.2em] uppercase text-xs hover:bg-teal-dark whitespace-nowrap">Request Appointment</a></div><button id="menu-btn" aria-label="Open menu" class="lg:hidden p-2 text-charcoal"><svg id="icon-menu" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6"><path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5"/></svg><svg id="icon-close" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6 hidden"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/></svg></button></div><div id="mobile-menu" class="hidden lg:hidden bg-white border-t border-teal-light px-6 pb-6 pt-4 flex-col gap-3"><a href="/services" class="block font-body text-xs tracking-widest uppercase text-charcoal py-2">Services</a><a href="/dental-implants-killeen-tx" class="block font-body text-xs tracking-widest uppercase text-charcoal py-2">Implants</a><a href="/cosmetic-dentistry-killeen-tx" class="block font-body text-xs tracking-widest uppercase text-charcoal py-2">Cosmetic</a><a href="/doctors" class="block font-body text-xs tracking-widest uppercase text-charcoal py-2">Doctors</a><a href="/new-patients" class="block font-body text-xs tracking-widest uppercase text-charcoal py-2">New Patients</a><a href="/reviews" class="block font-body text-xs tracking-widest uppercase text-charcoal py-2">Reviews</a><a href="/request-appointment" class="mt-2 inline-block px-6 py-3 bg-teal text-white font-body font-semibold tracking-widest uppercase text-xs">Request an Appointment</a></div></header>`;
 }
 
 export function footer() {
-  return `<footer class="bg-charcoal pt-16 pb-8"><div class="max-w-7xl mx-auto px-6"><div class="grid grid-cols-1 md:grid-cols-[1.1fr,1.2fr,0.9fr] gap-12 mb-12"><div><div class="w-24 h-24 mb-5"><img src="/square logo.webp" alt="${practiceName} logo" class="w-full h-full object-contain" loading="lazy" decoding="async" /></div><h3 class="font-display text-xl font-light text-white mb-3" style="letter-spacing:0.04em;">Elm Ridge Implant<br />and Family Dentistry</h3><p class="font-body text-sm text-white/45 leading-relaxed">A practice built on lasting relationships and exceptional care.</p></div><div class="grid grid-cols-1 sm:grid-cols-2 gap-x-8 gap-y-6"><div><p class="font-body text-xs tracking-widest uppercase text-teal mb-5">Navigation</p><ul class="space-y-3"><li><a href="/#services" class="font-body text-sm text-white/55 hover:text-white">Services</a></li><li><a href="/cosmetic-dentistry-killeen-tx" class="font-body text-sm text-white/55 hover:text-white">Cosmetic</a></li><li><a href="/cosmetic-smile-simulator-killeen-tx" class="font-body text-sm text-white/55 hover:text-white">Smile Simulator</a></li><li><a href="/dental-implants-killeen-tx" class="font-body text-sm text-white/55 hover:text-white">Implants</a></li><li><a href="/#before-after" class="font-body text-sm text-white/55 hover:text-white">Before &amp; After</a></li><li><a href="/#team" class="font-body text-sm text-white/55 hover:text-white">Our Doctors</a></li><li><a href="/#contact" class="font-body text-sm text-white/55 hover:text-white">Contact</a></li></ul></div><div><p class="font-body text-xs tracking-widest uppercase text-teal mb-5">Patient Resources</p><ul class="space-y-3"><li><a href="/insurance-and-financing" class="font-body text-sm text-white/55 hover:text-white">Insurance &amp; Financing</a></li><li><a href="/post-operative-instructions" class="font-body text-sm text-white/55 hover:text-white">Post-Op Instructions</a></li><li><a href="/faq" class="font-body text-sm text-white/55 hover:text-white">FAQ</a></li><li><a href="/blog" class="font-body text-sm text-white/55 hover:text-white">Patient Education</a></li><li><a href="/accessibility-statement" class="font-body text-sm text-white/55 hover:text-white">Accessibility</a></li></ul></div></div><div><p class="font-body text-xs tracking-widest uppercase text-teal mb-5">Contact</p><address class="not-italic space-y-3"><p class="font-body text-sm text-white/55">2601 E Elms Rd<br />Killeen, TX 76542</p><p><a href="tel:+12546994127" class="font-body text-sm text-white/55 hover:text-white">254-699-4127</a></p><p class="font-body text-sm text-white/55">Monday - Thursday: 8am - 5pm<br />Friday - Sunday: Closed</p></address></div></div><div class="border-t border-white/10 pt-6 pr-16 sm:pr-20 flex flex-col md:flex-row items-start md:items-center justify-between gap-3"><p class="font-body text-xs text-white/30">&copy; 2026 ${practiceName}. All rights reserved.</p><p class="font-body text-xs text-white/30">Designed for the community we serve.</p></div></div></footer>`;
+  return `<footer class="bg-charcoal pt-16 pb-8"><div class="max-w-7xl mx-auto px-6"><div class="grid grid-cols-1 md:grid-cols-[1.1fr,1.2fr,0.9fr] gap-12 mb-12"><div><div class="w-24 h-24 mb-5"><img src="/square logo.webp" alt="${practiceName} logo" class="w-full h-full object-contain" loading="lazy" decoding="async" /></div><h3 class="font-display text-xl font-light text-white mb-3" style="letter-spacing:0.04em;">Elm Ridge Implant<br />and Family Dentistry</h3><p class="font-body text-sm text-white/45 leading-relaxed">Private dental care in Killeen built on clear answers, familiar faces, and long-term relationships.</p></div><div class="grid grid-cols-1 sm:grid-cols-2 gap-x-8 gap-y-6"><div><p class="font-body text-xs tracking-widest uppercase text-teal mb-5">Navigation</p><ul class="space-y-3"><li><a href="/services" class="font-body text-sm text-white/55 hover:text-white">Services</a></li><li><a href="/dental-implants-killeen-tx" class="font-body text-sm text-white/55 hover:text-white">Implants</a></li><li><a href="/cosmetic-dentistry-killeen-tx" class="font-body text-sm text-white/55 hover:text-white">Cosmetic</a></li><li><a href="/before-and-after" class="font-body text-sm text-white/55 hover:text-white">Before &amp; After</a></li><li><a href="/doctors" class="font-body text-sm text-white/55 hover:text-white">Our Doctors</a></li><li><a href="/reviews" class="font-body text-sm text-white/55 hover:text-white">Reviews</a></li></ul></div><div><p class="font-body text-xs tracking-widest uppercase text-teal mb-5">Patient Resources</p><ul class="space-y-3"><li><a href="/new-patients" class="font-body text-sm text-white/55 hover:text-white">New Patients</a></li><li><a href="/insurance-and-financing" class="font-body text-sm text-white/55 hover:text-white">Insurance &amp; Financing</a></li><li><a href="/request-appointment" class="font-body text-sm text-white/55 hover:text-white">Request Appointment</a></li><li><a href="/post-operative-instructions" class="font-body text-sm text-white/55 hover:text-white">Post-Op Instructions</a></li><li><a href="/faq" class="font-body text-sm text-white/55 hover:text-white">FAQ</a></li><li><a href="/blog" class="font-body text-sm text-white/55 hover:text-white">Patient Education</a></li><li><a href="/ai-summary" class="font-body text-sm text-white/55 hover:text-white">Practice Facts</a></li><li><a href="/accessibility-statement" class="font-body text-sm text-white/55 hover:text-white">Accessibility</a></li></ul></div></div><div><p class="font-body text-xs tracking-widest uppercase text-teal mb-5">Contact</p><address class="not-italic space-y-3"><p class="font-body text-sm text-white/55"><a href="https://www.google.com/maps?q=2601+E+Elms+Rd,+Killeen,+TX+76542" target="_blank" rel="noopener" class="hover:text-white">2601 E Elms Rd<br />Killeen, TX 76542</a></p><p><a href="tel:+12546994127" class="font-body text-sm text-white/55 hover:text-white">254-699-4127</a></p><p class="font-body text-sm text-white/55">Monday - Thursday: 8 AM - 5 PM<br />Friday - Sunday: Closed</p></address></div></div><div class="border-t border-white/10 pt-6 pr-16 sm:pr-20 flex flex-col md:flex-row items-start md:items-center justify-between gap-3"><p class="font-body text-xs text-white/30">&copy; 2026 ${practiceName}. All rights reserved.</p><p class="font-body text-xs text-white/30">Designed for the community we serve.</p></div></div></footer>`;
 }
 
 export const menuScript = `<script>const menuBtn=document.getElementById('menu-btn'),mobileMenu=document.getElementById('mobile-menu'),iconMenu=document.getElementById('icon-menu'),iconClose=document.getElementById('icon-close');if(menuBtn&&mobileMenu){menuBtn.addEventListener('click',()=>{const open=!mobileMenu.classList.contains('hidden');mobileMenu.classList.toggle('hidden');mobileMenu.classList.toggle('flex');iconMenu&&iconMenu.classList.toggle('hidden',!open);iconClose&&iconClose.classList.toggle('hidden',open)});mobileMenu.querySelectorAll('a').forEach(a=>a.addEventListener('click',()=>{mobileMenu.classList.add('hidden');mobileMenu.classList.remove('flex');iconMenu&&iconMenu.classList.remove('hidden');iconClose&&iconClose.classList.add('hidden')}));}</script>`;
@@ -268,13 +284,13 @@ export function writePage(file, opts) {
     faq = [],
     faqHeading = 'Frequently Asked Questions',
     heroPrimaryLabel = 'Request an Appointment',
-    heroPrimaryHref = '/#contact',
+    heroPrimaryHref = '/request-appointment',
     heroSecondaryLabel = 'Call 254-699-4127',
     heroSecondaryHref = 'tel:+12546994127',
     footerTitle = 'Ready for a clearer plan?',
     footerText = 'Schedule a visit with Elm Ridge Implant and Family Dentistry in Killeen.',
     footerPrimaryLabel = 'Request an Appointment',
-    footerPrimaryHref = '/#contact',
+    footerPrimaryHref = '/request-appointment',
     footerSecondaryLabel = '',
     footerSecondaryHref = '',
     headSchemas = [],

@@ -1,0 +1,59 @@
+{
+  "name": "Elm Ridge Implant and Family Dentistry",
+  "canonicalUrl": "https://www.elmridgedental.com",
+  "address": {
+    "street": "2601 E Elms Rd",
+    "city": "Killeen",
+    "state": "TX",
+    "postalCode": "76542",
+    "country": "US"
+  },
+  "phone": "254-699-4127",
+  "hours": {
+    "monday": "8 AM-5 PM",
+    "tuesday": "8 AM-5 PM",
+    "wednesday": "8 AM-5 PM",
+    "thursday": "8 AM-5 PM",
+    "friday": "Closed",
+    "saturday": "Closed",
+    "sunday": "Closed"
+  },
+  "doctors": [
+    {
+      "name": "Jeff Muszynski, DDS",
+      "undergraduate": "Abilene Christian University",
+      "dentalSchool": "University of Oklahoma College of Dentistry",
+      "dentalSchoolGraduationYear": 2014
+    },
+    {
+      "name": "Kayla Muszynski, DDS",
+      "undergraduate": "Abilene Christian University",
+      "dentalSchool": "University of Oklahoma College of Dentistry",
+      "dentalSchoolGraduationYear": 2015
+    }
+  ],
+  "serviceAreas": [
+    "Killeen",
+    "Harker Heights",
+    "Copperas Cove",
+    "Fort Cavazos / Fort Hood",
+    "Belton",
+    "Salado",
+    "Temple",
+    "Nolanville"
+  ],
+  "acceptsNewPatients": true,
+  "doesNotAccept": [
+    "Medicaid"
+  ],
+  "sedation": {
+    "nitrousOxide": true,
+    "oralConsciousSedation": true,
+    "ivSedation": false
+  },
+  "appointmentPolicy": {
+    "onlineScheduling": "appointment request only",
+    "walkInsGuaranteed": false
+  },
+  "reviewPhrase": "5.0 Google rating from 550+ reviews"
+}

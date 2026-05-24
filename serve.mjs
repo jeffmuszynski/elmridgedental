@@ -52,11 +52,10 @@ Avoid oversized teeth, long rectangular veneer shapes, teeth that extend too far
 `;
 
 const oldUrlRedirects = new Map([
-  ['/contact-us', '/#contact'],
-  ['/reviews', '/#reviews'],
-  ['/before-and-after', '/#before-after'],
-  ['/dentistnearme', '/'],
+  ['/contact-us', '/request-appointment'],
+  ['/dentistnearme', '/dentist-killeen-tx'],
   ['/dentalimplants', '/dental-implants-killeen-tx'],
+  ['/dental-implants-near-me-in-killeen-how-to-choose-the-right-fit', '/dental-implants-killeen-tx'],
   ['/dental-implants', '/dental-implants-killeen-tx'],
   ['/implants', '/dental-implants-killeen-tx'],
   ['/implantdentistry', '/dental-implants-killeen-tx'],
@@ -67,11 +66,16 @@ const oldUrlRedirects = new Map([
   ['/snapondentures', '/snap-on-dentures-killeen-tx'],
   ['/cosmeticdentistry', '/cosmetic-dentistry-killeen-tx'],
   ['/cosmetic-dentistry', '/cosmetic-dentistry-killeen-tx'],
-  ['/invisalign', '/invisalign-killeen-tx'],
+  ['/invisalign', '/clear-aligners-killeen-tx'],
+  ['/invisalign-killeen-tx', '/clear-aligners-killeen-tx'],
   ['/rootcanals', '/root-canal-killeen-tx'],
   ['/root-canal', '/root-canal-killeen-tx'],
   ['/dentures', '/dentures-killeen-tx'],
-  ['/extractions', '/emergency-dentist-killeen-tx'],
+  ['/implant-bridges-killeen-tx', '/implant-bridge-killeen-tx'],
+  ['/sleep-dentistry-killeen-tx', '/sleep-apnea-dentist-killeen-tx'],
+  ['/sleep-dentistry', '/sleep-apnea-dentist-killeen-tx'],
+  ['/sleep', '/sleep-apnea-dentist-killeen-tx'],
+  ['/extractions', '/tooth-extractions-killeen-tx'],
   ['/emergencydentist', '/emergency-dentist-killeen-tx'],
   ['/emergency-dentist', '/emergency-dentist-killeen-tx'],
   ['/postoperativeinstructions', '/post-operative-instructions'],
@@ -80,14 +84,19 @@ const oldUrlRedirects = new Map([
   ['/insurance', '/insurance-and-financing'],
   ['/financing', '/insurance-and-financing'],
   ['/insurance-financing', '/insurance-and-financing'],
+  ['/appointment', '/request-appointment'],
+  ['/appointments', '/request-appointment'],
+  ['/request-an-appointment', '/request-appointment'],
+  ['/contact', '/request-appointment'],
   ['/dentistnolanville', '/dentist-nolanville-tx'],
   ['/dentistnolanvilletx', '/dentist-nolanville-tx'],
   ['/nolanville-dentist', '/dentist-nolanville-tx'],
   ['/dentist-nolanville', '/dentist-nolanville-tx'],
-  ['/generaldentistry', '/#services'],
-  ['/cleanings', '/#services'],
-  ['/wellnessexams', '/#services'],
-  ['/sedation', '/#services'],
+  ['/generaldentistry', '/services'],
+  ['/cleanings', '/dental-cleanings-killeen-tx'],
+  ['/wellnessexams', '/dental-cleanings-killeen-tx'],
+  ['/sedation', '/sedation-dentistry-killeen-tx'],
+  ['/kids-dentist-killeen-tx', '/family-dentist-killeen-tx'],
   ['/blog-cosmetic-dentistry-options-killeen-tx', '/blog/cosmetic-dentistry-options-killeen-tx'],
   ['/blog-emergency-dentist-killeen-tx', '/blog/emergency-dentist-killeen-tx'],
   ['/blog-dental-implant-cost-killeen-tx', '/blog/dental-implant-cost-killeen-tx'],
@@ -114,6 +123,7 @@ const mime = {
   '.webp': 'image/webp',
   '.txt': 'text/plain; charset=utf-8',
   '.xml': 'application/xml; charset=utf-8',
+  '.json': 'application/json; charset=utf-8',
 };
 
 const isProduction = process.env.NODE_ENV === 'production';
@@ -742,13 +752,13 @@ async function handleSmileSimulationEmail(req, res) {
     });
   }
 }
-createServer(async (req, res) => {
+export const server = createServer(async (req, res) => {
   const requestUrl = new URL(req.url, `http://${req.headers.host || 'localhost'}`);
   const host = (req.headers.host || '').split(':')[0].toLowerCase();
   const normalizedPath = requestUrl.pathname.replace(/\/+$/, '') || '/';
   const oldDestination = oldUrlRedirects.get(normalizedPath.toLowerCase());
 
-  if (normalizedPath === '/api/contact' || normalizedPath === '/contact') {
+  if (normalizedPath === '/api/contact' || (normalizedPath === '/contact' && req.method === 'POST')) {
     await handleContactForm(req, res);
     return;
   }

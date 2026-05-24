@@ -4,6 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "build": "node build-content.mjs && node agentic-rebuild.mjs",
+    "build:agentic": "node agentic-rebuild.mjs",
     "start": "node serve.mjs",
     "test": "echo \"Error: no test specified\" && exit 1"
   },

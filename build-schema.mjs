@@ -59,10 +59,10 @@ const serviceProcedures = {
   'dental-crowns-killeen-tx': ['Dental Crowns', 'Restorative', 'Tooth'],
   'root-canal-killeen-tx': ['Root Canal Therapy', 'Restorative', 'Tooth'],
   'dentures-killeen-tx': ['Dentures', 'Restorative', 'Mouth'],
-  'invisalign-killeen-tx': ['Invisalign', 'Orthodontic', 'Teeth'],
+  'clear-aligners-killeen-tx': ['Clear Aligners', 'Orthodontic', 'Teeth'],
   'cosmetic-dentistry-killeen-tx': ['Cosmetic Dentistry', 'Restorative', 'Teeth'],
   'emergency-dentist-killeen-tx': ['Emergency Dental Care', 'Diagnostic', 'Mouth'],
-  'sleep-dentistry-killeen-tx': ['Sleep Dentistry Consultation', 'Diagnostic', 'Airway'],
+  'sleep-dentistry-killeen-tx': ['Sleep Apnea Oral Appliance Therapy Consultation', 'Diagnostic', 'Airway'],
 };
 
 const postOpMedicalPages = {
