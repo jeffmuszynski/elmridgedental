@@ -1203,31 +1203,172 @@ function buildCostPages() {
 function buildNewPatientInsuranceAppointmentPages() {
   writePage('new-patients', {
     path: '/new-patients',
-    title: 'New Dental Patients in Killeen, TX | Elm Ridge',
-    description: 'New patient information for Elm Ridge in Killeen: first visits, kids, insurance, Medicaid, military families, emergency appointments, sedation, and payment options.',
+    title: 'New Patients | Elm Ridge Implant and Family Dentistry',
+    description: 'New patients are welcome at Elm Ridge in Killeen. Learn what to expect, insurance and financing options, emergency visit guidance, children\'s care, sedation options, and how to request an appointment.',
     crumb: 'New Patients',
     kicker: 'New Patients',
-    h1: 'New Patients Are Welcome',
-    intro: 'Here is what to know before your first visit with Elm Ridge Implant and Family Dentistry in Killeen.',
-    body: `<section class="py-16 bg-white"><div class="max-w-4xl mx-auto px-6 prose-page space-y-7">
-      <h2>Quick Answers</h2>${atAGlance([
-        ['Accepting new patients', 'Yes.'],
-        ['Children', 'Yes, when teeth are present. Not a pediatric specialty office.'],
-        ['Insurance', 'Most major PPO plans; no Medicaid.'],
-        ['Online scheduling', 'Appointment request only, not guaranteed real-time booking.'],
+    h1: 'New Patients Are Welcome at Elm Ridge',
+    intro: `Elm Ridge Implant and Family Dentistry is a privately owned dental office in Killeen led by Jeff Muszynski, DDS and Kayla Muszynski, DDS. We see children, adults, families, emergency patients, and patients looking for everything from routine care to implants, cosmetic dentistry, and second opinions.<br /><span class="block mt-4 text-teal text-sm uppercase tracking-[0.24em]">${reviewPhrase}</span>`,
+    heroPrimaryLabel: `Call ${phoneDisplay}`,
+    heroPrimaryHref: phoneHref,
+    heroSecondaryLabel: 'Request an Appointment',
+    heroSecondaryHref: '/request-appointment',
+    body: `<section class="py-12 bg-white"><div class="max-w-6xl mx-auto px-6">
+      <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-4 not-prose">
+        ${[
+          ['Accepting new patients', 'Yes'],
+          ['Children', 'Yes, once teeth are present'],
+          ['Emergency visits', 'Same-day when possible; call first'],
+          ['Insurance', 'In-network with most major PPO plans'],
+          ['Medicaid', 'Not accepted'],
+          ['Financing', 'CareCredit and Cherry available'],
+          ['Sedation', 'Nitrous oxide and oral conscious sedation; no IV sedation'],
+          ['Friday hours', 'Closed Fridays'],
+          ['Location', addressLine],
+        ].map(([label, value]) => `<div class="border border-teal-light bg-stone p-5"><p class="text-xs uppercase tracking-[0.24em] text-teal-dark mb-2">${label}</p><p class="text-charcoal font-semibold leading-7">${value}</p></div>`).join('')}
+      </div>
+    </div></section>
+    <section class="py-16 bg-stone"><div class="max-w-6xl mx-auto px-6 grid lg:grid-cols-[0.9fr,1.1fr] gap-10 items-start">
+      <div>
+        <p class="text-xs uppercase tracking-[0.28em] text-teal-dark mb-4">First Visit</p>
+        <h2 class="font-display text-5xl text-charcoal leading-tight mb-5">What to expect at your first visit</h2>
+        <p class="text-charcoal/70 leading-8">Your first appointment is built around clarity. Elm Ridge will not treat every new patient visit like the same script, but the goal is always to understand what you need, explain what the team sees, and give you practical next steps.</p>
+      </div>
+      <div class="grid sm:grid-cols-2 gap-4 not-prose">
+        ${[
+          'We get to know your goals and concerns.',
+          'We review your dental and medical history.',
+          'We take appropriate X-rays or imaging as needed.',
+          'The doctor performs an exam.',
+          'We explain findings in plain language.',
+          'You get options, priorities, and next steps.',
+          'We review insurance and payment estimates before treatment when possible.',
+          'Bring your photo ID, insurance card, medication list, and any recent dental X-rays if available.',
+        ].map((item, index) => `<div class="bg-white border border-teal-light p-5"><p class="text-teal-dark text-xs uppercase tracking-[0.2em] mb-3">Step ${index + 1}</p><p class="text-charcoal/75 leading-7">${item}</p></div>`).join('')}
+      </div>
+    </div></section>
+    <section class="py-16 bg-white"><div class="max-w-6xl mx-auto px-6">
+      <div class="max-w-3xl mb-8">
+        <p class="text-xs uppercase tracking-[0.28em] text-teal-dark mb-4">Who We Care For</p>
+        <h2 class="font-display text-5xl text-charcoal leading-tight mb-5">A dental home for real family life</h2>
+        <p class="text-charcoal/70 leading-8">Elm Ridge sees adults, children once teeth are present, families, patients with dental anxiety, patients who need implants or more complex planning, and patients who want a second opinion before moving forward.</p>
+      </div>
+      <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-5 not-prose">
+        ${[
+          ['Adults and families', 'Preventive, restorative, cosmetic, and urgent dental care in one privately owned office.'],
+          ['Children', 'Children are seen as part of family dentistry once teeth are present. Elm Ridge is not a pediatric specialty office.'],
+          ['Anxious patients', 'The team can talk through comfort options, pacing, and what to expect before treatment.'],
+          ['Implant and complex-care patients', 'Consultations can help compare implants, dentures, full-arch options, and restorative choices.'],
+          ['Second opinions', 'Bring your questions. The goal is a clear explanation, not pressure.'],
+          ['Military families', 'Elm Ridge treats military families, spouses, and dependents from the Fort Cavazos / Fort Hood area. Active-duty service members are not currently treated through active-duty military dental programs.'],
+        ].map(([label, text]) => `<div class="border border-teal-light bg-stone p-6"><h3 class="font-display text-3xl text-charcoal mb-3">${label}</h3><p class="text-charcoal/65 leading-7">${text}</p></div>`).join('')}
+      </div>
+    </div></section>
+    <section class="py-16 bg-stone"><div class="max-w-6xl mx-auto px-6">
+      <div class="max-w-3xl mb-8">
+        <p class="text-xs uppercase tracking-[0.28em] text-teal-dark mb-4">Care You Can Start Here</p>
+        <h2 class="font-display text-5xl text-charcoal leading-tight mb-5">Routine visits, bigger questions, and urgent problems</h2>
+        <p class="text-charcoal/70 leading-8">You do not have to know the exact service you need before calling. The team can help you decide whether to start with a cleaning, exam, consultation, emergency visit, or second opinion.</p>
+      </div>
+      ${cardGrid([
+        { kicker: 'Family Dentistry', label: 'Cleanings, exams, fillings, crowns, and children\'s care', href: '/family-dentist-killeen-tx', text: 'Steady family dental care for children once teeth are present, adults, and seniors.' },
+        { kicker: 'Emergency Care', label: 'Tooth pain, broken teeth, swelling, and knocked-out teeth', href: '/emergency-dentist-killeen-tx', text: 'Call first for urgent dental problems. Same-day care is available when the schedule allows.' },
+        { kicker: 'Implants and Dentures', label: 'Single implants, implant bridges, snap-on dentures, and full-arch options', href: '/dental-implants-killeen-tx', text: 'Start with diagnosis, imaging, and a clear comparison of tooth replacement choices.' },
+        { kicker: 'Cosmetic Dentistry', label: 'Veneers, bonding, whitening, and clear aligners', href: '/cosmetic-dentistry-killeen-tx', text: 'Natural-looking cosmetic planning that fits your teeth, bite, and goals.' },
+        { kicker: 'Comfort Options', label: 'Nitrous oxide and oral conscious sedation', href: '/sedation-dentistry-killeen-tx', text: 'Comfort options are available for appropriate patients. IV sedation is not offered.' },
+        { kicker: 'Sleep Apnea', label: 'Take-home sleep studies and oral appliances', href: '/sleep-apnea-dentist-killeen-tx', text: 'Oral appliances may be used after sleep-study data and physician diagnosis.' },
       ])}
-      <h2>Your First Visit</h2><p>Your first visit usually includes a review of your health history, concerns, appropriate X-rays or imaging, a dental and gum evaluation, and a clear explanation of findings. Bring your insurance card, photo ID, medication list, and any recent X-rays if another office has them.</p>
-      <h2>Insurance, Military Families, and Payment</h2><p>Elm Ridge is in-network with many major PPO plans and can file many out-of-network PPO plans. Elm Ridge does not accept Medicaid. Military dependents, spouses, and families are welcome. Elm Ridge does not currently treat active-duty service members through active-duty military dental programs.</p><p>Payment is due at the time of service. CareCredit and Cherry are available, and in-house arrangements may be considered case by case. ${insuranceCaveat}</p>
-      <h2>Emergencies and Walk-Ins</h2><p>Same-day emergency appointments are offered when possible. Call first. Walk-ins are not guaranteed, though the team will try to help if the schedule allows. For severe swelling, trouble breathing, uncontrolled bleeding, major trauma, or a medical emergency, go to the ER.</p>
-      <h2>Second Opinions</h2><p>Second opinions are welcome. If recent diagnostic-quality X-rays from another office are sent over, Elm Ridge can review them, but the practice may still take its own images if needed for diagnostic accuracy. If duplicative images are needed and insurance does not pay, or if the patient does not have insurance, Elm Ridge avoids charging for duplicative images when appropriate.</p>
-      <h2>Comfort Options</h2><p>Elm Ridge offers nitrous oxide and oral conscious sedation for evaluated candidates. IV sedation is not offered.</p>
-      ${pillLinks([{ label: 'Request appointment', href: '/request-appointment' }, { label: 'Insurance and financing', href: '/insurance-and-financing' }, { label: 'Services', href: '/services' }, { label: 'Emergency care', href: '/emergency-dentist-killeen-tx' }, { label: 'Reviews', href: '/reviews' }, serviceLinks.jeff, serviceLinks.kayla])}
+      <div class="mt-8">${pillLinks([{ label: 'See all services', href: '/services' }, { label: 'Read patient reviews', href: '/reviews' }])}</div>
+    </div></section>
+    <section class="py-16 bg-white"><div class="max-w-6xl mx-auto px-6 grid lg:grid-cols-2 gap-8">
+      <div class="border border-teal-light bg-stone p-8">
+        <p class="text-xs uppercase tracking-[0.28em] text-teal-dark mb-4">Insurance and Payment</p>
+        <h2 class="font-display text-4xl text-charcoal mb-5">Clear estimates before treatment whenever possible</h2>
+        <div class="prose-page space-y-5">
+          <p>Elm Ridge is in-network with most major PPO dental plans and can file many out-of-network PPO plans. Benefits vary by employer and plan. ${insuranceCaveat}</p>
+          <ul><li>Most major PPO plans are accepted.</li><li>Medicaid is not accepted.</li><li>Many Medicare Advantage dental plans may be accepted depending on the plan.</li><li>Traditional Medicare generally does not cover routine dental care.</li><li>TRICARE Dental Program / United Concordia is accepted where appropriate.</li><li>CareCredit and Cherry are available.</li><li>Payment is due at the time of service.</li><li>In-house arrangements may be considered case by case.</li></ul>
+        </div>
+        <div class="mt-6">${pillLinks([{ label: 'Insurance and financing', href: '/insurance-and-financing' }])}</div>
+      </div>
+      <div class="border border-teal-light bg-white p-8">
+        <p class="text-xs uppercase tracking-[0.28em] text-teal-dark mb-4">Scheduling</p>
+        <h2 class="font-display text-4xl text-charcoal mb-5">How appointment requests work</h2>
+        <div class="prose-page space-y-5">
+          <p>The fastest way to schedule is to call <a href="${phoneHref}">${phoneDisplay}</a>. You can also use the appointment request form for non-emergency visits.</p>
+          <p>Online scheduling is currently an appointment request, not guaranteed real-time booking. For urgent dental problems, call instead of using the form so the team can triage timing and symptoms.</p>
+          <p>Appointments are recommended. Walk-ins are not guaranteed, though the team will try to help when the schedule allows.</p>
+        </div>
+        <div class="mt-6">${pillLinks([{ label: 'Request an appointment', href: '/request-appointment' }, { label: `Call ${phoneDisplay}`, href: phoneHref }])}</div>
+      </div>
+    </div></section>
+    <section class="py-16 bg-stone"><div class="max-w-6xl mx-auto px-6 grid lg:grid-cols-2 gap-8">
+      <div class="bg-white border border-teal-light p-8">
+        <p class="text-xs uppercase tracking-[0.28em] text-teal-dark mb-4">Second Opinions</p>
+        <h2 class="font-display text-4xl text-charcoal mb-5">A careful second look is welcome</h2>
+        <div class="prose-page space-y-5">
+          <p>Elm Ridge offers second opinions for patients who want another set of eyes before committing to treatment.</p>
+          <p>The doctors may take their own X-rays or imaging for diagnostic accuracy and medical-legal documentation, even if another office has already taken images. That is not meant to make you repeat things unnecessarily; it helps the team make and document decisions responsibly.</p>
+          <p>If recent diagnostic-quality X-rays are sent from another office, Elm Ridge can review them, but may still take its own images if needed. When duplicative images are needed and insurance does not pay, or when a patient does not have insurance, the team avoids charging for duplicative images when appropriate.</p>
+        </div>
+      </div>
+      <div class="bg-white border border-teal-light p-8">
+        <p class="text-xs uppercase tracking-[0.28em] text-teal-dark mb-4">Emergencies</p>
+        <h2 class="font-display text-4xl text-charcoal mb-5">For urgent dental problems, call first</h2>
+        <div class="prose-page space-y-5">
+          <p>For urgent dental problems, call <a href="${phoneHref}">${phoneDisplay}</a>. Same-day appointments are available when possible.</p>
+          <p>True trauma, knocked-out permanent teeth, swelling, severe pain, and infection symptoms are prioritized. Painless cosmetic chips may be seen same-day if possible, but same-day care is not guaranteed.</p>
+          <p>Go to the ER for severe swelling, trouble breathing, trouble swallowing, uncontrolled bleeding, major trauma, or any medical emergency.</p>
+        </div>
+        <div class="mt-6">${pillLinks([{ label: 'Emergency dentist', href: '/emergency-dentist-killeen-tx' }, { label: 'Broken tooth', href: '/broken-tooth-killeen-tx' }, { label: 'Toothache', href: '/toothache-killeen-tx' }, { label: 'Dental abscess', href: '/dental-abscess-killeen-tx' }, { label: 'Knocked-out tooth', href: '/knocked-out-tooth-killeen-tx' }])}</div>
+      </div>
+    </div></section>
+    <section class="py-16 bg-white"><div class="max-w-6xl mx-auto px-6">
+      <div class="max-w-3xl mb-8">
+        <p class="text-xs uppercase tracking-[0.28em] text-teal-dark mb-4">Meet Your Doctors</p>
+        <h2 class="font-display text-5xl text-charcoal leading-tight mb-5">A husband-and-wife private-practice team</h2>
+        <p class="text-charcoal/70 leading-8">Jeff Muszynski, DDS and Kayla Muszynski, DDS both attended Abilene Christian University and graduated from the University of Oklahoma College of Dentistry. Jeff graduated dental school in 2014, and Kayla graduated dental school in 2015.</p>
+      </div>
+      <div class="grid md:grid-cols-2 gap-6 not-prose">
+        <a href="/dr-jeff-muszynski-dds" class="group block border border-teal-light bg-stone hover:border-teal transition-colors">
+          <img src="/Jeff%20photo.webp" alt="Jeff Muszynski, DDS" class="w-full h-80 object-cover" loading="lazy" decoding="async" />
+          <div class="p-6"><h3 class="font-display text-4xl text-charcoal mb-2">Jeff Muszynski, DDS</h3><p class="text-charcoal/65 leading-7">Implants, oral surgery, root canals, restorative dentistry, cosmetic dentistry, and family care.</p><p class="mt-4 text-xs uppercase tracking-[0.22em] text-teal-dark font-semibold">Read Dr. Jeff's profile</p></div>
+        </a>
+        <a href="/dr-kayla-muszynski-dds" class="group block border border-teal-light bg-stone hover:border-teal transition-colors">
+          <img src="/kayla%20photo.webp" alt="Kayla Muszynski, DDS" class="w-full h-80 object-cover" loading="lazy" decoding="async" />
+          <div class="p-6"><h3 class="font-display text-4xl text-charcoal mb-2">Kayla Muszynski, DDS</h3><p class="text-charcoal/65 leading-7">Family dentistry, restorative dentistry, cleanings and exams, cosmetic dentistry, veneers, whitening, and clear aligner care.</p><p class="mt-4 text-xs uppercase tracking-[0.22em] text-teal-dark font-semibold">Read Dr. Kayla's profile</p></div>
+        </a>
+      </div>
+      <div class="mt-8">${pillLinks([{ label: 'Meet both doctors', href: '/doctors' }, { label: 'Request an appointment', href: '/request-appointment' }])}</div>
     </div></section>`,
     faq: [
-      ['Do you accept Medicaid?', 'No. Elm Ridge does not accept Medicaid.'],
-      ['Do you offer payment plans?', 'CareCredit and Cherry are available. Case-by-case in-house arrangements may be discussed.'],
-      ['Do you offer second opinions?', 'Yes. Elm Ridge offers second opinions and may take its own imaging when needed.'],
-      ['Do you see active-duty service members?', 'Not at this time through active-duty military dental programs. Dependents, spouses, and families are welcome.'],
+      ['Are you accepting new patients?', 'Yes.'],
+      ['Do you see children?', 'Yes, children are seen as part of family dentistry once teeth are present.'],
+      ['Do you accept Medicaid?', 'No, Elm Ridge does not accept Medicaid.'],
+      ['Do you accept PPO insurance?', 'Elm Ridge is in-network with most major PPO dental plans and can file many out-of-network PPO plans. Benefits vary by employer and plan.'],
+      ['Do you offer payment plans?', 'CareCredit and Cherry are available. In-house arrangements may be considered case by case.'],
+      ['Do you offer sedation?', 'Yes, Elm Ridge offers nitrous oxide and oral conscious sedation for appropriate patients. IV sedation is not offered.'],
+      ['Do you take walk-ins?', 'Appointments are recommended. If someone walks in with an urgent concern and the schedule allows, the team will try to help, but same-day care is not guaranteed without an appointment.'],
+      ['Do you offer second opinions?', 'Yes. Elm Ridge offers second opinions and may take its own imaging for diagnostic accuracy.'],
+      ['Do you see military families?', 'Yes, Elm Ridge treats military families, spouses, and dependents from the Fort Cavazos / Fort Hood area. Active-duty service members are not currently treated through active-duty military dental programs.'],
+      ['What should I do if I have a dental emergency?', `Call ${phoneDisplay}. For severe swelling, trouble breathing, trouble swallowing, uncontrolled bleeding, major trauma, or medical emergency, go to the ER.`],
+    ],
+    footerTitle: 'Ready to schedule?',
+    footerText: 'Call or request an appointment online. Online scheduling is currently an appointment request, not guaranteed real-time booking. For emergencies, call instead of using the form.',
+    footerPrimaryLabel: `Call ${phoneDisplay}`,
+    footerPrimaryHref: phoneHref,
+    footerSecondaryLabel: 'Request an Appointment',
+    footerSecondaryHref: '/request-appointment',
+    headSchemas: [
+      jsonLd({
+        '@context': 'https://schema.org',
+        '@type': 'WebPage',
+        name: 'New Patients Are Welcome at Elm Ridge',
+        url: `${domain}/new-patients`,
+        description: 'New patients are welcome at Elm Ridge in Killeen. Learn what to expect, insurance and financing options, emergency visit guidance, children\'s care, sedation options, and how to request an appointment.',
+        isPartOf: { '@id': `${domain}/#website` },
+        about: dentistEntityRef,
+        mainEntity: dentistEntityRef,
+      }, 'new_patients_webpage'),
     ],
   });
 
@@ -1263,7 +1404,8 @@ function reviewCards(items, compact = false) {
 }
 
 function buildReviewsBeforeAfterAiPages() {
-  writeCustomPage('reviews', '/reviews', 'Patient Reviews | Elm Ridge Implant and Family Dentistry', 'Read patient reviews for Elm Ridge Implant and Family Dentistry in Killeen. 5.0 Google rating from 550+ reviews.', 'Reviews', `${hero('Patient Reviews', 'Real reviews from real patients', reviewPhrase)}<section class="py-16 bg-white"><div class="max-w-7xl mx-auto px-6 space-y-12"><div><p class="text-charcoal/65 leading-7 max-w-3xl">These comments come from public patient reviews and testimonials. They are shared as patient feedback, not as review schema.</p></div><div id="review-carousel" class="overflow-hidden border-y border-teal-light py-6" aria-label="Featured patient review carousel"><div id="review-track" class="flex gap-4">${reviewCards(reviews.slice(0, 12), true)}</div></div><div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-5">${reviewCards(reviews)}</div><div class="bg-stone border border-teal-light p-8">${pillLinks([{ label: 'New patients', href: '/new-patients' }, { label: 'Services', href: '/services' }, { label: 'Request appointment', href: '/request-appointment' }, { label: 'Call ' + phoneDisplay, href: phoneHref }])}</div></div></section><script>(function(){const carousel=document.getElementById('review-carousel');const track=document.getElementById('review-track');if(!carousel||!track)return;track.innerHTML+=track.innerHTML;let pos=0;let paused=false;const reduce=window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)').matches;carousel.addEventListener('mouseenter',()=>paused=true);carousel.addEventListener('mouseleave',()=>paused=false);carousel.addEventListener('focusin',()=>paused=true);carousel.addEventListener('focusout',()=>paused=false);function tick(){if(!reduce&&!paused){pos-=0.55;const midpoint=track.scrollWidth/2;if(Math.abs(pos)>=midpoint)pos=0;track.style.transform='translateX('+pos+'px)';}requestAnimationFrame(tick);}tick();})();</script>`);
+  if (fs.existsSync('reviews') && fs.statSync('reviews').isFile()) fs.rmSync('reviews');
+  writeCustomPage('reviews/index.html', '/reviews', 'Patient Reviews | Elm Ridge Implant and Family Dentistry', 'Read patient reviews for Elm Ridge Implant and Family Dentistry in Killeen. 5.0 Google rating from 550+ reviews.', 'Reviews', `${hero('Patient Reviews', 'Real reviews from real patients', reviewPhrase)}<section class="py-16 bg-white"><div class="max-w-7xl mx-auto px-6 space-y-12"><div><p class="text-charcoal/65 leading-7 max-w-3xl">These comments come from public patient reviews and testimonials. They are shared as patient feedback, not as review schema.</p></div><div id="review-carousel" class="overflow-hidden border-y border-teal-light py-6" aria-label="Featured patient review carousel"><div id="review-track" class="flex gap-4">${reviewCards(reviews.slice(0, 12), true)}</div></div><div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-5">${reviewCards(reviews)}</div><div class="bg-stone border border-teal-light p-8">${pillLinks([{ label: 'New patients', href: '/new-patients' }, { label: 'Services', href: '/services' }, { label: 'Request appointment', href: '/request-appointment' }, { label: 'Call ' + phoneDisplay, href: phoneHref }])}</div></div></section><script>(function(){const carousel=document.getElementById('review-carousel');const track=document.getElementById('review-track');if(!carousel||!track)return;track.innerHTML+=track.innerHTML;let pos=0;let paused=false;const reduce=window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)').matches;carousel.addEventListener('mouseenter',()=>paused=true);carousel.addEventListener('mouseleave',()=>paused=false);carousel.addEventListener('focusin',()=>paused=true);carousel.addEventListener('focusout',()=>paused=false);function tick(){if(!reduce&&!paused){pos-=0.55;const midpoint=track.scrollWidth/2;if(Math.abs(pos)>=midpoint)pos=0;track.style.transform='translateX('+pos+'px)';}requestAnimationFrame(tick);}tick();})();</script>`);
 
   const gallery = [
     ['cosmetic dentistry 2before.webp', 'Before smile photo shared with patient consent'],
@@ -1614,7 +1756,7 @@ function buildSitemap() {
     if (entry.isFile()) {
       const text = fs.readFileSync(entry.name, 'utf8');
       if (text.includes('<html') && entry.name !== 'index.html') add(entry.name);
-    } else if (['blog', 'insurance', 'post-op'].includes(entry.name)) {
+    } else if (['blog', 'insurance', 'post-op', 'reviews'].includes(entry.name)) {
       for (const file of fs.readdirSync(entry.name, { recursive: true })) {
         const full = path.join(entry.name, file);
         if (fs.statSync(full).isFile() && full.endsWith('index.html')) add(full);
