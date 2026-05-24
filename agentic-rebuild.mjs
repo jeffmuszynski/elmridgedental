@@ -139,7 +139,7 @@ function simpleSchema(type, name, pagePath, description, extra = {}) {
 }
 
 function pageIntroBlock(answer) {
-  return `<section class="py-10 bg-white"><div class="max-w-4xl mx-auto px-6"><div class="border border-teal-light bg-teal-pale/50 p-6"><p class="font-body text-xs tracking-[0.28em] uppercase text-teal-dark mb-3">Direct Answer</p><p class="text-charcoal/75 leading-8 text-lg">${answer}</p></div></div></section>`;
+  return `<section class="py-10 bg-white"><div class="max-w-4xl mx-auto px-6"><div class="border border-teal-light bg-teal-pale/50 p-6"><p class="font-body text-xs tracking-[0.28em] uppercase text-teal-dark mb-3">Short Answer</p><p class="text-charcoal/75 leading-8 text-lg">${answer}</p></div></div></section>`;
 }
 
 function atAGlance(items) {
@@ -158,6 +158,218 @@ function providerLinks(names = ['Jeff Muszynski, DDS', 'Kayla Muszynski, DDS']) 
   return `<h2>Provider Links</h2>${pillLinks(links)}`;
 }
 
+function serviceKind(page) {
+  const slug = page.slug || '';
+  if (slug.includes('sleep-apnea')) return 'sleep';
+  if (slug.includes('tmj')) return 'tmj';
+  if (slug.includes('sedation') || slug.includes('nitrous')) return 'comfort';
+  if (slug.includes('implant') || slug.includes('all-on-4') || slug.includes('bone-grafting') || slug.includes('sinus-lift') || slug.includes('snap-on')) return 'implant';
+  if (slug.includes('denture')) return 'denture';
+  if (slug.includes('veneer') || slug.includes('bonding') || slug.includes('whitening') || slug.includes('aligner') || slug.includes('cosmetic')) return 'cosmetic';
+  if (slug.includes('root-canal') || slug.includes('molar-root')) return 'root-canal';
+  if (slug.includes('extraction') || slug.includes('wisdom')) return 'oral-surgery';
+  if (slug.includes('crown') || slug.includes('bridge') || slug.includes('filling')) return 'restorative';
+  return 'family';
+}
+
+function defaultServiceGlance(page) {
+  const nextStep = `Call ${phoneDisplay} or request an appointment.`;
+  switch (serviceKind(page)) {
+    case 'implant':
+      return [
+        ['Best for', 'Missing teeth, failing teeth, loose dentures, or implant planning questions.'],
+        ['Planning', 'Exam, imaging, bite review, and a clear restorative plan before treatment.'],
+        ['Comfort', 'Local anesthesia, nitrous oxide, and oral conscious sedation when appropriate.'],
+        ['Next step', nextStep],
+      ];
+    case 'denture':
+      return [
+        ['Best for', 'Several missing teeth, full-mouth tooth loss, or a denture that no longer feels stable.'],
+        ['Options', 'Traditional dentures, partial dentures, immediate dentures, and implant-retained choices.'],
+        ['Planning', 'Fit, speech, chewing, appearance, maintenance, and future implant options all matter.'],
+        ['Next step', nextStep],
+      ];
+    case 'cosmetic':
+      return [
+        ['Best for', 'Chips, wear, gaps, discoloration, shape concerns, or a smile that no longer feels like you.'],
+        ['Planning', 'Shade, tooth shape, bite, gum display, and facial proportions are reviewed together.'],
+        ['Style', 'Natural-looking, conservative changes when the tooth structure and goals fit.'],
+        ['Next step', nextStep],
+      ];
+    case 'comfort':
+      return [
+        ['Best for', 'Dental anxiety, sensitive gag reflex, longer visits, or treatment that feels hard to face.'],
+        ['Options', 'Nitrous oxide and oral conscious sedation for evaluated candidates.'],
+        ['Not offered', 'No IV sedation, deep sedation, or general anesthesia.'],
+        ['Next step', nextStep],
+      ];
+    case 'sleep':
+      return [
+        ['Best for', 'Appropriate mild to moderate OSA patients and some CPAP-intolerant patients.'],
+        ['Diagnosis', 'A sleep physician must make the official diagnosis before appliance delivery.'],
+        ['Appliance', 'FDA-cleared oral appliances are used when appropriate.'],
+        ['Next step', nextStep],
+      ];
+    case 'tmj':
+      return [
+        ['Scope', 'Limited TMJ care focused on splint therapy.'],
+        ['Best for', 'Patients who may benefit from a protective or stabilization splint.'],
+        ['Referral', 'More advanced TMJ needs are explained and referred appropriately.'],
+        ['Next step', nextStep],
+      ];
+    case 'root-canal':
+      return [
+        ['Best for', 'A painful or infected tooth that can still be predictably saved.'],
+        ['Molar root canals', 'Elm Ridge performs many root canals, including molars.'],
+        ['Not offered', 'Root canal retreatments are not performed.'],
+        ['Next step', nextStep],
+      ];
+    case 'oral-surgery':
+      return [
+        ['Best for', 'Teeth that cannot be saved predictably or wisdom teeth that need evaluation.'],
+        ['Treatment', 'Simple and surgical extractions, including many wisdom tooth cases.'],
+        ['Planning', 'Replacement options, grafting, and healing are discussed when relevant.'],
+        ['Next step', nextStep],
+      ];
+    case 'restorative':
+      return [
+        ['Best for', 'Cavities, cracked teeth, missing teeth, worn teeth, or older dental work that is failing.'],
+        ['Materials', 'Tooth-colored fillings and lab-made crowns or bridges when appropriate.'],
+        ['Planning', 'The goal is to protect the tooth without overtreating it.'],
+        ['Next step', nextStep],
+      ];
+    default:
+      return [
+        ['Best for', 'Families who want steady preventive care and clear answers when something changes.'],
+        ['Children', 'Seen once teeth are present as part of family dentistry.'],
+        ['Gum health', 'Routine periodontal therapy and maintenance are recommended when appropriate.'],
+        ['Next step', nextStep],
+      ];
+  }
+}
+
+function defaultWhoText(page) {
+  switch (serviceKind(page)) {
+    case 'implant':
+      return 'This helps patients who are missing one tooth, several teeth, or a full arch, as well as patients whose current denture or older dental work is not giving them the stability they need.';
+    case 'denture':
+      return 'This helps patients who need a removable replacement for missing teeth, are preparing for extractions, or want to compare traditional dentures with implant-retained options.';
+    case 'cosmetic':
+      return 'This helps patients who want their smile to look healthier, more balanced, or more like it used to look without being pushed toward a one-size-fits-all makeover.';
+    case 'comfort':
+      return 'This helps patients who feel anxious, have had difficult dental experiences, need longer treatment, or want to understand comfort options before scheduling.';
+    case 'sleep':
+      return 'This helps patients with a physician diagnosis of obstructive sleep apnea, especially appropriate mild to moderate cases and some patients who cannot tolerate CPAP.';
+    case 'tmj':
+      return 'This helps patients who may benefit from limited splint therapy. More complex jaw-joint, muscle, or pain concerns may need referral to a provider with a broader TMJ focus.';
+    case 'root-canal':
+      return 'This helps patients with tooth pain, lingering temperature sensitivity, swelling, or infection when the tooth still has a reasonable chance of being saved.';
+    case 'oral-surgery':
+      return 'This helps patients with teeth that are broken, infected, loose, impacted, or not predictable to save, including many wisdom tooth cases.';
+    case 'restorative':
+      return 'This helps patients with cavities, cracks, old fillings, missing teeth, bite changes, or damage that needs a practical repair instead of guesswork.';
+    default:
+      return 'This helps children, adults, and seniors who want a reliable dental home for cleanings, exams, fillings, gum monitoring, second opinions, and long-term planning.';
+  }
+}
+
+function defaultExpectText(page) {
+  switch (serviceKind(page)) {
+    case 'implant':
+      return 'Expect a diagnosis-first visit. Elm Ridge reviews imaging, bone, bite, gum health, medical history, and the final tooth design before recommending the implant path.';
+    case 'denture':
+      return 'Expect a conversation about fit, comfort, appearance, maintenance, and whether implants would meaningfully improve stability before a final recommendation is made.';
+    case 'cosmetic':
+      return 'Expect a careful look at tooth shape, shade, wear, gum display, bite, and photos when helpful. The goal is a result that fits your face and does not look overdone.';
+    case 'comfort':
+      return 'Expect a health-history review and clear instructions. Nitrous oxide is different from oral conscious sedation, and oral sedation requires planning and a driver.';
+    case 'sleep':
+      return 'Expect a workflow that respects the medical boundary: sleep-study data goes to a sleep physician, and a physician diagnosis is required before appliance delivery.';
+    case 'tmj':
+      return 'Expect an evaluation focused on whether splint therapy is appropriate. If the problem appears more advanced, Elm Ridge will explain referral options.';
+    case 'root-canal':
+      return 'Expect testing, X-rays, and a discussion of whether the tooth can be saved predictably. Back teeth often need a crown afterward to reduce fracture risk.';
+    case 'oral-surgery':
+      return 'Expect Elm Ridge to explain why the tooth should or should not come out, what comfort options apply, and whether grafting or replacement planning should be considered.';
+    case 'restorative':
+      return 'Expect Elm Ridge to explain what is damaged, how much healthy tooth remains, and whether a filling, crown, bridge, root canal, or implant option makes the most sense.';
+    default:
+      return 'Expect a review of health history, appropriate X-rays or imaging, a dental and gum evaluation, and a plainspoken explanation of findings.';
+  }
+}
+
+function defaultCallText(page) {
+  switch (serviceKind(page)) {
+    case 'implant':
+      return 'Call if you are missing a tooth, have a failing tooth, are tired of loose dentures, or want a second opinion before committing to implant treatment.';
+    case 'denture':
+      return 'Call if teeth are missing, dentures are loose, eating feels limited, or you need to plan extractions and replacement teeth at the same time.';
+    case 'cosmetic':
+      return 'Call if chips, wear, gaps, discoloration, crowding, or old dental work keep drawing your attention in photos or conversation.';
+    case 'comfort':
+      return 'Call before scheduling if anxiety, a past bad experience, or a longer procedure makes you want to talk through comfort options.';
+    case 'sleep':
+      return 'Call if you have a sleep apnea diagnosis, struggle with CPAP, or want to know whether an oral appliance may be appropriate after physician involvement.';
+    case 'tmj':
+      return 'Call if you want to know whether limited splint therapy may help. Seek medical or specialty care promptly for severe, spreading, or complex pain concerns.';
+    case 'root-canal':
+      return 'Call if tooth pain lingers, wakes you up, comes with swelling, or makes biting difficult. Severe swelling or trouble swallowing should be treated as an emergency.';
+    case 'oral-surgery':
+      return 'Call if a tooth is broken, infected, loose, impacted, painful, or being discussed for removal. Urgent swelling, trauma, or uncontrolled bleeding needs immediate attention.';
+    case 'restorative':
+      return 'Call if a tooth hurts, cracks, feels sharp, loses a filling, changes color, or feels different when you bite.';
+    default:
+      return 'Call for cleanings, new patient visits, second opinions, bleeding gums, a child first visit, or any change you do not want to guess about.';
+  }
+}
+
+function defaultApproachText(page) {
+  switch (serviceKind(page)) {
+    case 'implant':
+      return 'Elm Ridge starts with the end result in mind. The implant position, bone, gums, bite, and final tooth design all have to work together before treatment makes sense.';
+    case 'denture':
+      return 'Elm Ridge compares removable and implant-supported options honestly, including comfort, maintenance, cost, and what daily life usually feels like with each choice.';
+    case 'cosmetic':
+      return 'Cosmetic dentistry is planned with restraint. The goal is not to make every smile look the same, but to improve the details that matter while protecting healthy tooth structure.';
+    case 'comfort':
+      return 'Comfort care is matched to the patient and procedure. Elm Ridge explains what nitrous oxide and oral conscious sedation can and cannot do before treatment day.';
+    case 'sleep':
+      return 'Sleep apnea care is handled as a medical-dental workflow. Elm Ridge supports testing and oral appliance therapy, while a sleep physician handles the official diagnosis.';
+    case 'tmj':
+      return 'The TMJ approach is intentionally limited and honest: splint therapy when appropriate, with referral when symptoms call for more advanced care.';
+    case 'root-canal':
+      return 'The goal is to save teeth when that is predictable and to be clear when it is not. Elm Ridge also explains when a specialist or extraction is the more appropriate path.';
+    case 'oral-surgery':
+      return 'Elm Ridge does not treat extraction as the only answer. The team first considers whether the tooth can be saved, then plans removal, grafting, or replacement when needed.';
+    case 'restorative':
+      return 'Restorative dentistry is about matching the repair to the problem. Small damage may need a conservative filling; larger cracks or weakened teeth may need stronger protection.';
+    default:
+      return 'Elm Ridge keeps family dentistry practical: prevent what can be prevented, fix what needs fixing, and explain the difference clearly.';
+  }
+}
+
+function renderDetailSections(sections = []) {
+  if (!sections.length) return '';
+  return sections.map((section) => `<h2>${esc(section.title)}</h2><p>${section.text}</p>`).join('');
+}
+
+function defaultNextQuestions(page, related) {
+  const supportHrefs = new Set(['/services', '/new-patients', '/insurance-and-financing', '/request-appointment', '/reviews']);
+  return uniqueLinks(related)
+    .filter((item) => !supportHrefs.has(item.href))
+    .slice(0, 4)
+    .map((item) => ({
+      label: item.label,
+      href: item.href,
+      text: `See how this connects with ${item.label.toLowerCase()} at Elm Ridge.`,
+    }));
+}
+
+function nextQuestionsSection(items = []) {
+  if (!items.length) return '';
+  return `<h2>Common Next Questions</h2><div class="not-prose grid sm:grid-cols-2 gap-4">${items.map((item) => `<a href="${item.href}" class="block border border-teal-light bg-stone p-5 hover:border-teal transition-colors"><p class="font-semibold text-charcoal mb-2">${esc(item.label)}</p><p class="text-sm leading-7 text-charcoal/65">${esc(item.text)}</p></a>`).join('')}</div>`;
+}
+
 function serviceBody(page) {
   const supportLinks = [
     { label: 'Services', href: '/services' },
@@ -166,13 +378,17 @@ function serviceBody(page) {
     { label: 'Request appointment', href: '/request-appointment' },
     { label: 'Reviews', href: '/reviews' },
   ];
-  const related = uniqueLinks([...(page.related || []), ...supportLinks]);
+  const related = uniqueLinks([...(page.related || []), ...supportLinks]).filter((item) => item.href !== `/${page.slug}`);
+  const nextQuestions = page.nextQuestions || defaultNextQuestions(page, related);
   return `${pageIntroBlock(page.answer)}
   <section class="py-14 bg-white"><div class="max-w-4xl mx-auto px-6 prose-page space-y-7">
     <h2>At a Glance</h2>
     ${atAGlance(page.glance)}
     <h2>Who It Helps</h2>
     <p>${page.who}</p>
+    <h2>How Elm Ridge Approaches It</h2>
+    <p>${page.approach || defaultApproachText(page)}</p>
+    ${renderDetailSections(page.detailSections)}
     <h2>What to Expect</h2>
     <p>${page.expect}</p>
     <h2>When to Call</h2>
@@ -181,6 +397,7 @@ function serviceBody(page) {
     <p>${page.payment || `Coverage depends on your plan, diagnosis, and treatment details. ${insuranceCaveat}`}</p>
     ${page.extra || ''}
     ${providerLinks(page.providers)}
+    ${nextQuestionsSection(nextQuestions)}
     ${relatedSection(related)}
     <p class="bg-stone border border-teal-light p-5"><strong>Ready for the next step?</strong> Call <a href="${phoneHref}">${phoneDisplay}</a> or <a href="/request-appointment">request an appointment</a>. For urgent dental problems, call instead of using the form.</p>
   </div></section>`;
@@ -232,6 +449,7 @@ function standardFaq(name) {
 }
 
 function emergencyBody(page) {
+  const related = uniqueLinks(page.related || []).filter((item) => item.href !== `/${page.slug}`);
   return `${pageIntroBlock(page.answer)}
   <section class="py-14 bg-white"><div class="max-w-4xl mx-auto px-6 prose-page space-y-7">
     <h2>What to Do Now</h2>
@@ -246,7 +464,32 @@ function emergencyBody(page) {
     <p>${page.treat}</p>
     <h2>Insurance and Payment</h2>
     <p>Emergency visits may involve an exam, X-rays, same-day treatment, or a staged plan. ${insuranceCaveat}</p>
-    ${relatedSection(page.related)}
+    ${relatedSection(related)}
+  </div></section>`;
+}
+
+function emergencyQuestionBody(page) {
+  const links = uniqueLinks([...(page.related || []), serviceLinks.insurance, serviceLinks.appointment]).filter((item) => item.href !== `/${page.slug}`);
+  return `${pageIntroBlock(page.answer)}
+  <section class="py-14 bg-white"><div class="max-w-4xl mx-auto px-6 prose-page space-y-7">
+    <h2>${esc(page.question || 'What should I do right now?')}</h2>
+    <p>${page.now}</p>
+    <div class="not-prose grid sm:grid-cols-2 gap-4">
+      <a href="${phoneHref}" class="block bg-teal text-white p-6 text-center font-semibold tracking-widest uppercase text-xs">Call ${phoneDisplay}</a>
+      <a href="/emergency-dentist-killeen-tx" class="block border border-teal p-6 text-center font-semibold tracking-widest uppercase text-xs text-teal-dark">Emergency Page</a>
+    </div>
+    <h2>Can this wait?</h2>
+    <p>${page.wait}</p>
+    <h2>When should I go to the ER?</h2>
+    <p>Go to the ER for severe swelling, trouble breathing, trouble swallowing, uncontrolled bleeding, major trauma, or any medical emergency.</p>
+    <h2>What can Elm Ridge do?</h2>
+    <p>${page.treat}</p>
+    <h2>What might the treatment involve?</h2>
+    <p>${page.treatmentOptions}</p>
+    <h2>Will insurance apply?</h2>
+    <p>Emergency visits may involve an exam, X-rays, same-day treatment, or a staged plan. ${insuranceCaveat}</p>
+    ${nextQuestionsSection(page.nextQuestions || [])}
+    ${relatedSection(links)}
   </div></section>`;
 }
 
@@ -259,7 +502,7 @@ function createEmergencyPage(page) {
     kicker: 'Emergency Dentistry',
     h1: page.h1,
     intro: page.intro,
-    body: emergencyBody(page),
+    body: page.isSymptom ? emergencyQuestionBody(page) : emergencyBody(page),
     faqHeading: 'Emergency FAQ',
     faq: page.faq,
     heroPrimaryLabel: 'Call First',
@@ -663,12 +906,7 @@ function buildServicesHub() {
       ['Smile makeovers', '/cosmetic-dentistry-killeen-tx', 'Coordinated cosmetic and restorative planning.'],
     ]],
     ['Emergency Dentistry', [
-      ['Emergency dentist', '/emergency-dentist-killeen-tx', 'Call first for urgent dental problems.'],
-      ['Broken tooth', '/broken-tooth-killeen-tx', 'Stabilize chips, fractures, and broken teeth.'],
-      ['Toothache', '/toothache-killeen-tx', 'Evaluate pain before it becomes a bigger emergency.'],
-      ['Dental abscess or swelling', '/dental-abscess-killeen-tx', 'Infection guidance and ER red flags.'],
-      ['Lost crown', '/lost-crown-killeen-tx', 'Protect the tooth and determine whether the crown can be reused.'],
-      ['Knocked-out tooth', '/knocked-out-tooth-killeen-tx', 'Urgent instructions for permanent teeth.'],
+      ['Emergency dentist', '/emergency-dentist-killeen-tx', 'One clear emergency page for tooth pain, swelling, broken teeth, lost crowns, knocked-out teeth, and same-day triage when possible.'],
     ]],
     ['Comfort and Adjacent Care', [
       ['Nitrous oxide', '/nitrous-oxide-dentist-killeen-tx', 'Light relaxation that wears off quickly.'],
@@ -711,15 +949,13 @@ function makePage(overrides) {
     kicker: overrides.kicker || 'Dental Service',
     intro: overrides.intro || `Clear, practical ${name.toLowerCase()} guidance from Elm Ridge Implant and Family Dentistry in Killeen.`,
     answer: overrides.answer || `${name} may be recommended when it is the most sensible way to protect comfort, function, appearance, or long-term oral health. Elm Ridge starts with diagnosis before recommending treatment.`,
-    glance: overrides.glance || [
-      ['Best for', overrides.bestFor || 'Patients who need a clear diagnosis and practical treatment plan.'],
-      ['Visit type', overrides.visit || 'Exam or consultation first.'],
-      ['Comfort', overrides.comfort || 'Local anesthesia and comfort options when appropriate.'],
-      ['Next step', `Call ${phoneDisplay} or request an appointment.`],
-    ],
-    who: overrides.who || `This may help patients who have symptoms, damage, missing teeth, cosmetic concerns, or questions about whether treatment is needed now or can be staged.`,
-    expect: overrides.expect || `Elm Ridge will evaluate the area, explain findings in plain language, review reasonable options, and discuss timing, insurance, and payment before treatment begins.`,
-    call: overrides.call || `Call if you have pain, swelling, a broken tooth, a change in chewing, or a concern you do not want to guess about.`,
+    glance: overrides.glance || defaultServiceGlance(overrides),
+    who: overrides.who || defaultWhoText(overrides),
+    approach: overrides.approach,
+    detailSections: overrides.detailSections || [],
+    nextQuestions: overrides.nextQuestions,
+    expect: overrides.expect || defaultExpectText(overrides),
+    call: overrides.call || defaultCallText(overrides),
     payment: overrides.payment,
     extra: overrides.extra || '',
     providers: overrides.providers || ['Jeff Muszynski, DDS', 'Kayla Muszynski, DDS'],
@@ -795,12 +1031,147 @@ function buildServicePages() {
     .forEach(createServicePage);
 
   [
-    { slug: 'emergency-dentist-killeen-tx', h1: 'Emergency Dentist in Killeen: When to Call and When to Go to the ER', title: 'Emergency Dentist in Killeen, TX | Elm Ridge', description: 'Call Elm Ridge for emergency dental care in Killeen. Same-day appointments when possible, with ER guidance for severe swelling, trauma, or medical emergencies.', intro: 'Call first for tooth pain, swelling, broken teeth, lost crowns, knocked-out teeth, or urgent dental concerns.', answer: 'For dental emergencies, call first. Elm Ridge offers same-day emergency appointments when possible, but same-day care is not guaranteed without an appointment.', now: `Call ${phoneDisplay} as early as possible. Describe pain, swelling, trauma, fever, broken teeth, or lost restorations so the team can help triage the next step.`, treat: 'Elm Ridge can evaluate the problem, take X-rays when needed, relieve pain when possible, stabilize broken teeth, treat infection, perform root canals or extractions when appropriate, and explain follow-up options.', related: emergencyRelated, faq: [['Do you take walk-ins?', 'Appointments are recommended. If someone walks in with an urgent concern and the schedule allows, Elm Ridge will try to help, but same-day care is not guaranteed without an appointment.'], ['Is after-hours emergency guidance available?', 'After-hours emergency guidance is available for patients of record. The phone prompt after hours can reach a doctor. New patients with urgent concerns should call during business hours as early as possible.']] },
-    { slug: 'broken-tooth-killeen-tx', h1: 'Broken Tooth: When You Need a Crown, Root Canal, or Extraction', title: 'Broken Tooth in Killeen, TX | Elm Ridge', description: 'Broken tooth in Killeen? Call Elm Ridge first. Learn what to do now and when a crown, root canal, extraction, or ER care may be needed.', intro: 'A broken tooth can be cosmetic, urgent, or a sign that the tooth is structurally compromised.', answer: 'A broken tooth may need smoothing, bonding, a filling, a crown, a root canal, or extraction depending on the depth and symptoms.', now: 'Avoid chewing on the tooth, save any fragment if you have it, and call. A painless cosmetic chip may be seen same-day if possible but is not guaranteed.', treat: 'Elm Ridge can check whether the tooth is restorable, protect sharp edges, repair small breaks, place lab-made crowns, perform root canals, or discuss extraction and replacement options.', related: emergencyRelated, faq: standardFaq('broken tooth treatment') },
-    { slug: 'toothache-killeen-tx', h1: 'Toothache That Should Not Be Ignored', title: 'Toothache Relief in Killeen, TX | Elm Ridge', description: 'Toothache in Killeen? Call Elm Ridge for diagnosis, same-day care when possible, and clear guidance on root canals, fillings, crowns, or extractions.', intro: 'Tooth pain that comes and goes can still be a sign of decay, cracks, nerve inflammation, bite trauma, or infection.', answer: 'A toothache should be evaluated if it repeats, lingers, wakes you up, hurts to bite, or comes with swelling or fever.', now: 'Avoid chewing on the painful side, keep the area clean, and call. Do not place aspirin on the gums or tooth.', treat: 'Elm Ridge can diagnose the source, take X-rays, test the tooth, and discuss fillings, crowns, root canals, extractions, or gum care depending on the cause.', related: emergencyRelated, faq: standardFaq('toothache care') },
-    { slug: 'dental-abscess-killeen-tx', h1: 'Dental Abscess or Swelling: What to Do Now', title: 'Dental Abscess Treatment in Killeen, TX | Elm Ridge', description: 'Dental abscess or swelling in Killeen? Call Elm Ridge first and go to the ER for breathing trouble, swallowing trouble, severe swelling, or medical emergencies.', intro: 'Swelling can become serious quickly, so dental infection symptoms deserve direct guidance.', answer: 'Call Elm Ridge for dental swelling or suspected abscess. Go to the ER for severe swelling, trouble breathing, trouble swallowing, uncontrolled bleeding, major trauma, or a medical emergency.', now: 'Call as early as possible. If swelling is spreading, affecting breathing or swallowing, or making you feel seriously ill, go to the ER.', treat: 'Elm Ridge can evaluate the tooth, take imaging, drain or treat infection when appropriate, and explain whether root canal treatment, extraction, or referral is needed.', related: emergencyRelated, faq: standardFaq('dental abscess treatment') },
-    { slug: 'lost-crown-killeen-tx', h1: 'Lost Crown: Temporary Fixes and Real Treatment', title: 'Lost Crown in Killeen, TX | Elm Ridge', description: 'Lost a crown in Killeen? Save it, avoid chewing on the tooth, and call Elm Ridge to see whether it can be recemented or needs replacement.', intro: 'A lost crown is not always painful, but the tooth underneath may be exposed or weakened.', answer: 'If a crown comes off, save it, avoid chewing on that side, do not use superglue, and call for an evaluation.', now: 'Keep the crown in a small bag if you have it. Pharmacy temporary cement may help only if it fits easily and the bite feels normal.', treat: 'Elm Ridge can evaluate the tooth and crown, recement it when appropriate, or explain whether decay, fracture, root canal treatment, or a new crown is needed.', related: emergencyRelated, faq: standardFaq('lost crown care') },
-    { slug: 'knocked-out-tooth-killeen-tx', h1: 'Knocked-Out Permanent Tooth: Act Quickly', title: 'Knocked-Out Tooth in Killeen, TX | Elm Ridge', description: 'Knocked-out permanent tooth in Killeen? Call immediately. Learn how to handle the tooth and when to go to the ER for trauma or severe bleeding.', intro: 'A knocked-out permanent tooth is urgent and time-sensitive.', answer: 'For a knocked-out permanent tooth, call immediately. Hold the tooth by the crown, keep it moist, and do not scrub the root.', now: 'If possible, place the tooth back in the socket without touching the root. If not, keep it in milk or saliva and call immediately. Baby teeth should not be replanted.', treat: 'Elm Ridge can evaluate the tooth, stabilize it when appropriate, address pain or injury, and discuss replacement options if the tooth cannot be saved.', related: emergencyRelated, faq: standardFaq('knocked-out tooth care') },
+    {
+      slug: 'emergency-dentist-killeen-tx',
+      h1: 'Emergency Dentist in Killeen: When to Call and When to Go to the ER',
+      title: 'Emergency Dentist in Killeen, TX | Elm Ridge',
+      description: 'Call Elm Ridge for emergency dental care in Killeen. Same-day appointments when possible, with ER guidance for severe swelling, trauma, or medical emergencies.',
+      intro: 'Call first for tooth pain, swelling, broken teeth, lost crowns, knocked-out teeth, or urgent dental concerns.',
+      answer: 'For dental emergencies, call first. Elm Ridge offers same-day emergency appointments when possible, but same-day care is not guaranteed without an appointment.',
+      now: `Call ${phoneDisplay} as early as possible. Describe pain, swelling, trauma, fever, broken teeth, or lost restorations so the team can help triage the next step.`,
+      treat: 'Elm Ridge can evaluate the problem, take X-rays when needed, relieve pain when possible, stabilize broken teeth, treat infection, perform root canals or extractions when appropriate, and explain follow-up options.',
+      related: emergencyRelated,
+      faq: [
+        ['Do you take walk-ins?', 'Appointments are recommended. If someone walks in with an urgent concern and the schedule allows, Elm Ridge will try to help, but same-day care is not guaranteed without an appointment.'],
+        ['Is after-hours emergency guidance available?', 'After-hours emergency guidance is available for patients of record. The phone prompt after hours can reach a doctor. New patients with urgent concerns should call during business hours as early as possible.'],
+        ['What symptoms should go to the ER?', 'Go to the ER for severe swelling, trouble breathing, trouble swallowing, uncontrolled bleeding, major trauma, or any medical emergency.'],
+      ],
+    },
+    {
+      slug: 'broken-tooth-killeen-tx',
+      h1: 'I Broke a Tooth. What Should I Do?',
+      title: 'Broken Tooth in Killeen, TX | Elm Ridge',
+      description: 'Broken tooth in Killeen? Learn what to do now, when to call Elm Ridge, and when a crown, root canal, extraction, or ER care may be needed.',
+      intro: 'A broken tooth can be a small cosmetic chip, a painful fracture, or a sign that the tooth is structurally compromised.',
+      answer: 'If you broke a tooth, avoid chewing on it, save any fragment if you have it, and call Elm Ridge. A painless cosmetic chip may be seen same-day if possible, but same-day care is not guaranteed.',
+      question: 'I broke a tooth. What should I do right now?',
+      now: 'Rinse gently with warm water, avoid chewing on that side, and cover sharp edges with orthodontic wax if needed. Save any tooth fragment in a small bag and call before using an online form.',
+      wait: 'A tiny painless chip may be less urgent, but pain, swelling, a loose piece, bleeding, or a crack that hurts to bite should be handled promptly. If you are not sure, call and describe what happened.',
+      treat: 'Elm Ridge can check whether the tooth is restorable, smooth or protect sharp edges, repair small breaks, place a lab-made crown, perform a root canal when appropriate, or discuss extraction and replacement options.',
+      treatmentOptions: 'Possible next steps include bonding, a filling, a crown, root canal treatment, extraction, or a staged plan if swelling or infection is present.',
+      related: emergencyRelated,
+      nextQuestions: [
+        { label: 'Dental crowns', href: '/dental-crowns-killeen-tx', text: 'When a broken tooth needs stronger coverage than a filling.' },
+        { label: 'Root canals', href: '/root-canal-killeen-tx', text: 'When a fracture or deep decay reaches the nerve.' },
+        { label: 'Tooth extractions', href: '/tooth-extractions-killeen-tx', text: 'When a tooth cannot be predictably saved.' },
+      ],
+      faq: [
+        ['Should I save the broken piece?', 'Yes, if you have it. Bring it with you, but do not delay calling if you cannot find it.'],
+        ['Can a broken tooth wait if it does not hurt?', 'Sometimes, but not always. A painless crack can still worsen, so call for guidance.'],
+        ['Should I go to the ER for a broken tooth?', 'Go to the ER for major trauma, uncontrolled bleeding, severe swelling, trouble breathing, trouble swallowing, or a medical emergency.'],
+      ],
+      isSymptom: true,
+    },
+    {
+      slug: 'toothache-killeen-tx',
+      h1: 'I Have a Toothache. What Should I Do?',
+      title: 'Toothache Relief in Killeen, TX | Elm Ridge',
+      description: 'Toothache in Killeen? Learn when to call Elm Ridge, what not to do, and how fillings, crowns, root canals, extractions, or gum care may help.',
+      intro: 'Tooth pain that comes and goes can still be a sign of decay, cracks, nerve inflammation, bite trauma, gum problems, or infection.',
+      answer: 'Call Elm Ridge if a toothache repeats, lingers, wakes you up, hurts to bite, or comes with swelling or fever. Do not put aspirin directly on the gums or tooth.',
+      question: 'My tooth hurts. What should I do right now?',
+      now: 'Keep the area clean, avoid chewing on the painful side, and call. If you can take over-the-counter pain medicine safely, follow the label or your physician guidance.',
+      wait: 'Brief sensitivity that disappears quickly may not be an emergency, but pain that lingers, pulses, wakes you up, or comes with swelling should be evaluated soon.',
+      treat: 'Elm Ridge can diagnose the source, take X-rays, test the tooth, and discuss fillings, crowns, root canals, extractions, gum care, or referral depending on the cause.',
+      treatmentOptions: 'A toothache may need a filling, crown, root canal, extraction, periodontal treatment, bite adjustment, medication, or no treatment beyond monitoring if the tooth tests healthy.',
+      related: emergencyRelated,
+      nextQuestions: [
+        { label: 'Root canals', href: '/root-canal-killeen-tx', text: 'When tooth pain comes from an inflamed or infected nerve.' },
+        { label: 'Molar root canals', href: '/molar-root-canal-killeen-tx', text: 'How Elm Ridge handles many back-tooth root canals.' },
+        { label: 'Dental abscess', href: '/dental-abscess-killeen-tx', text: 'What to know if pain comes with swelling.' },
+      ],
+      faq: [
+        ['Should I put aspirin on my tooth?', 'No. Aspirin can burn the gum tissue and does not treat the cause of the toothache.'],
+        ['Can a toothache go away on its own?', 'Pain can fade temporarily even when the underlying problem remains, so recurring or lingering pain should be evaluated.'],
+        ['When is tooth pain an emergency?', 'Swelling, fever, trouble swallowing, trouble breathing, uncontrolled pain, or trauma should be treated urgently.'],
+      ],
+      isSymptom: true,
+    },
+    {
+      slug: 'dental-abscess-killeen-tx',
+      h1: 'I Think I Have a Dental Abscess. What Should I Do?',
+      title: 'Dental Abscess Treatment in Killeen, TX | Elm Ridge',
+      description: 'Dental abscess or swelling in Killeen? Call Elm Ridge and go to the ER for breathing trouble, swallowing trouble, severe swelling, or medical emergencies.',
+      intro: 'Swelling can become serious quickly, so dental infection symptoms deserve direct guidance.',
+      answer: 'Call Elm Ridge for dental swelling or a suspected abscess. Go to the ER for severe swelling, trouble breathing, trouble swallowing, uncontrolled bleeding, major trauma, or a medical emergency.',
+      question: 'I have swelling or a possible abscess. What should I do right now?',
+      now: 'Call as early as possible. If swelling is spreading, affecting breathing or swallowing, or making you feel seriously ill, go to the ER instead of waiting for a dental appointment.',
+      wait: 'Dental swelling should not be watched casually. Even if pain improves, infection can remain and may need dental treatment to address the source.',
+      treat: 'Elm Ridge can evaluate the tooth, take imaging, treat infection when appropriate, and explain whether root canal treatment, extraction, drainage, medication, or referral is needed.',
+      treatmentOptions: 'Treatment depends on the source and severity. Antibiotics alone usually do not fix the dental cause, so root canal treatment, extraction, or other dental treatment may be needed.',
+      related: emergencyRelated,
+      nextQuestions: [
+        { label: 'Root canals', href: '/root-canal-killeen-tx', text: 'One way to treat infection when the tooth can be saved.' },
+        { label: 'Tooth extractions', href: '/tooth-extractions-killeen-tx', text: 'When the tooth cannot be predictably saved.' },
+        { label: 'Emergency dentist', href: '/emergency-dentist-killeen-tx', text: 'How Elm Ridge handles urgent dental calls.' },
+      ],
+      faq: [
+        ['Can antibiotics fix a dental abscess?', 'Antibiotics may help control infection in some situations, but dental treatment is usually needed to address the source.'],
+        ['When should swelling go to the ER?', 'Go to the ER for severe swelling, trouble breathing, trouble swallowing, uncontrolled bleeding, major trauma, or a medical emergency.'],
+        ['Should I wait if the abscess drains?', 'No. Drainage may reduce pressure, but the source still needs evaluation.'],
+      ],
+      isSymptom: true,
+    },
+    {
+      slug: 'lost-crown-killeen-tx',
+      h1: 'I Lost a Crown. What Should I Do?',
+      title: 'Lost Crown in Killeen, TX | Elm Ridge',
+      description: 'Lost a crown in Killeen? Save it, avoid chewing on the tooth, and call Elm Ridge to see whether it can be recemented or needs replacement.',
+      intro: 'A lost crown is not always painful, but the tooth underneath may be exposed, sensitive, decayed, or weakened.',
+      answer: 'If a crown comes off, save it, avoid chewing on that side, do not use superglue, and call Elm Ridge for an evaluation.',
+      question: 'I lost a crown. What should I do right now?',
+      now: 'Put the crown in a small bag and bring it with you. Avoid sticky foods and chewing on that side. Pharmacy temporary cement may help only if the crown fits easily and the bite feels normal.',
+      wait: 'If the tooth is painful, sharp, loose, swollen, or very sensitive, call promptly. Even without pain, the uncovered tooth can shift, decay, or break if it is left alone too long.',
+      treat: 'Elm Ridge can evaluate the tooth and crown, recement it when appropriate, or explain whether decay, fracture, root canal treatment, buildup, or a new lab-made crown is needed.',
+      treatmentOptions: 'Possible next steps include recementing the crown, replacing it, building up the tooth, treating decay, root canal treatment, or discussing extraction if the tooth is not restorable.',
+      related: emergencyRelated,
+      nextQuestions: [
+        { label: 'Dental crowns', href: '/dental-crowns-killeen-tx', text: 'How lab-made crowns protect weakened teeth.' },
+        { label: 'Crown cost', href: '/crown-cost-killeen-tx', text: 'What affects the estimate if the crown needs replacement.' },
+        { label: 'Root canals', href: '/root-canal-killeen-tx', text: 'When the tooth under a crown becomes painful or infected.' },
+      ],
+      faq: [
+        ['Can I glue my crown back on?', 'Do not use superglue. Temporary dental cement may be used only if the crown fits easily and the bite feels normal.'],
+        ['Can Elm Ridge reuse my old crown?', 'Sometimes. The tooth and crown have to be evaluated first. Decay, fracture, or poor fit may mean replacement is needed.'],
+        ['Is a lost crown an emergency?', 'It can be urgent if there is pain, swelling, sensitivity, a sharp edge, or trouble chewing. Call for guidance.'],
+      ],
+      isSymptom: true,
+    },
+    {
+      slug: 'knocked-out-tooth-killeen-tx',
+      h1: 'A Permanent Tooth Was Knocked Out. What Should I Do?',
+      title: 'Knocked-Out Tooth in Killeen, TX | Elm Ridge',
+      description: 'Knocked-out permanent tooth in Killeen? Call immediately. Learn how to handle the tooth and when to go to the ER for trauma or severe bleeding.',
+      intro: 'A knocked-out permanent tooth is urgent and time-sensitive.',
+      answer: 'For a knocked-out permanent tooth, call immediately. Hold the tooth by the crown, keep it moist, and do not scrub the root. Baby teeth should not be replanted.',
+      question: 'A permanent tooth was knocked out. What should I do right now?',
+      now: 'Pick the tooth up by the crown, not the root. If possible, place it gently back in the socket. If not, keep it in milk or saliva and call immediately. Do not scrub the root.',
+      wait: 'Do not wait. Time matters for a knocked-out permanent tooth. If there was major facial trauma, uncontrolled bleeding, or a medical emergency, go to the ER.',
+      treat: 'Elm Ridge can evaluate the tooth, stabilize it when appropriate, address pain or injury, and discuss replacement options if the tooth cannot be saved.',
+      treatmentOptions: 'Treatment may include reimplantation and stabilization, X-rays, follow-up monitoring, root canal treatment later, or replacement planning if the tooth cannot be saved.',
+      related: emergencyRelated,
+      nextQuestions: [
+        { label: 'Emergency dentist', href: '/emergency-dentist-killeen-tx', text: 'How to call and get triaged quickly.' },
+        { label: 'Dental implants', href: '/dental-implants-killeen-tx', text: 'One replacement option if a tooth cannot be saved.' },
+        { label: 'Dental bridges', href: '/dental-bridges-killeen-tx', text: 'A non-removable replacement option in selected cases.' },
+      ],
+      faq: [
+        ['Should I put a baby tooth back in?', 'No. Baby teeth should not be replanted because that can damage the developing permanent tooth.'],
+        ['Should I clean the tooth?', 'Do not scrub the root. If it is dirty, gently rinse with milk or saline if available, then keep it moist.'],
+        ['When should I go to the ER?', 'Go to the ER for major trauma, uncontrolled bleeding, severe swelling, trouble breathing, trouble swallowing, or any medical emergency.'],
+      ],
+      isSymptom: true,
+    },
   ].forEach((page) => createEmergencyPage({ ...page, isEmergency: true }));
 }
 
@@ -1158,8 +1529,6 @@ function cleanupText(html) {
     ['If you have been searching for a <strong>dentist for dentures near me</strong>, you may already know there is not just one way to replace missing teeth.', 'If you are comparing denture and implant options, you may already know there is not just one way to replace missing teeth.'],
     ['Implant dentist in Killeen, TX guide covering experience, CBCT imaging, guided surgery, treatment planning, and private practice care.', 'Learn how to compare implant dentistry experience, CBCT imaging, guided surgery, treatment planning, and private-practice care in Killeen.'],
     ['Contact / Appointment', 'request appointment'],
-    ['Schedule an implant consultation', 'Request an implant consultation'],
-    ['Schedule an Implant Consultation', 'Request an Implant Consultation'],
     ['/request-appointment', '/request-appointment'],
   ];
   let out = html;
