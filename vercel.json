@@ -64,6 +64,11 @@
       "permanent": true
     },
     {
+      "source": "/before-and-after",
+      "destination": "https://www.elmridgedental.com/cosmetic-dentistry-killeen-tx",
+      "permanent": true
+    },
+    {
       "source": "/kids-dentist-killeen-tx",
       "destination": "https://www.elmridgedental.com/family-dentist-killeen-tx",
       "permanent": true

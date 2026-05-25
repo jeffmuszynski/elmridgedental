@@ -350,7 +350,7 @@ function defaultApproachText(page) {
 
 function renderDetailSections(sections = []) {
   if (!sections.length) return '';
-  return sections.map((section) => `<h2>${esc(section.title)}</h2><p>${section.text}</p>`).join('');
+  return sections.map((section) => `<h2>${esc(section.title)}</h2>${section.html || `<p>${section.text}</p>`}`).join('');
 }
 
 function defaultNextQuestions(page, related) {
@@ -462,8 +462,9 @@ function emergencyBody(page) {
     <p>Go to the ER for severe swelling, trouble breathing, trouble swallowing, uncontrolled bleeding, major trauma, or any medical emergency.</p>
     <h2>What Elm Ridge Can Do</h2>
     <p>${page.treat}</p>
+    ${renderDetailSections(page.detailSections)}
     <h2>Insurance and Payment</h2>
-    <p>Emergency visits may involve an exam, X-rays, same-day treatment, or a staged plan. ${insuranceCaveat}</p>
+    <p>${page.costText || 'Emergency visits may involve an exam, X-rays, same-day treatment, or a staged plan. Treatment is separate from the emergency exam when needed.'} ${insuranceCaveat}</p>
     ${relatedSection(related)}
   </div></section>`;
 }
@@ -486,14 +487,16 @@ function emergencyQuestionBody(page) {
     <p>${page.treat}</p>
     <h2>What might the treatment involve?</h2>
     <p>${page.treatmentOptions}</p>
+    ${renderDetailSections(page.detailSections)}
     <h2>Will insurance apply?</h2>
-    <p>Emergency visits may involve an exam, X-rays, same-day treatment, or a staged plan. ${insuranceCaveat}</p>
+    <p>${page.costText || 'Emergency visits may involve an exam, X-rays, same-day treatment, or a staged plan. Treatment is separate from the emergency exam when needed.'} ${insuranceCaveat}</p>
     ${nextQuestionsSection(page.nextQuestions || [])}
     ${relatedSection(links)}
   </div></section>`;
 }
 
 function createEmergencyPage(page) {
+  page = { ...page, ...(emergencyEnhancements[page.slug] || {}) };
   writePage(page.slug, {
     path: `/${page.slug}`,
     title: page.title,
@@ -534,15 +537,14 @@ const standardCostFactors = [
 ];
 
 const ownerCostRangeData = {
-  // TODO(owner): Replace null values only with owner-approved public ranges.
-  'dental-implant-cost-killeen-tx': { ownerApprovedRange: null, needed: 'single implant, abutment/crown, extraction, grafting, sinus lift, temporary tooth options' },
-  'full-arch-dental-implant-cost-killeen-tx': { ownerApprovedRange: null, needed: 'per-arch fixed full-arch range, temporary prosthesis, final zirconia, acrylic/select alternatives, extractions/grafting' },
-  'snap-on-denture-cost-killeen-tx': { ownerApprovedRange: null, needed: 'implant-retained denture range by implant count, attachment maintenance, new versus existing denture' },
-  'crown-cost-killeen-tx': { ownerApprovedRange: null, needed: 'lab-made crown range, buildup/core range, crown replacement considerations' },
-  'root-canal-cost-killeen-tx': { ownerApprovedRange: null, needed: 'anterior, premolar, molar root canal ranges and crown-after-root-canal estimate notes' },
-  'clear-aligner-cost-killeen-tx': { ownerApprovedRange: null, needed: 'clear aligner treatment range by case complexity, records, refinements, retainers' },
-  'emergency-dentist-cost-killeen-tx': { ownerApprovedRange: null, needed: 'emergency exam, X-rays/imaging, common same-day treatment estimate ranges' },
-  'sleep-apnea-appliance-cost-killeen-tx': { ownerApprovedRange: null, needed: 'oral appliance range, records/scans, follow-up, medical insurance billing notes' },
+  'dental-implant-cost-killeen-tx': { ownerApprovedRange: '$3,500-$6,500 for many single-tooth implant cases. The lower end is closer to implant, abutment, and crown only; the higher end may include extraction, socket preservation grafting, and other needed extras.', needed: 'single implant, abutment/crown, extraction, grafting, sinus lift, temporary tooth options' },
+  'full-arch-dental-implant-cost-killeen-tx': { ownerApprovedRange: '$25,000-$35,000 per arch for fixed full-arch dental implants; $50,000-$70,000 for both arches. Final zirconia is the go-to material; acrylic is rare/selective when appropriate.', needed: 'per-arch fixed full-arch range, temporary prosthesis, final zirconia, acrylic/select alternatives, extractions/grafting' },
+  'snap-on-denture-cost-killeen-tx': { ownerApprovedRange: '$8,000-$14,000 per arch for many snap-on denture cases. Cost depends on implant count, new versus existing denture, attachments, extractions, and maintenance needs.', needed: 'implant-retained denture range by implant count, attachment maintenance, new versus existing denture' },
+  'crown-cost-killeen-tx': { ownerApprovedRange: '$900-$1,600 per tooth for a lab-made crown. Core buildup commonly ranges from $250-$500 when needed.', needed: 'lab-made crown range, buildup/core range, crown replacement considerations' },
+  'root-canal-cost-killeen-tx': { ownerApprovedRange: '$600-$1,200 for many root canal cases. Crown cost after root canal treatment is separate when recommended.', needed: 'anterior, premolar, molar root canal ranges and crown-after-root-canal estimate notes' },
+  'clear-aligner-cost-killeen-tx': { ownerApprovedRange: '$3,500-$5,500 for many clear aligner cases, depending on complexity, treatment length, records, refinements, retainers, and insurance orthodontic benefits.', needed: 'clear aligner treatment range by case complexity, records, refinements, retainers' },
+  'emergency-dentist-cost-killeen-tx': { ownerApprovedRange: '$150-$350 for emergency exam, X-ray, and triage. Treatment is separate.', needed: 'emergency exam, X-rays/imaging, common same-day treatment estimate ranges' },
+  'sleep-apnea-appliance-cost-killeen-tx': { ownerApprovedRange: '$2,500-$3,500 for many sleep apnea oral appliance cases. Medical insurance may help when requirements are met.', needed: 'oral appliance range, records/scans, follow-up, medical insurance billing notes' },
 };
 
 function costBody(page) {
@@ -552,11 +554,11 @@ function costBody(page) {
       <p class="font-body text-xs tracking-[0.28em] uppercase text-teal-dark mb-3">Cost Estimate Basics</p>
       <p class="text-charcoal/75 leading-8 text-lg">${page.answer}</p>
     </div>
-    ${page.ownerApprovedRange ? `<h2>Owner-Approved Cost Range</h2><p>${esc(page.ownerApprovedRange)}</p>` : ''}
+    ${page.ownerApprovedRange ? `<h2>Typical Public Cost Range</h2><p>${esc(page.ownerApprovedRange)}</p><p>Cost ranges are typical public ranges, not guarantees.</p>` : ''}
     <h2>What Affects Cost?</h2>
     <ul>${factors.map((item) => `<li>${esc(item)}</li>`).join('')}</ul>
     <h2>Insurance and Benefits</h2>
-    <p>Elm Ridge is in-network with many major PPO dental plans and can file many out-of-network PPO plans. Benefits vary by employer and plan. ${insuranceCaveat}</p>
+    <p>Elm Ridge is in-network with most major PPO dental plans and can file many out-of-network PPO plans. Benefits vary by employer and plan. ${insuranceCaveat}</p>
     <h2>Financing Options</h2>
     <p>CareCredit and Cherry are available. In-house payment arrangements may be considered case by case. Payment is due at the time of service unless another arrangement has been made before treatment.</p>
     <h2>Why an Exam May Be Needed</h2>
@@ -837,6 +839,75 @@ const serviceLinks = {
   kayla: { label: 'Kayla Muszynski, DDS', href: '/dr-kayla-muszynski-dds' },
 };
 
+const costRanges = {
+  singleImplant: '$3,500-$6,500',
+  implantBridge: '$8,000-$10,000',
+  snapOnDenture: '$8,000-$14,000 per arch',
+  fullArch: '$25,000-$35,000 per arch',
+  fullArchBoth: '$50,000-$70,000 for both arches',
+  crown: '$900-$1,600 per tooth',
+  coreBuildup: '$250-$500 when needed',
+  rootCanal: '$600-$1,200',
+  clearAligners: '$3,500-$5,500',
+  emergency: '$150-$350 for emergency exam, X-rays, and triage; treatment is separate',
+  sleepAppliance: '$2,500-$3,500',
+  socketGraft: '$400-$650',
+  sinusBump: '$500-$800 with implant placement',
+  completeDentures: '$800-$1,800 per arch',
+  immediateDentures: '$800-$1,800 per arch',
+  partialDentures: '$800-$1,800 per arch',
+  simpleExtraction: '$150-$250',
+  surgicalExtraction: '$200-$300',
+  wisdomTooth: '$150-$500 per tooth',
+  fillings: '$150-$450',
+  whitening: '$250-$500',
+  veneers: '$1,200-$2,500 per tooth',
+};
+
+const costContext = 'Typical public ranges are not guarantees. PPO insurance can dramatically change out-of-pocket cost. Medicaid is not accepted. CareCredit and Cherry are available. Payment is due at time of service. Financing may help spread out larger treatment costs. ' + insuranceCaveat;
+
+function htmlList(items) {
+  return `<ul>${items.map((item) => `<li>${item}</li>`).join('')}</ul>`;
+}
+
+function costRangeHtml(range, note = '') {
+  return `<p><strong>Typical public range:</strong> ${range}. ${note ? `${note} ` : ''}${costContext}</p>`;
+}
+
+function simpleTable(headers, rows) {
+  return `<div class="not-prose overflow-x-auto my-5"><table class="w-full border-collapse text-sm"><thead><tr>${headers.map((header) => `<th class="border border-teal-light bg-stone p-3 text-left font-semibold text-charcoal">${esc(header)}</th>`).join('')}</tr></thead><tbody>${rows.map((row) => `<tr>${row.map((cell) => `<td class="border border-teal-light p-3 align-top text-charcoal/75 leading-7">${cell}</td>`).join('')}</tr>`).join('')}</tbody></table></div>`;
+}
+
+const implantTimelineHtml = htmlList([
+  'Extract the tooth and place socket preservation grafting when appropriate.',
+  'Place the implant about 3-4 months later, depending on healing and anatomy.',
+  'Take implant impressions or scans about 3-4 months after implant placement.',
+  'Seat the final restoration about 1 month later.',
+]);
+
+function implantValueHtml() {
+  return `<p>Dental implants are often one of the strongest long-term tooth replacement options. They usually cost more upfront than a removable denture or traditional bridge, but they can be more cost-effective over time because they are designed for longevity and do not rely on reshaping neighboring teeth. Bridges and dentures can work well, but they may need replacement or major maintenance during the same period that a well-planned implant is still functioning.</p>`;
+}
+
+const beforeAfterGallery = [
+  ['cosmetic dentistry 2before.webp', 'Before smile photo shared with patient consent'],
+  ['cosmetic dentistry 2after.webp', 'After smile photo shared with patient consent'],
+  ['cosmeticdentistry3.webp', 'Smile result photo shared with patient consent'],
+  ['cosmeticdentistry5.webp', 'Smile result photo shared with patient consent'],
+  ['cosmetic dentistry before 11.jpg', 'Before smile photo shared with patient consent'],
+  ['cosmetic dentistry 11 after.jpg', 'After smile photo shared with patient consent'],
+  ['all on 4 before.jpg', 'Before full-arch smile photo shared with patient consent'],
+  ['all on 4 after.JPG', 'After full-arch smile photo shared with patient consent'],
+  ['cosmetic killeen before.jpg', 'Before smile photo shared with patient consent'],
+  ['cosmetic killeen after.jpg', 'After smile photo shared with patient consent'],
+  ['cosmetic before 1.jpg', 'Before smile photo shared with patient consent'],
+  ['cosmetic after 1.jpg', 'After smile photo shared with patient consent'],
+];
+
+function cosmeticGalleryHtml() {
+  return `<h2>Before-and-after photos</h2><p>Individual results vary. Images are shared with patient consent.</p><div class="not-prose grid sm:grid-cols-2 lg:grid-cols-3 gap-5">${beforeAfterGallery.map(([src, alt]) => `<figure class="bg-stone border border-teal-light p-3"><img src="/${src}" alt="${alt}" class="w-full aspect-[4/3] object-cover" loading="lazy" decoding="async" /><figcaption class="sr-only">${alt}</figcaption></figure>`).join('')}</div>`;
+}
+
 const implantRelated = [
   { label: 'Dental implants', href: '/dental-implants-killeen-tx' },
   { label: 'Single tooth implant', href: '/single-tooth-implant-killeen-tx' },
@@ -868,9 +939,639 @@ const cosmeticRelated = [
   { label: 'Cosmetic bonding', href: '/cosmetic-bonding-killeen-tx' },
   { label: 'Teeth whitening', href: '/teeth-whitening-killeen-tx' },
   { label: 'Clear aligners', href: '/clear-aligners-killeen-tx' },
-  { label: 'Before and after', href: '/before-and-after' },
   serviceLinks.reviews,
 ];
+
+const serviceEnhancements = {
+  'dental-implants-killeen-tx': {
+    h1: 'Dental Implants Planned Around the Final Tooth',
+    intro: 'A dental implant is only useful if the final tooth is comfortable, cleanable, and built for the bite it has to live in.',
+    answer: 'Dental implants can replace a single tooth, several teeth, or a full arch. Elm Ridge plans the implant position, bone, gums, bite, and final restoration together instead of treating the implant screw as the whole answer.',
+    glance: [
+      ['Best for', 'Missing or failing teeth when bone, bite, and health history support the plan'],
+      ['Typical single implant range', costRanges.singleImplant],
+      ['Timeline', 'Often several months from extraction or implant placement to final tooth'],
+      ['Provider focus', 'Jeff Muszynski, DDS'],
+    ],
+    who: 'Implants may help patients who are missing a tooth, facing an extraction, tired of loose dentures, or comparing a bridge, partial, snap-on denture, or full-arch option.',
+    approach: 'Elm Ridge starts with restorative planning: what the final tooth needs to look like, how it needs to chew, whether the bite is stable, and whether the bone can support the plan. CBCT imaging is used when needed to evaluate bone, anatomy, nerves, sinus position, and implant options.',
+    detailSections: [
+      { title: 'Long-term value', html: implantValueHtml() },
+      { title: 'When an implant may not be the right fit', html: htmlList(['A traditional bridge may make more sense if neighboring teeth already need crowns.', 'A removable denture or partial may fit the budget or timeline better.', 'Active infection, limited bone, smoking, uncontrolled diabetes, medical history, or bite forces may change the plan.', 'Some advanced surgical cases are better handled with oral surgeon or specialist involvement.']) },
+      { title: 'Typical implant timeline', html: `<p>For extraction, socket preservation, implant placement, and a final restoration, a common sequence is:</p>${implantTimelineHtml}<p>Immediate implants may be possible in selected cases, but they are not appropriate for every tooth or every infection pattern. Timelines vary by healing, bone, anatomy, bite, medical history, and the treatment plan.</p>` },
+      { title: 'Complex cases and specialist coordination', html: '<p>Some implant and bone grafting cases require an oral surgeon or specialist for the surgical phase. Dr. Jeff can still evaluate the restorative goals, coordinate the plan, help determine what the final teeth need to look and function like, and restore the case after surgery when appropriate.</p>' },
+      { title: 'Implants placed elsewhere', html: '<p>Elm Ridge can evaluate and restore implants placed elsewhere when appropriate. Bring records if available, including implant brand or system, implant connection, implant size, placement date, prior X-rays, and restorative parts information. Elm Ridge commonly works with major implant systems and most often sees Nobel and Straumann connections, but no office can promise that every system can always be restored.</p>' },
+      { title: 'Typical cost range', html: costRangeHtml(costRanges.singleImplant, 'For a single implant, the lower end is closer to implant, abutment, and crown only. The higher end may include extraction, socket preservation grafting, and other needed extras.') },
+    ],
+    payment: costContext,
+    faq: [
+      ['Are implants always better than bridges or dentures?', 'No. Implants are often one of the strongest long-term options, but bridges and dentures can be the better fit depending on teeth, bone, health, budget, and timeline.'],
+      ['Can Elm Ridge restore implants placed somewhere else?', 'Often, after evaluation and with records, implant system information, and imaging as needed.'],
+      ['Do you do immediate implants?', 'Sometimes. Immediate implants may be appropriate in selected cases, but infection, bone, gum tissue, and bite can make a staged plan safer.'],
+      ['What if I need an oral surgeon?', 'Elm Ridge can still be the planning and restorative home when a specialist is needed for advanced surgery.'],
+      ['Does insurance cover dental implants?', `Coverage varies widely by plan. ${insuranceCaveat}`],
+    ],
+  },
+  'single-tooth-implant-killeen-tx': {
+    h1: 'A Single-Tooth Implant When One Tooth Is Missing',
+    answer: 'A single-tooth implant replaces one missing tooth with an implant, abutment, and crown. It can be a strong option when the neighboring teeth are healthy and the bone, gum tissue, and bite support the plan.',
+    glance: [
+      ['Typical range', costRanges.singleImplant],
+      ['Common timeline', 'Extraction/graft, healing, implant, healing, scan, final crown'],
+      ['Key advantage', 'Does not require reshaping adjacent healthy teeth'],
+      ['Provider focus', 'Jeff Muszynski, DDS'],
+    ],
+    who: 'This can help when one tooth is missing, failing, cracked beyond repair, or being planned for removal and the goal is a fixed replacement that stands on its own.',
+    detailSections: [
+      { title: 'When this makes sense', html: htmlList(['The neighboring teeth are healthy and do not need crowns.', 'There is enough bone or a predictable grafting plan.', 'The bite can be managed so the implant crown is not overloaded.', 'The patient wants a fixed replacement instead of a removable partial.']) },
+      { title: 'When something else may be better', html: htmlList(['A bridge may be more practical if adjacent teeth already need crowns.', 'A partial denture may fit a temporary or lower-cost plan better.', 'A staged graft or referral may be needed if bone is limited.']) },
+      { title: 'Typical timeline', html: `<p>A common sequence for extraction, socket preservation, implant, and crown is:</p>${implantTimelineHtml}<p>Immediate implant placement may be possible in selected cases, but only when the anatomy, infection level, bone, and bite make it responsible.</p>` },
+      { title: 'Typical cost range', html: costRangeHtml(costRanges.singleImplant, 'The lower end is closer to implant, abutment, and crown only. The higher end may include extraction, socket preservation grafting, and other needed extras.') },
+    ],
+    payment: costContext,
+    faq: [
+      ['Will I be without a tooth during healing?', 'Temporary tooth options depend on the tooth location, bite, and treatment plan. Elm Ridge will explain what is realistic before treatment starts.'],
+      ['Can an implant be placed the same day as extraction?', 'Sometimes, but not every case is a good immediate implant case.'],
+      ['Is a single implant better than a bridge?', 'Often it is preferred when neighboring teeth are healthy, but a bridge can still be a good option in selected cases.'],
+      ['What records help if another office placed the implant?', 'Implant system, connection, size, placement date, prior X-rays, and restorative parts information are helpful.'],
+    ],
+  },
+  'implant-bridge-killeen-tx': {
+    h1: 'Implant Bridges for Several Missing Teeth in a Row',
+    answer: 'An implant bridge can replace multiple missing teeth without placing one implant for every tooth. The design depends on the number of missing teeth, implant positions, bone, bite forces, final material, and restorative space.',
+    glance: [
+      ['Typical range', `${costRanges.implantBridge} for many typical cases`],
+      ['Best for', 'Multiple missing teeth in one area'],
+      ['Main comparison', 'Implant bridge vs traditional bridge'],
+      ['Provider focus', 'Jeff Muszynski, DDS'],
+    ],
+    who: 'Implant bridges can help patients missing several teeth who want fixed teeth and either cannot or should not replace every missing tooth with an individual implant.',
+    detailSections: [
+      { title: 'Implant bridge vs traditional bridge', html: simpleTable(['Option', 'What to know'], [['Implant bridge', 'Does not require reshaping adjacent healthy teeth. It is surgical and usually takes longer, but can be better when neighboring teeth are healthy.'], ['Traditional bridge', 'Can be faster and less surgical. It may be practical when neighboring teeth already need crowns, but it depends on those teeth for support.']]) },
+      { title: 'What affects the plan', html: htmlList(['Number of missing teeth', 'Number and position of implants', 'Final material', 'Bone needs or grafting', 'Bite forces and habits', 'Restorative space and smile line', 'Whether existing teeth are involved']) },
+      { title: 'Typical cost range', html: costRangeHtml(costRanges.implantBridge, 'This applies to many typical implant bridge cases. Span length, number of implants, final material, bone needs, and bite forces can change cost.') },
+    ],
+    payment: costContext,
+    faq: [
+      ['Can an implant bridge replace several teeth?', 'Yes. It can replace multiple teeth in a row when the implants and bite can support the design.'],
+      ['Is an implant bridge always better than a traditional bridge?', 'No. A traditional bridge can be appropriate when adjacent teeth already need crowns or when surgery is not the right fit.'],
+      ['Can Elm Ridge restore implants placed elsewhere?', 'Yes, after evaluation and with records, system information, and imaging as needed.'],
+      ['How many implants will I need?', 'That depends on the span, bone, bite, and final design. Elm Ridge will plan from the final teeth backward.'],
+    ],
+  },
+  'bone-grafting-killeen-tx': {
+    h1: 'Socket Preservation Bone Grafting After Extraction',
+    intro: 'A cheap extraction today can become a more expensive implant problem later if the socket collapses and the ridge shrinks.',
+    answer: 'Elm Ridge performs socket preservation grafting. The practice does not routinely perform broader ridge augmentation, block grafting, vertical grafting, or staged complex graft reconstruction.',
+    glance: [
+      ['Typical range', costRanges.socketGraft],
+      ['Common use', 'Preserving an extraction socket when future implant replacement is possible'],
+      ['Not routine scope', 'Block grafting, vertical grafting, broad ridge reconstruction'],
+      ['Provider focus', 'Jeff Muszynski, DDS'],
+    ],
+    who: 'Socket preservation may help when a tooth is removed and the patient wants to keep implant options open, reduce ridge collapse, or avoid a bigger compromise later.',
+    approach: 'Elm Ridge evaluates the tooth, infection, socket walls, future replacement plan, medical history, and anatomy before recommending a graft. Not every extraction needs one.',
+    detailSections: [
+      { title: 'Why bone shrinks after a tooth is removed', html: '<p>Tooth roots help support the surrounding jawbone. After a tooth is removed, the socket can narrow and flatten as it heals. That shrinkage can make a future implant harder, less ideal, or more expensive.</p>' },
+      { title: 'What socket preservation does', html: '<p>Socket preservation places grafting material into the extraction socket when appropriate. The goal is to support the ridge shape while healing occurs. It can protect options, but it does not guarantee that an implant can be placed later.</p>' },
+      { title: 'When socket grafting may not be necessary', html: htmlList(['The tooth is not being replaced with an implant.', 'The site has enough bone and the future plan does not depend on ridge preservation.', 'Health, infection, or anatomy makes a different timing safer.', 'The patient has chosen a removable denture plan where grafting is not expected to improve the final result enough.']) },
+      { title: 'What affects the grafting plan', html: htmlList(['Infection around the tooth', 'Remaining socket walls and anatomy', 'Smoking and diabetes control', 'Health history and healing risk', 'Timing of implant placement', 'Nerve position, sinus location, and available bone on CBCT imaging']) },
+      { title: 'When a specialist may be needed', html: '<p>More advanced ridge augmentation, block grafting, vertical grafting, or staged complex graft reconstruction may require referral or specialist involvement. Elm Ridge can still be the restorative planning home, coordinate goals, and restore the case after surgery when appropriate.</p>' },
+      { title: 'Typical cost range', html: costRangeHtml(costRanges.socketGraft, 'Socket preservation grafting is usually discussed when future implant replacement is possible.') },
+    ],
+    related: [{ label: 'Tooth extractions', href: '/tooth-extractions-killeen-tx' }, { label: 'Dental implants', href: '/dental-implants-killeen-tx' }, { label: 'Single tooth implant', href: '/single-tooth-implant-killeen-tx' }, { label: 'Sinus lifts', href: '/sinus-lift-killeen-tx' }, { label: 'Implant cost', href: '/dental-implant-cost-killeen-tx' }, serviceLinks.jeff],
+    payment: costContext,
+    faq: [
+      ['Does every extraction need a bone graft?', 'No. Socket preservation depends on the tooth, future replacement plan, anatomy, and health factors.'],
+      ['Does a socket graft guarantee an implant later?', 'No. It can help preserve options, but healing, anatomy, and medical factors still matter.'],
+      ['Does Elm Ridge do all types of bone grafting?', 'No. Elm Ridge performs socket preservation grafting; complex reconstruction may require referral.'],
+      ['Can Elm Ridge still coordinate my implant if a specialist grafts the bone?', 'Yes, when appropriate. Elm Ridge can help plan the final tooth needs and restore the case.'],
+    ],
+  },
+  'sinus-lift-killeen-tx': {
+    h1: 'Limited Sinus Lifts for Upper Implant Planning',
+    answer: 'Elm Ridge performs limited sinus lift or sinus bump procedures at the same time as implant placement when appropriate. The practice does not perform staged sinus lifts that require a separate grafting and healing phase.',
+    glance: [
+      ['Typical range', costRanges.sinusBump],
+      ['Common area', 'Upper back teeth near the maxillary sinus'],
+      ['Scope', 'Limited sinus bump with implant placement when appropriate'],
+      ['Provider focus', 'Jeff Muszynski, DDS'],
+    ],
+    who: 'A limited sinus lift may help when an upper back tooth implant needs a small amount of additional vertical bone because the sinus is close to the implant site.',
+    approach: 'CBCT imaging helps Elm Ridge evaluate sinus position, available bone, anatomy, and whether an implant can be placed responsibly in the same visit.',
+    detailSections: [
+      { title: 'Why the sinus matters', html: '<p>Upper back teeth sit close to the maxillary sinus. When a tooth has been missing or bone is limited, the sinus may leave less room for an implant.</p>' },
+      { title: 'When a limited sinus bump may work', html: htmlList(['The implant site only needs a modest amount of additional vertical space.', 'The implant can be placed with adequate stability at the same appointment.', 'CBCT imaging shows anatomy that supports a limited approach.']) },
+      { title: 'When this may not be the right fit', html: htmlList(['The site needs staged sinus grafting with a separate healing phase.', 'Sinus anatomy, infection, bone volume, or medical history makes specialist involvement safer.', 'A different tooth replacement option fits the patient better.']) },
+      { title: 'Typical cost range', html: costRangeHtml(costRanges.sinusBump, 'This is for a limited sinus lift or sinus bump performed with implant placement. More advanced staged sinus grafting is outside Elm Ridge routine scope.') },
+    ],
+    related: [{ label: 'Dental implants', href: '/dental-implants-killeen-tx' }, { label: 'Bone grafting', href: '/bone-grafting-killeen-tx' }, { label: 'Single tooth implant', href: '/single-tooth-implant-killeen-tx' }, { label: 'Implant cost', href: '/dental-implant-cost-killeen-tx' }, serviceLinks.jeff],
+    payment: costContext,
+    faq: [
+      ['Does every upper implant need a sinus lift?', 'No. Many upper implants do not require a sinus lift.'],
+      ['Can every sinus case be handled in one visit?', 'No. Some sinus cases need staged grafting, referral, or a different treatment plan.'],
+      ['How does Elm Ridge decide?', 'CBCT imaging helps evaluate bone height, sinus position, anatomy, and implant options.'],
+    ],
+  },
+  'full-arch-dental-implants-killeen-tx': {
+    h1: 'Full-Arch Dental Implants for Fixed Tooth Replacement',
+    answer: 'Full-arch dental implants replace an upper or lower arch with fixed implant-supported teeth. Elm Ridge provides surgery and restorative treatment for many full-arch cases and uses final zirconia as the go-to material.',
+    glance: [
+      ['Typical range', `${costRanges.fullArch}; ${costRanges.fullArchBoth}`],
+      ['Final material', 'Zirconia is the go-to; acrylic is rare/selective'],
+      ['Timeline', 'Final teeth commonly around 5-7 months after healing and records'],
+      ['Provider focus', 'Jeff Muszynski, DDS'],
+    ],
+    who: 'Full-arch implants may help patients with failing teeth, severe denture frustration, or a goal of fixed teeth that do not come out at night.',
+    approach: 'Elm Ridge discusses goals, smile, bite, bone, health history, finances, and final tooth design before treatment. The number and position of implants depends on the case; not every full-arch case uses exactly four implants.',
+    detailSections: [
+      { title: 'Workflow and timeline', html: htmlList(['Consultation and imaging.', 'Discussion of goals, smile, bite, bone, health history, finances, and final tooth design.', 'Extractions and implant placement when appropriate.', 'Immediate temporary fixed teeth the same day or next day when possible.', 'Healing phase.', 'Final zirconia teeth after healing, commonly around 5-7 months. Timelines vary.']) },
+      { title: 'Full-arch fixed implants vs snap-on dentures', html: simpleTable(['Option', 'What to know'], [['Full-arch fixed implants', 'Teeth do not come out at night, usually feel stronger for chewing, and are often best when the patient wants maximum stability. They are more expensive and involve more planning.'], ['Snap-on dentures', 'Removable and usually less expensive than fixed full-arch treatment. Lower snap-ons can be a strong middle-ground option; upper snap-ons are more case-dependent.']]) },
+      { title: 'Upper arch planning', html: '<p>For the upper arch, fixed full-arch dental implants may be a better fit than an upper snap-on denture when the patient wants the palate uncovered, stronger stability, and a result that does not depend on removable denture suction. Upper snap-on dentures can work in selected cases, but softer upper-jaw bone, sinus anatomy, implant angulation, and attachment design can make them less forgiving than lower snap-on dentures.</p>' },
+      { title: 'Complex surgical cases', html: '<p>Some complex full-arch surgical cases may require oral surgeon involvement. Elm Ridge can still manage restorative planning and restore the case when appropriate.</p>' },
+      { title: 'Typical cost range', html: costRangeHtml(`${costRanges.fullArch}, or ${costRanges.fullArchBoth}`, 'Costs vary with extractions, implant number and position, temporary teeth, final zirconia design, bone needs, and financing choices.') },
+    ],
+    payment: costContext,
+    faq: [
+      ['Does every full-arch case use four implants?', 'No. All-on-4-style treatment is one approach, but implant number and position depend on the case.'],
+      ['Are the final teeth zirconia?', 'Zirconia is the go-to final material. Acrylic is used only rarely or selectively when appropriate.'],
+      ['Will I get temporary teeth right away?', 'Immediate temporary fixed teeth may be possible the same day or next day, but it depends on the case.'],
+      ['Is this better than a snap-on denture?', 'It can be when the patient wants maximum stability and fixed teeth, but cost, anatomy, surgery, and goals matter.'],
+    ],
+  },
+  'all-on-4-dental-implants-killeen-tx': {
+    h1: 'All-on-4-Style Treatment Within Full-Arch Planning',
+    answer: 'All-on-4-style treatment is a search phrase for one type of full-arch dental implant plan. Elm Ridge uses full-arch dental implants as the main term because the right number of implants depends on anatomy, bite, bone, and final tooth design.',
+    glance: [
+      ['Main term', 'Full-arch dental implants'],
+      ['Implant number', 'Case-dependent; not always exactly four'],
+      ['Typical range', `${costRanges.fullArch}; ${costRanges.fullArchBoth}`],
+      ['Provider focus', 'Jeff Muszynski, DDS'],
+    ],
+    who: 'This page is useful for patients who have heard of All-on-4 and want to understand how it fits into a responsible full-arch plan.',
+    detailSections: [
+      { title: 'Why Elm Ridge avoids one-size-fits-all language', html: '<p>The final teeth have to fit the face, bite, bone, smile, and cleaning access. Four implants may be appropriate for some cases, but other cases need a different number or position.</p>' },
+      { title: 'Typical full-arch workflow', html: htmlList(['Consultation and imaging.', 'Smile, bite, bone, health history, and finance discussion.', 'Extractions and implant placement when appropriate.', 'Immediate temporary teeth same day or next day when possible.', 'Healing phase.', 'Final zirconia teeth commonly around 5-7 months.']) },
+      { title: 'Typical cost range', html: costRangeHtml(`${costRanges.fullArch}, or ${costRanges.fullArchBoth}`, 'The range depends on arch, implant number, extractions, bone needs, temporary teeth, final material, and restorative design.') },
+    ],
+    payment: costContext,
+    faq: [
+      ['Is All-on-4 the same as full-arch dental implants?', 'It is one style of full-arch implant treatment, but not every case uses exactly four implants.'],
+      ['Does Elm Ridge restore full-arch cases placed elsewhere?', 'Sometimes, after evaluation and with records, implant details, and imaging as needed.'],
+      ['What is the final material?', 'Zirconia is the go-to final material at Elm Ridge.'],
+    ],
+  },
+  'snap-on-dentures-killeen-tx': {
+    h1: 'Snap-On Dentures When a Loose Denture Needs More Stability',
+    answer: 'Snap-on dentures attach to dental implants for better retention than a traditional removable denture. At Elm Ridge, they are typically strongest and most predictable as a lower-arch solution.',
+    glance: [
+      ['Typical range', costRanges.snapOnDenture],
+      ['Implants', 'Often 2 or 4; four is better when anatomy and finances allow'],
+      ['Strongest use', 'Usually lower-arch denture stability'],
+      ['Provider focus', 'Jeff Muszynski, DDS'],
+    ],
+    who: 'Snap-on dentures can help patients who struggle with a loose lower denture, want a removable option with more retention, or need a middle-ground between traditional dentures and fixed full-arch implants.',
+    detailSections: [
+      { title: 'Lower vs upper snap-on dentures', html: simpleTable(['Option', 'How Elm Ridge explains it'], [['Lower snap-on denture', 'Usually more predictable. Two implants can make a major improvement over a loose lower denture; four implants are better when possible.'], ['Upper snap-on denture', 'More case-dependent. Softer bone, sinus anatomy, implant angulation, and attachment design matter more.'], ['Fixed full-arch upper implants', 'Often better when the patient wants maximum stability and no palatal coverage, but more expensive and more involved.']]) },
+      { title: 'Upper snap-on nuance', html: '<p>Upper snap-on dentures can be less predictable than lower snap-ons because the upper jaw often has softer bone, sinus anatomy can limit implant position, and removing the palate means the denture depends more heavily on implant support and attachment design. Upper snap-on dentures can work in selected cases, but they should be planned carefully.</p>' },
+      { title: 'New denture or retrofit', html: '<p>A new denture or retrofitting an existing denture may be possible when appropriate. The existing denture must fit well enough and have enough restorative space for attachments.</p>' },
+      { title: 'Typical cost range', html: costRangeHtml(costRanges.snapOnDenture, 'Cost depends on implant number, whether a new denture is needed, extractions, grafting, attachments, maintenance, and financing choices.') },
+    ],
+    payment: costContext,
+    faq: [
+      ['Are snap-on dentures fixed?', 'No. They snap onto implants for retention but are still removed for cleaning.'],
+      ['Are two implants enough?', 'Two lower implants can be a major improvement. Four implants are better when anatomy and finances allow.'],
+      ['Are upper snap-on dentures the same as lower snap-ons?', 'No. Upper cases are more dependent on bone, sinus anatomy, implant angle, palate design, and attachments.'],
+      ['When is fixed full-arch better?', 'Often when the patient wants maximum stability, no palatal coverage, and a stronger long-term option.'],
+    ],
+  },
+  'dentures-vs-implants-killeen-tx': {
+    h1: 'Dentures, Snap-On Dentures, and Full-Arch Implants Compared',
+    answer: 'Traditional dentures, snap-on dentures, implant bridges, and full-arch dental implants all solve different versions of tooth loss. Elm Ridge compares stability, maintenance, cost, bone, surgery, and long-term goals honestly.',
+    detailSections: [
+      { title: 'How the options compare', html: simpleTable(['Option', 'Best fit'], [['Traditional denture', 'Lower upfront cost and no implant surgery, but removable, less stable, and does not preserve bone like implants.'], ['Snap-on denture', 'A removable middle-ground option, especially useful for loose lower dentures.'], ['Implant bridge', 'Fixed replacement for several missing teeth without reshaping healthy neighboring teeth.'], ['Full-arch fixed implants', 'Fixed teeth for a whole arch with the strongest stability, higher cost, and more involved planning.']]) },
+      { title: 'Long-term value', html: implantValueHtml() },
+      { title: 'Upper snap-on consideration', html: '<p>Upper snap-on dentures can be less predictable than lower snap-ons. If the patient wants the palate uncovered and wants a highly stable result, fixed full-arch dental implants may be a stronger long-term option when anatomy and budget allow.</p>' },
+    ],
+    payment: costContext,
+  },
+  'dental-crowns-killeen-tx': {
+    intro: 'A crown should not just cover a tooth. It should protect what is left, fit the bite, and look like it belongs there.',
+    glance: [
+      ['Typical range', costRanges.crown],
+      ['Core buildup', costRanges.coreBuildup],
+      ['Workflow', 'Lab-made crown; no same-day crowns'],
+      ['Timing', 'Preparation, temporary crown, final cement about 2 weeks later'],
+    ],
+    who: 'Crowns can help cracked teeth, heavily filled teeth, worn teeth, teeth after root canal treatment, and teeth that need stronger protection than a filling can provide.',
+    approach: 'Elm Ridge uses lab-made crowns only. Most crown workflows use intraoral scanning when appropriate, and material selection depends on bite, tooth location, strength needs, esthetics, and the clinical situation.',
+    detailSections: [
+      { title: 'When a crown makes sense', html: htmlList(['A large old filling has weakened the tooth.', 'A crack or fracture needs protection.', 'A back tooth has had root canal treatment.', 'Wear or bite forces have compromised the tooth.', 'A lab-made restoration is needed for strength and fit.']) },
+      { title: 'When something else may be better', html: htmlList(['A small cavity may only need a tooth-colored filling.', 'A front tooth cosmetic concern may be better handled with bonding or a veneer.', 'A tooth split below the gumline may need extraction and replacement rather than a crown.']) },
+      { title: 'Materials and technology', html: '<p>Common materials include modern porcelain options such as zirconia and e.max/lithium disilicate. Gold may be used when requested or necessary, and PFM may be used when necessary. Elm Ridge uses intraoral scanning for about 90% of applications, while choosing traditional impressions when they produce a better result.</p>' },
+      { title: 'What happens if a crown is delayed', html: '<p>A weakened tooth can crack farther, lose more structure, or become painful. If the nerve becomes involved, a root canal or extraction may enter the conversation.</p>' },
+      { title: 'Typical cost range', html: costRangeHtml(`${costRanges.crown}; ${costRanges.coreBuildup}`, 'A buildup is needed only when there is not enough solid tooth structure to support the crown.') },
+    ],
+    payment: costContext,
+    faq: [
+      ['Do you do same-day crowns?', 'No. Elm Ridge provides lab-made crowns only.'],
+      ['How long does a crown take?', 'A typical crown is prepared first, then the final crown is cemented about 2 weeks later.'],
+      ['Will I have a temporary crown?', 'Yes, in most crown workflows. The temporary protects the tooth while the lab-made crown is being made.'],
+      ['Which crown material is best?', 'It depends on tooth location, bite, strength needs, esthetics, and clinical situation.'],
+      ['Do back teeth need crowns after root canals?', 'Crowns are strongly recommended for molars and really all posterior teeth after root canal treatment.'],
+    ],
+  },
+  'root-canal-killeen-tx': {
+    h1: 'Root Canal Treatment When a Tooth Can Still Be Saved',
+    glance: [
+      ['Typical range', costRanges.rootCanal],
+      ['Molar root canals', 'Yes, many cases'],
+      ['Retreatments', 'Not offered'],
+      ['Technology', 'CBCT for nearly every case, especially posterior teeth; rotary endodontics'],
+    ],
+    who: 'Root canal treatment may help when tooth pain, deep decay, trauma, swelling, or infection involves the nerve but the tooth is still restorable.',
+    approach: 'Elm Ridge uses CBCT for nearly every root canal case, especially posterior teeth, because missed canals can contribute to failed treatment. Rotary endodontics is used, and same-day start is offered when possible.',
+    detailSections: [
+      { title: 'Root canal vs extraction', html: '<p>A root canal is meant to save a tooth by cleaning the infected or inflamed nerve space and sealing it. Extraction may be better when the tooth is cracked beyond repair, lacks enough structure for a crown, has severe bone loss, or has a poor long-term outlook.</p>' },
+      { title: 'Why posterior teeth often need crowns', html: '<p>Molars and premolars take heavy chewing forces. Crowns are strongly recommended for molars and really all posterior teeth after root canal treatment to reduce fracture risk.</p>' },
+      { title: 'Boundary: retreatments', html: '<p>Elm Ridge performs many root canals, including molars, but does not perform root canal retreatments. If retreatment is needed, the team will explain referral options.</p>' },
+      { title: 'Typical cost range', html: costRangeHtml(costRanges.rootCanal, 'A crown after root canal treatment is a separate restoration and may be recommended for long-term strength.') },
+    ],
+    payment: costContext,
+  },
+  'molar-root-canal-killeen-tx': {
+    h1: 'Molar Root Canals Planned With CBCT Imaging',
+    glance: [
+      ['Typical range', costRanges.rootCanal],
+      ['Complexity', 'Molars often have multiple canals and heavier chewing forces'],
+      ['Retreatments', 'Not offered'],
+      ['Provider focus', 'Jeff Muszynski, DDS'],
+    ],
+    who: 'Molar root canals may help when a back tooth has lingering pain, biting pain, swelling, deep decay, or infection but still has enough structure to restore.',
+    approach: 'Elm Ridge uses CBCT for nearly every root canal case, especially posterior teeth, to better evaluate canal anatomy. Rotary endodontics is used, and a same-day start is possible when the schedule and diagnosis allow.',
+    detailSections: [
+      { title: 'Why molars are more complex', html: '<p>Molars often have multiple roots and canals. Hidden anatomy matters because missed canals can contribute to failed treatment.</p>' },
+      { title: 'Crown after molar root canal', html: '<p>A crown is strongly recommended for molars after root canal treatment because back teeth absorb heavy chewing forces and are more likely to fracture if left unprotected.</p>' },
+      { title: 'When extraction may be better', html: '<p>If the tooth is cracked below the gumline, has too little remaining structure, or cannot be restored predictably, Elm Ridge will explain extraction and replacement options.</p>' },
+      { title: 'Typical cost range', html: costRangeHtml(costRanges.rootCanal, 'The crown, if needed, is separate and depends on material, buildup needs, and insurance.') },
+    ],
+    payment: costContext,
+  },
+  'tooth-extractions-killeen-tx': {
+    h1: 'Tooth Extractions With a Plan for What Comes Next',
+    glance: [
+      ['Simple extraction', costRanges.simpleExtraction],
+      ['Surgical extraction', costRanges.surgicalExtraction],
+      ['Socket preservation', costRanges.socketGraft],
+      ['Provider focus', 'Jeff Muszynski, DDS'],
+    ],
+    who: 'An extraction may be needed when a tooth is broken beyond repair, severely infected, loose, impacted, painful, or not restorable. If saving the tooth is a better choice, Elm Ridge will say so.',
+    detailSections: [
+      { title: 'Simple vs surgical extraction', html: '<p>A simple extraction is usually more straightforward. A surgical extraction may involve a broken tooth, difficult root shape, bone removal, sectioning the tooth, or other complexity.</p>' },
+      { title: 'When saving the tooth may be better', html: '<p>A root canal, crown, or periodontal treatment may be better when the tooth has a predictable long-term outlook. Elm Ridge compares the options before recommending removal.</p>' },
+      { title: 'Replacement planning', html: htmlList(['Socket preservation may be recommended when future implant replacement is possible.', 'An immediate denture may be planned when several teeth are removed.', 'A single implant, bridge, partial, or denture may be discussed depending on the site.']) },
+      { title: 'Typical cost range', html: costRangeHtml(`${costRanges.simpleExtraction} for simple extractions; ${costRanges.surgicalExtraction} for surgical extractions`, 'Socket preservation, sedation, implants, dentures, and other treatment are separate when needed.') },
+    ],
+    payment: costContext,
+  },
+  'wisdom-teeth-removal-killeen-tx': {
+    h1: 'Wisdom Teeth Removal, Case by Case',
+    glance: [
+      ['Typical range', costRanges.wisdomTooth],
+      ['Scope', 'Most wisdom teeth, case-dependent'],
+      ['Referral', 'Used for unusually complex cases'],
+      ['Comfort options', 'Nitrous oxide or oral conscious sedation when appropriate'],
+    ],
+    who: 'Wisdom teeth may need removal when they are painful, infected, hard to clean, damaging nearby teeth, or likely to create problems.',
+    detailSections: [
+      { title: 'What makes wisdom teeth more complex', html: htmlList(['Depth and angle of the tooth', 'Root shape and development', 'Closeness to nerves or sinus', 'Infection or swelling', 'Medical history and comfort needs']) },
+      { title: 'When referral is appropriate', html: '<p>Elm Ridge removes most wisdom teeth, case-dependent. If the anatomy or risk level makes a specialist a better fit, the practice will explain that clearly and refer appropriately.</p>' },
+      { title: 'Typical cost range', html: costRangeHtml(costRanges.wisdomTooth, 'Cost depends on tooth position, complexity, imaging, sedation when applicable, and insurance.') },
+    ],
+    payment: costContext,
+  },
+  'dentures-killeen-tx': {
+    h1: 'Dentures, Partials, Immediate Dentures, and Implant Options',
+    glance: [
+      ['Complete dentures', costRanges.completeDentures],
+      ['Partial dentures', costRanges.partialDentures],
+      ['Immediate dentures', costRanges.immediateDentures],
+      ['Implant upgrade', 'Snap-on or fixed full-arch options when appropriate'],
+    ],
+    who: 'Dentures may help when many or all teeth are missing or need removal, especially when the patient wants a lower upfront cost or a removable solution.',
+    approach: 'Elm Ridge discusses dentures honestly. They are a valid option, but they can require sore-spot adjustments, relines, repairs, replacement, and they do not preserve bone like implants.',
+    detailSections: [
+      { title: 'Types of dentures', html: htmlList(['Complete dentures replace a full upper or lower arch.', 'Partial dentures replace several missing teeth while some natural teeth remain.', 'Immediate dentures are placed the day teeth are removed, then adjusted as gums and bone heal.']) },
+      { title: 'Fit, chewing, and bone change', html: '<p>Dentures sit on gums and bone that change over time. That can affect fit, chewing, speech, sore spots, and the need for relines or replacement.</p>' },
+      { title: 'Impressions and scanning', html: '<p>Elm Ridge uses intraoral scanning for about 90% of applications, but traditional impressions may still be better for dentures in some cases because soft tissue movement and borders matter.</p>' },
+      { title: 'Dentures vs implant options', html: '<p>Traditional dentures are usually lower upfront cost. Snap-on dentures can improve retention, especially for lower dentures. Fixed full-arch implants are usually stronger and more stable, but cost more and involve more planning.</p>' },
+      { title: 'Typical cost range', html: costRangeHtml(`${costRanges.completeDentures} for complete dentures; ${costRanges.partialDentures} for partial dentures; ${costRanges.immediateDentures} for immediate dentures`, 'Relines, extractions, grafting, implants, attachments, and repairs are separate when needed.') },
+    ],
+    payment: costContext,
+  },
+  'partial-dentures-killeen-tx': {
+    h1: 'Partial Dentures When Some Natural Teeth Remain',
+    glance: [
+      ['Typical range', costRanges.partialDentures],
+      ['Best for', 'Several missing teeth with usable natural teeth remaining'],
+      ['Alternative options', 'Bridge, implant bridge, or individual implants'],
+      ['Maintenance', 'Removable appliance with cleaning and adjustment needs'],
+    ],
+    who: 'Partial dentures can help when several teeth are missing and a removable solution fits the budget, anatomy, or timeline better than fixed treatment.',
+    detailSections: [
+      { title: 'When a partial makes sense', html: htmlList(['Several missing teeth in different areas', 'A lower upfront-cost plan is needed', 'Implants are not the right fit right now', 'Remaining teeth can help support a removable appliance']) },
+      { title: 'When a bridge or implant may be better', html: '<p>Fixed options may be better when the patient wants less movement, stronger chewing, or a result that does not come out at night.</p>' },
+      { title: 'Typical cost range', html: costRangeHtml(costRanges.partialDentures, 'Cost depends on design, materials, number of teeth replaced, extractions, and insurance.') },
+    ],
+    payment: costContext,
+  },
+  'immediate-dentures-killeen-tx': {
+    h1: 'Immediate Dentures for Planned Tooth Removal',
+    glance: [
+      ['Typical range', costRanges.immediateDentures],
+      ['Placed', 'The day teeth are removed when appropriate'],
+      ['Follow-up', 'Adjustments are expected as healing changes the gums'],
+      ['Provider focus', 'Jeff Muszynski, DDS'],
+    ],
+    who: 'Immediate dentures may help patients who need teeth removed but do not want to go without teeth during the first healing phase.',
+    detailSections: [
+      { title: 'What immediate dentures are', html: '<p>An immediate denture is made before extractions and placed the day teeth are removed when appropriate. It is useful, but the mouth changes quickly during healing.</p>' },
+      { title: 'What to expect after placement', html: '<p>Sore spots, bite adjustments, looseness, and follow-up visits are common. A reline or replacement may be needed as gums and bone shrink.</p>' },
+      { title: 'Planning replacement options', html: '<p>Immediate dentures can be part of a traditional denture plan, a snap-on denture plan, or a staged implant plan depending on the patient goals and anatomy.</p>' },
+      { title: 'Typical cost range', html: costRangeHtml(costRanges.immediateDentures, 'Extractions, grafting, relines, implants, and future replacement teeth are separate when needed.') },
+    ],
+    payment: costContext,
+  },
+  'dental-fillings-killeen-tx': {
+    h1: 'Tooth-Colored Fillings When the Tooth Can Stay Conservative',
+    glance: [
+      ['Typical range', costRanges.fillings],
+      ['Material', 'Tooth-colored fillings only'],
+      ['Best for', 'Small to moderate cavities, chips, and replacement of selected old fillings'],
+      ['Provider focus', 'Jeff Muszynski, DDS and Kayla Muszynski, DDS'],
+    ],
+    who: 'Fillings help when damage is small enough that the tooth can be repaired without covering it with a crown.',
+    detailSections: [
+      { title: 'When a filling is enough', html: htmlList(['A cavity is small or moderate.', 'A small chip or worn edge can be repaired conservatively.', 'An old filling has failed but enough strong tooth remains.']) },
+      { title: 'When a crown may be better', html: '<p>A crown may be more predictable when a filling would be too large, a tooth is cracked, an old filling has weakened the tooth, or the tooth has had root canal treatment.</p>' },
+      { title: 'Sensitivity and cracks', html: '<p>Some sensitivity after a filling can be normal, but lingering pain, biting pain, or a sharp crack feeling should be checked. Cracks around old fillings can change the treatment plan.</p>' },
+      { title: 'Typical cost range', html: costRangeHtml(costRanges.fillings, 'Cost depends on size, number of surfaces, tooth location, insurance, and complexity.') },
+    ],
+    payment: costContext,
+  },
+  'dental-bridges-killeen-tx': {
+    h1: 'Dental Bridges When a Fixed Non-Implant Option Makes Sense',
+    answer: 'A traditional dental bridge replaces a missing tooth by using crowns on neighboring teeth for support. It can be a good fixed option when those teeth can responsibly carry the load.',
+    glance: [
+      ['Best for', 'One or more missing teeth with strong neighboring teeth'],
+      ['Main comparison', 'Traditional bridge vs implant bridge'],
+      ['Cleaning', 'Requires cleaning under the bridge'],
+      ['Provider focus', 'Jeff Muszynski, DDS and Kayla Muszynski, DDS'],
+    ],
+    who: 'A bridge may help when a patient wants a fixed replacement and implants are not the best fit because of timeline, anatomy, medical history, budget, or patient preference.',
+    detailSections: [
+      { title: 'Traditional bridge vs implant bridge', html: simpleTable(['Option', 'Tradeoff'], [['Traditional bridge', 'Can be faster and less surgical, and insurance may favor it in some cases. It requires reshaping neighboring teeth.'], ['Implant bridge', 'Does not require reshaping adjacent healthy teeth, but involves implant surgery, healing time, and different cost factors.']]) },
+      { title: 'When an implant may be better', html: '<p>An implant may be better when neighboring teeth are healthy and do not need crowns. Preserving those teeth can matter over the long term.</p>' },
+      { title: 'Maintenance', html: '<p>Bridges need careful cleaning around the edges and under the replacement tooth. Elm Ridge explains the tools and technique so the supporting teeth stay healthy.</p>' },
+      { title: 'Cost and insurance', html: `<p>Bridge cost depends on span length, supporting teeth, materials, buildup needs, and insurance. ${insuranceCaveat}</p>` },
+    ],
+    payment: costContext,
+  },
+  'cosmetic-dentistry-killeen-tx': {
+    h1: 'Cosmetic Dentistry That Still Looks Like You',
+    intro: 'Most people do not want a fake-looking smile. They want the details cleaned up without losing themselves.',
+    answer: 'Elm Ridge plans cosmetic dentistry around natural-looking results, tooth structure, bite, facial features, goals, and budget. Treatment may include whitening, bonding, veneers, clear aligners, crowns, or a staged combination.',
+    glance: [
+      ['Philosophy', 'Natural-looking and conservative when appropriate'],
+      ['Options', 'Whitening, bonding, veneers, clear aligners, crowns, bridges'],
+      ['Planning', 'Function and bite matter, not just appearance'],
+      ['Doctors', 'Jeff Muszynski, DDS and Kayla Muszynski, DDS'],
+    ],
+    who: 'Cosmetic dentistry may help with chips, wear, gaps, discoloration, crowded teeth, old dental work, uneven edges, or a smile that no longer feels like it fits.',
+    approach: 'Elm Ridge does not push every patient toward the same bright, flat, overly perfect result. The team discusses what can be improved conservatively and when stronger restorative treatment is needed.',
+    detailSections: [
+      { title: 'How options are chosen', html: htmlList(['Whitening can brighten natural enamel before other cosmetic work.', 'Bonding can repair small chips, gaps, or shape issues conservatively.', 'Veneers can change front-tooth shape, shade, and proportion in selected cases.', 'Clear aligners can move teeth before restorations so less tooth structure has to be changed.', 'Crowns may be needed when teeth are weak, cracked, heavily filled, or worn.']) },
+      { title: 'When cosmetic treatment should wait', html: '<p>Gum disease, active cavities, unstable bite problems, severe wear, infection, or failing old dental work may need to be addressed before cosmetic dentistry makes sense.</p>' },
+      { title: 'Before-and-after photos', html: '<p>Before-and-after imagery is shown for education and conversation only. Individual results vary. Images are shared with patient consent.</p>' },
+    ],
+    extra: cosmeticGalleryHtml(),
+    payment: costContext,
+  },
+  'veneers-killeen-tx': {
+    h1: 'Veneers Planned for Shape, Proportion, and Restraint',
+    glance: [
+      ['Typical range', costRanges.veneers],
+      ['Best for', 'Selected front-tooth shape, shade, proportion, and symmetry changes'],
+      ['Comparison', 'Veneers vs bonding vs crowns vs whitening'],
+      ['Provider focus', 'Kayla Muszynski, DDS and Jeff Muszynski, DDS'],
+    ],
+    who: 'Veneers may help when front teeth have cosmetic concerns that whitening or bonding cannot predictably solve.',
+    detailSections: [
+      { title: 'Veneers vs other options', html: simpleTable(['Option', 'Best use'], [['Whitening', 'Brightens natural enamel but does not change shape or old dental work.'], ['Bonding', 'Conservative for small chips or gaps, but stains and chips more easily than porcelain.'], ['Veneers', 'Changes front-tooth shape, shade, and proportion when the teeth are strong enough.'], ['Crowns', 'Better when teeth are weak, heavily filled, cracked, or need full coverage.']]) },
+      { title: 'When veneers may not be right', html: '<p>Veneers may not be best for severe bite issues, heavy grinding, active decay, unstable gums, or teeth that need crowns instead of thin porcelain coverage.</p>' },
+      { title: 'Typical cost range', html: costRangeHtml(costRanges.veneers, 'Cost depends on tooth number, porcelain choice, bite, records, temporary needs, and lab work.') },
+    ],
+    payment: costContext,
+  },
+  'cosmetic-bonding-killeen-tx': {
+    h1: 'Cosmetic Bonding for Small Changes Without Overdoing It',
+    answer: 'Cosmetic bonding uses tooth-colored composite to repair small chips, close selected small gaps, and improve tooth shape with a conservative approach.',
+    glance: [
+      ['Good for', 'Small chips, small gaps, shape changes, conservative touchups'],
+      ['Limitations', 'Can stain or chip more easily than porcelain'],
+      ['Alternative', 'Veneers or crowns for larger changes'],
+      ['Provider focus', 'Kayla Muszynski, DDS'],
+    ],
+    detailSections: [
+      { title: 'When bonding works well', html: htmlList(['Small chips at the edge of a tooth', 'Small spaces or black triangles in selected cases', 'Minor shape or length changes', 'A conservative test before porcelain treatment']) },
+      { title: 'When bonding may not be enough', html: '<p>Bonding may not be ideal for large color changes, heavy bite forces, major wear, broad smile redesign, or areas where porcelain would be more durable.</p>' },
+      { title: 'Maintenance', html: '<p>Bonding can stain, chip, or need polishing and repairs over time. Elm Ridge explains the tradeoff before treatment.</p>' },
+    ],
+    payment: costContext,
+  },
+  'teeth-whitening-killeen-tx': {
+    h1: 'Custom Take-Home Whitening Trays',
+    glance: [
+      ['Typical range', costRanges.whitening],
+      ['Method', 'Custom trays with take-home whitening gel'],
+      ['Important limit', 'Crowns, fillings, and veneers do not whiten like enamel'],
+      ['Provider focus', 'Kayla Muszynski, DDS'],
+    ],
+    who: 'Whitening can help patients with natural tooth discoloration who want a brighter smile before bonding, veneers, crowns, or clear aligner planning.',
+    detailSections: [
+      { title: 'Why custom trays matter', html: '<p>Custom trays help the whitening gel contact teeth more evenly and reduce messy overflow compared with one-size-fits-all options.</p>' },
+      { title: 'When whitening should be timed carefully', html: '<p>If crowns, fillings, veneers, or bonding are planned on visible teeth, whitening often needs to happen first so final materials can be matched to the new shade.</p>' },
+      { title: 'Typical cost range', html: costRangeHtml(costRanges.whitening, 'Elm Ridge uses custom trays with take-home whitening gel.') },
+    ],
+    payment: costContext,
+  },
+  'clear-aligners-killeen-tx': {
+    h1: 'Clear Aligners Planned Around Your Bite and Next Steps',
+    glance: [
+      ['Typical range', costRanges.clearAligners],
+      ['Brands', 'Multiple clear aligner brands when appropriate'],
+      ['Good for', 'Mild/moderate crowding, spacing, relapse after braces, minor bite issues'],
+      ['Also useful for', 'Pre-restorative alignment before veneers, crowns, or implants'],
+    ],
+    who: 'Clear aligners may help adults and teens with mild to moderate crowding, spacing, relapse after braces, minor bite issues, or teeth that need positioning before cosmetic or restorative work.',
+    approach: 'Elm Ridge uses clear aligners as the primary term because the practice can use multiple brands. The goal is responsible tooth movement, not locking every patient into one brand name.',
+    detailSections: [
+      { title: 'Clear aligners vs cosmetic restorations', html: '<p>Sometimes the best cosmetic move is to move the teeth first, then use less bonding, veneer, or crown material. In other cases, restorations address shape or color better than aligners alone.</p>' },
+      { title: 'Timeline and retainers', html: '<p>Treatment length depends on the amount of movement and how well aligners are worn. Retainers are part of protecting the result after treatment.</p>' },
+      { title: 'Typical cost range', html: costRangeHtml(costRanges.clearAligners, 'Cost depends on case complexity, records, monitoring, refinements, retainers, insurance orthodontic benefits, and financing.') },
+    ],
+    payment: costContext,
+  },
+  'sleep-apnea-dentist-killeen-tx': {
+    h1: 'Sleep Apnea Oral Appliance Therapy With Physician Diagnosis',
+    glance: [
+      ['Typical appliance range', costRanges.sleepAppliance],
+      ['Testing workflow', 'Take-home sleep studies; data sent to sleep physician'],
+      ['Diagnosis', 'Physician diagnosis required before appliance delivery'],
+      ['Scope', 'Mild/moderate OSA and CPAP-intolerant patients when appropriate'],
+    ],
+    who: 'Oral appliance therapy may help patients with mild to moderate obstructive sleep apnea, patients who cannot tolerate CPAP, or severe OSA cases only with physician involvement.',
+    approach: 'Elm Ridge supports the dental side of sleep apnea care. The practice does not independently diagnose sleep apnea; recorded sleep-study data is sent to a sleep physician for official medical diagnosis.',
+    detailSections: [
+      { title: 'Snoring vs sleep apnea', html: '<p>Snoring can be annoying, but sleep apnea is a medical condition that needs proper testing and diagnosis. An oral appliance should not be delivered as a shortcut around that process.</p>' },
+      { title: 'How the appliance process works', html: htmlList(['Discuss symptoms, CPAP history, and medical-dental fit.', 'Use a take-home sleep study workflow when appropriate.', 'Send recorded data to a sleep physician for official diagnosis.', 'Deliver an FDA-cleared oral appliance only after physician diagnosis and dental evaluation.', 'Adjust and follow up as needed.']) },
+      { title: 'Insurance boundary', html: '<p>Medical insurance billing is for appliances only, not sleep studies. Requirements vary by plan and documentation.</p>' },
+      { title: 'Typical cost range', html: costRangeHtml(costRanges.sleepAppliance, 'Medical insurance may help when requirements are met.') },
+    ],
+    payment: costContext,
+  },
+  'tmj-splint-therapy-killeen-tx': {
+    h1: 'Limited TMJ Splint Therapy for Conservative Care',
+    answer: 'Elm Ridge provides limited TMJ care focused on splint therapy and conservative support. Complex TMJ disorders may require referral.',
+    glance: [
+      ['Scope', 'Limited splint therapy/conservative care'],
+      ['May help with', 'Clenching, grinding, jaw soreness, tooth wear'],
+      ['Not full-scope', 'Advanced joint disorder treatment or surgery'],
+      ['Provider focus', 'Jeff Muszynski, DDS'],
+    ],
+    who: 'A splint may help when symptoms are connected to clenching, grinding, muscle soreness, tooth wear, or bite-related stress.',
+    detailSections: [
+      { title: 'Why conservative care comes first', html: '<p>TMJ symptoms can have many causes. Conservative approaches are usually best to try before surgery or irreversible treatment.</p>' },
+      { title: 'What a splint can and cannot do', html: '<p>A splint may protect teeth and reduce overload from clenching or grinding. It is not a cure-all for every jaw joint problem, headache, or facial pain condition.</p>' },
+      { title: 'When referral may be needed', html: '<p>Advanced joint disease, complex pain, locking, trauma, neurologic symptoms, or symptoms that do not fit a conservative dental pattern may require specialty or medical referral.</p>' },
+    ],
+  },
+  'sedation-dentistry-killeen-tx': {
+    h1: 'Sedation Options for a Calmer Dental Visit',
+    answer: 'Elm Ridge offers nitrous oxide and oral conscious sedation for appropriate patients. IV sedation, deep sedation, and general anesthesia are not offered.',
+    glance: [
+      ['Nitrous oxide', 'Yes; light relaxation that wears off quickly'],
+      ['Oral conscious sedation', 'Yes; evaluated candidates only'],
+      ['IV sedation', 'Not offered'],
+      ['Provider focus', 'Jeff Muszynski, DDS'],
+    ],
+    who: 'Sedation options may help patients with dental anxiety, a past difficult experience, a strong gag reflex, or longer treatment that feels hard to get through comfortably.',
+    detailSections: [
+      { title: 'Nitrous vs oral conscious sedation', html: simpleTable(['Option', 'What to know'], [['Nitrous oxide', 'Light relaxation through a nose mask. It wears off quickly and many patients can drive afterward.'], ['Oral conscious sedation', 'Prescription medication for deeper relaxation while the patient remains responsive. It requires evaluation, instructions, and a driver.']]) },
+      { title: 'What Elm Ridge does not offer', html: '<p>Elm Ridge does not offer IV sedation, deep sedation, or general anesthesia. If that level of sedation is needed, the team will explain referral options.</p>' },
+    ],
+  },
+  'nitrous-oxide-dentist-killeen-tx': {
+    h1: 'Nitrous Oxide for Light Dental Relaxation',
+    answer: 'Nitrous oxide can help take the edge off a dental visit while keeping the patient awake and responsive. It wears off quickly after the appointment.',
+    glance: [
+      ['Best for', 'Light anxiety or mild comfort support'],
+      ['Recovery', 'Wears off quickly'],
+      ['Driver', 'Often not needed for nitrous alone'],
+      ['Related option', 'Oral conscious sedation for evaluated candidates'],
+    ],
+    detailSections: [
+      { title: 'When nitrous makes sense', html: htmlList(['Mild to moderate nervousness', 'Shorter procedures', 'Patients who want relaxation without oral sedative planning', 'Appointments where a quick recovery matters']) },
+      { title: 'When something stronger may be discussed', html: '<p>Oral conscious sedation may be considered for evaluated candidates when anxiety, appointment length, or procedure complexity calls for a deeper level of relaxation. IV sedation is not offered.</p>' },
+    ],
+  },
+  'oral-conscious-sedation-killeen-tx': {
+    h1: 'Oral Conscious Sedation for Evaluated Candidates',
+    answer: 'Oral conscious sedation uses prescribed medication for deeper relaxation while the patient remains responsive. It is not IV sedation and it requires planning, instructions, and a driver.',
+    glance: [
+      ['Sedation type', 'Prescription oral medication'],
+      ['Driver', 'Required'],
+      ['IV sedation', 'Not offered'],
+      ['Provider focus', 'Jeff Muszynski, DDS'],
+    ],
+    detailSections: [
+      { title: 'What the visit requires', html: htmlList(['A review of health history and medications', 'Clear pre-visit and post-visit instructions', 'A responsible driver', 'A plan for the procedure and recovery time']) },
+      { title: 'Boundaries', html: '<p>Oral conscious sedation is not deep sedation, general anesthesia, or IV sedation. Patients remain responsive, and not every patient is a candidate.</p>' },
+    ],
+  },
+};
+
+const emergencyCostText = `Emergency exam, X-ray, and triage commonly range from ${costRanges.emergency}. Treatment such as a filling, crown, root canal, extraction, medication, or follow-up care is separate.`;
+
+const emergencyEnhancements = {
+  'emergency-dentist-killeen-tx': {
+    answer: 'For urgent dental problems, call first. Elm Ridge offers same-day emergency appointments when possible and triages severe pain, swelling, broken teeth, knocked-out permanent teeth, and infection symptoms honestly.',
+    now: `Call ${phoneDisplay} as early as possible. Describe your symptoms, how long they have been happening, whether swelling is present, and whether there was trauma. Use the appointment form only for non-urgent requests.`,
+    treat: 'Elm Ridge can examine the problem, take X-rays or imaging, relieve sharp edges, treat infection when appropriate, repair broken teeth, start a root canal when possible, remove a tooth when needed, or build a staged plan.',
+    costText: emergencyCostText,
+    detailSections: [
+      { title: 'What is prioritized', html: htmlList(['True trauma', 'Knocked-out permanent teeth', 'Facial swelling', 'Severe or uncontrolled pain', 'Infection symptoms', 'Broken teeth with pain or sharp edges']) },
+      { title: 'What may not be same-day', html: '<p>A painless cosmetic chip may be seen same-day if the schedule allows, but it is not guaranteed. Complex treatment may need diagnosis first and treatment on a later visit.</p>' },
+      { title: 'Typical emergency visit cost', html: costRangeHtml(costRanges.emergency, 'Treatment is separate and depends on the diagnosis.') },
+    ],
+  },
+  'broken-tooth-killeen-tx': {
+    answer: 'A broken tooth can be minor, painful, infected, or structurally hopeless. Call first so Elm Ridge can help decide whether you need urgent care and what to avoid until you are seen.',
+    now: 'If the tooth has a sharp edge, avoid chewing on that side. If a piece came off, save it if available. Call first, especially if there is pain, swelling, bleeding, or sensitivity.',
+    wait: 'A painless small cosmetic chip can often wait briefly, but deeper breaks, pain on biting, exposed inner tooth, swelling, or trauma should be handled urgently.',
+    treat: 'Treatment might be smoothing, bonding, a filling, a crown, root canal treatment, or extraction if the tooth cannot be restored predictably.',
+    treatmentOptions: 'A crown is common when the tooth is weak or cracked. Root canal treatment may be needed if the nerve is involved. Extraction and implant or bridge planning may be discussed if the tooth is not restorable.',
+    costText: emergencyCostText,
+    detailSections: [
+      { title: 'Common next decisions', html: simpleTable(['Finding', 'Likely conversation'], [['Small chip', 'Smoothing, bonding, or filling.'], ['Large break or cracked cusp', 'Crown, sometimes with buildup.'], ['Pain, swelling, or nerve exposure', 'Root canal vs extraction depending on restorability.'], ['Split tooth below the gumline', 'Extraction and replacement planning may be more predictable.']]) },
+    ],
+  },
+  'toothache-killeen-tx': {
+    answer: 'A toothache is a symptom, not a diagnosis. It can come from a cavity, cracked tooth, bite trauma, gum infection, sinus pressure, or a nerve problem.',
+    now: 'Call first and describe whether the pain is sharp, throbbing, lingering to cold or heat, worse when biting, waking you up, or paired with swelling.',
+    wait: 'Pain that is worsening, waking you up, causing swelling, or making it hard to bite should not be ignored. Severe swelling or trouble swallowing belongs in urgent medical care.',
+    treat: 'Elm Ridge can diagnose the source and recommend a filling, crown, root canal, extraction, bite adjustment, medication when appropriate, or referral if the problem is outside dental scope.',
+    treatmentOptions: 'Toothache treatment may involve X-rays, CBCT when needed, a filling, crown, root canal, extraction, or abscess treatment. The right answer depends on diagnosis.',
+    costText: emergencyCostText,
+    detailSections: [
+      { title: 'When root canal enters the conversation', html: '<p>Lingering temperature pain, spontaneous throbbing, swelling, or pain that wakes you up can mean the nerve is inflamed or infected. Elm Ridge performs many root canals, including molars, but not retreatments.</p>' },
+    ],
+  },
+  'dental-abscess-killeen-tx': {
+    answer: 'A dental abscess or swelling can become serious. Call first for dental triage, and go to the ER for severe swelling, trouble breathing, trouble swallowing, major trauma, or a medical emergency.',
+    now: 'Call Elm Ridge and describe the swelling location, fever, drainage, pain level, and whether swallowing or breathing is affected. Do not try to drain swelling yourself.',
+    wait: 'Swelling should not be treated casually. Rapidly spreading swelling, fever, trouble swallowing, trouble breathing, or swelling near the eye needs urgent medical attention.',
+    treat: 'Elm Ridge can diagnose whether the source is tooth-related and discuss root canal treatment, extraction, drainage when appropriate, medication when indicated, or referral.',
+    treatmentOptions: 'Abscess treatment may include X-rays or CBCT, antibiotics when appropriate, root canal treatment, extraction, or staged treatment after infection control.',
+    costText: emergencyCostText,
+    detailSections: [
+      { title: 'Why antibiotics are not the whole fix', html: '<p>Medication can be appropriate in some infections, but the source usually still needs dental treatment such as root canal treatment or extraction.</p>' },
+    ],
+  },
+  'lost-crown-killeen-tx': {
+    answer: 'A lost crown should be checked because the tooth underneath may be sensitive, decayed, cracked, or at risk of shifting or breaking.',
+    now: 'Save the crown and call first. Do not use superglue. If the crown fits easily and the bite feels normal, temporary dental cement may be used carefully until you are seen.',
+    wait: 'A lost crown can sometimes wait briefly if there is no pain, no sharp edge, and no bite problem, but sensitivity, pain, swelling, or a loose tooth should be handled promptly.',
+    treat: 'Elm Ridge can evaluate the tooth and crown, recement the crown when appropriate, replace it, treat decay, build up the tooth, or discuss root canal or extraction if needed.',
+    treatmentOptions: 'Treatment might include recementing, a new crown, buildup, root canal treatment, or replacement planning if the tooth is not restorable.',
+    costText: emergencyCostText,
+    detailSections: [
+      { title: 'When a crown can be reused', html: '<p>The crown has to fit well, the tooth has to be healthy enough, and the bite has to be stable. Decay, cracks, or poor fit may mean a new crown is safer.</p>' },
+    ],
+  },
+  'knocked-out-tooth-killeen-tx': {
+    answer: 'A knocked-out permanent tooth is urgent. Call immediately, keep the tooth moist, do not scrub the root, and seek help as quickly as possible.',
+    now: 'Pick the tooth up by the crown, not the root. If possible, place it gently back in the socket. If not, keep it in milk or saliva and call immediately. Do not scrub the root.',
+    wait: 'Do not wait on a knocked-out permanent tooth. Baby teeth should not be replanted. Major facial trauma, uncontrolled bleeding, or a medical emergency belongs in the ER.',
+    treat: 'Elm Ridge can evaluate the injury, attempt stabilization when appropriate, address pain, take X-rays, and discuss monitoring or replacement options if the tooth cannot be saved.',
+    treatmentOptions: 'Treatment may include reimplantation and stabilization, X-rays, follow-up monitoring, root canal treatment later, or replacement planning. Success cannot be guaranteed.',
+    costText: emergencyCostText,
+    detailSections: [
+      { title: 'Permanent vs baby teeth', html: '<p>Permanent teeth are time-sensitive and may be replanted in selected cases. Baby teeth should not be replanted because that can damage the developing permanent tooth.</p>' },
+      { title: 'If the tooth cannot be saved', html: '<p>Replacement options may include an implant, bridge, partial denture, or staged plan depending on age, bone, bite, and injury pattern.</p>' },
+    ],
+  },
+};
 
 function buildServicesHub() {
   const groups = [
@@ -939,34 +1640,35 @@ function buildServicesHub() {
 }
 
 function makePage(overrides) {
-  const name = overrides.name;
+  const page = { ...overrides, ...(serviceEnhancements[overrides.slug] || {}) };
+  const name = page.name;
   return {
-    slug: overrides.slug,
-    title: overrides.title || `${name} in Killeen, TX | Elm Ridge`,
-    description: overrides.description || `${practiceName} provides ${name.toLowerCase()} in Killeen with clear explanations, private-practice care, and practical next steps.`,
-    h1: overrides.h1 || name,
-    crumb: overrides.crumb || name,
-    kicker: overrides.kicker || 'Dental Service',
-    intro: overrides.intro || `Clear, practical ${name.toLowerCase()} guidance from Elm Ridge Implant and Family Dentistry in Killeen.`,
-    answer: overrides.answer || `${name} may be recommended when it is the most sensible way to protect comfort, function, appearance, or long-term oral health. Elm Ridge starts with diagnosis before recommending treatment.`,
-    glance: overrides.glance || defaultServiceGlance(overrides),
-    who: overrides.who || defaultWhoText(overrides),
-    approach: overrides.approach,
-    detailSections: overrides.detailSections || [],
-    nextQuestions: overrides.nextQuestions,
-    expect: overrides.expect || defaultExpectText(overrides),
-    call: overrides.call || defaultCallText(overrides),
-    payment: overrides.payment,
-    extra: overrides.extra || '',
-    providers: overrides.providers || ['Jeff Muszynski, DDS', 'Kayla Muszynski, DDS'],
-    related: overrides.related || [serviceLinks.services, serviceLinks.newPatients, serviceLinks.insurance, serviceLinks.appointment, serviceLinks.reviews],
-    faq: overrides.faq || standardFaq(name),
-    image: overrides.image,
-    alt: overrides.alt,
-    medical: overrides.medical ?? true,
-    serviceType: overrides.serviceType,
-    procedureType: overrides.procedureType,
-    bodyLocation: overrides.bodyLocation,
+    slug: page.slug,
+    title: page.title || `${name} in Killeen, TX | Elm Ridge`,
+    description: page.description || `${practiceName} provides ${name.toLowerCase()} in Killeen with clear explanations, private-practice care, and practical next steps.`,
+    h1: page.h1 || name,
+    crumb: page.crumb || name,
+    kicker: page.kicker || 'Dental Service',
+    intro: page.intro || `Clear, practical ${name.toLowerCase()} guidance from Elm Ridge Implant and Family Dentistry in Killeen.`,
+    answer: page.answer || `${name} may be recommended when it is the most sensible way to protect comfort, function, appearance, or long-term oral health. Elm Ridge starts with diagnosis before recommending treatment.`,
+    glance: page.glance || defaultServiceGlance(page),
+    who: page.who || defaultWhoText(page),
+    approach: page.approach,
+    detailSections: page.detailSections || [],
+    nextQuestions: page.nextQuestions,
+    expect: page.expect || defaultExpectText(page),
+    call: page.call || defaultCallText(page),
+    payment: page.payment,
+    extra: page.extra || '',
+    providers: page.providers || ['Jeff Muszynski, DDS', 'Kayla Muszynski, DDS'],
+    related: page.related || [serviceLinks.services, serviceLinks.newPatients, serviceLinks.insurance, serviceLinks.appointment, serviceLinks.reviews],
+    faq: page.faq || standardFaq(name),
+    image: page.image,
+    alt: page.alt,
+    medical: page.medical ?? true,
+    serviceType: page.serviceType,
+    procedureType: page.procedureType,
+    bodyLocation: page.bodyLocation,
   };
 }
 
@@ -1177,14 +1879,14 @@ function buildServicePages() {
 
 function buildCostPages() {
   [
-    ['dental-implant-cost-killeen-tx', 'Dental Implant Cost in Killeen, TX | Elm Ridge', 'Dental Implant Cost in Killeen', 'Dental implant cost depends on the number of missing teeth, whether extraction, grafting, sinus lift, temporary teeth, or final crown/bridge/denture work is needed. Elm Ridge does not publish unapproved fixed prices online.', ['Number of implants', 'Extraction needs', 'Bone grafting or sinus lift', 'Type of final tooth or teeth', 'Sedation or temporary teeth', 'Insurance benefits and annual maximums'], 'An implant estimate requires diagnosis, imaging, and a restorative plan because the implant screw is only one part of the final tooth.', implantRelated],
-    ['full-arch-dental-implant-cost-killeen-tx', 'Full-Arch Dental Implant Cost in Killeen, TX | Elm Ridge', 'Full-Arch Dental Implant Cost', 'Full-arch cost varies because surgery, temporary teeth, final material, number of implants, grafting, and restorative design differ by case. Public numeric ranges are omitted until owner-approved.', ['Upper or lower arch', 'Number and position of implants', 'Extractions and bone reduction', 'Temporary prosthesis', 'Final zirconia restoration', 'Maintenance and financing'], 'Full-arch planning needs imaging, bite evaluation, smile design, and a discussion of whether fixed full-arch, snap-on dentures, or traditional dentures fit best.', implantRelated],
-    ['snap-on-denture-cost-killeen-tx', 'Snap-On Denture Cost in Killeen, TX | Elm Ridge', 'Snap-On Denture Cost', 'Snap-on denture cost depends on implant number, attachments, whether teeth need removal, bone grafting, and denture design. Elm Ridge avoids fake online prices.', ['Two to four implants', 'New or existing denture', 'Extractions', 'Attachment maintenance', 'Insurance benefits', 'Financing'], 'An exam clarifies whether snap-on dentures are realistic and whether a traditional denture or full-arch fixed plan should also be compared.', implantRelated],
-    ['crown-cost-killeen-tx', 'Dental Crown Cost in Killeen, TX | Elm Ridge', 'Dental Crown Cost', 'Crown cost depends on tooth condition, buildup needs, material, lab work, insurance benefits, and whether root canal treatment is also needed.', ['Tooth location', 'Need for buildup', 'Lab-made material', 'Root canal history', 'Insurance coverage', 'Replacement of old dental work'], 'A crown estimate requires checking how much tooth remains and whether the bite and nerve are healthy.', [{ label: 'Dental crowns', href: '/dental-crowns-killeen-tx' }, serviceLinks.insurance]],
-    ['root-canal-cost-killeen-tx', 'Root Canal Cost in Killeen, TX | Elm Ridge', 'Root Canal Cost', 'Root canal cost depends on the tooth type, number of canals, infection, crown needs, and insurance benefits. Elm Ridge performs many root canals, including molars, but not retreatments.', ['Front tooth, premolar, or molar', 'Canal complexity', 'Need for crown', 'Emergency visit', 'Insurance coverage', 'Financing'], 'Diagnosis and X-rays are needed because a toothache might require a filling, crown, root canal, extraction, or referral.', [{ label: 'Root canals', href: '/root-canal-killeen-tx' }, { label: 'Molar root canals', href: '/molar-root-canal-killeen-tx' }, serviceLinks.insurance]],
-    ['clear-aligner-cost-killeen-tx', 'Clear Aligner Cost in Killeen, TX | Elm Ridge', 'Clear Aligner Cost', 'Clear aligner cost depends on case complexity, treatment length, records, refinements, retainers, and insurance orthodontic benefits.', ['Complexity of movement', 'Treatment length', 'Records and monitoring', 'Retainers', 'Insurance orthodontic benefits', 'Financing'], 'A clear aligner consultation is needed to confirm whether aligners are appropriate and which brand or workflow fits.', [{ label: 'Clear aligners', href: '/clear-aligners-killeen-tx' }, serviceLinks.insurance]],
-    ['emergency-dentist-cost-killeen-tx', 'Emergency Dentist Cost in Killeen, TX | Elm Ridge', 'Emergency Dentist Cost', 'Emergency dental cost depends on the exam, X-rays, diagnosis, and whether same-day treatment such as a filling, crown, root canal, extraction, or medication is needed.', ['Emergency exam', 'X-rays or imaging', 'Same-day treatment', 'Staged treatment', 'Insurance benefits', 'Financing'], 'An emergency visit starts with diagnosis because the same symptom can have very different causes and costs.', emergencyRelated],
-    ['sleep-apnea-appliance-cost-killeen-tx', 'Sleep Apnea Appliance Cost in Killeen, TX | Elm Ridge', 'Sleep Apnea Appliance Cost', 'Sleep apnea appliance cost depends on medical insurance, physician diagnosis, appliance design, records, follow-up, and documentation. Elm Ridge bills medical insurance for appliances only, not sleep studies.', ['Physician diagnosis', 'Medical insurance requirements', 'Appliance type', 'Records and scans', 'Follow-up adjustment', 'Documentation'], 'A physician diagnosis is required before appliance delivery, and the dental visit confirms whether oral appliance therapy is appropriate.', [{ label: 'Sleep apnea dentist', href: '/sleep-apnea-dentist-killeen-tx' }, serviceLinks.insurance, serviceLinks.jeff]],
+    ['dental-implant-cost-killeen-tx', 'Dental Implant Cost in Killeen, TX | Elm Ridge', 'Dental Implant Cost in Killeen', 'A single dental implant commonly ranges from $3,500-$6,500. The lower end is closer to implant, abutment, and crown only; the higher end may include extraction, socket preservation grafting, and other needed extras.', ['Number of implants', 'Extraction needs', 'Bone grafting or sinus lift', 'Type of final tooth or teeth', 'Sedation or temporary teeth', 'Insurance benefits and annual maximums'], 'An implant estimate requires diagnosis, imaging, and a restorative plan because the implant screw is only one part of the final tooth.', implantRelated],
+    ['full-arch-dental-implant-cost-killeen-tx', 'Full-Arch Dental Implant Cost in Killeen, TX | Elm Ridge', 'Full-Arch Dental Implant Cost', 'Full-arch fixed dental implants commonly range from $25,000-$35,000 per arch, or $50,000-$70,000 for both arches. Cost varies because surgery, temporary teeth, final material, number of implants, grafting, and restorative design differ by case.', ['Upper or lower arch', 'Number and position of implants', 'Extractions and bone reduction', 'Temporary prosthesis', 'Final zirconia restoration', 'Maintenance and financing'], 'Full-arch planning needs imaging, bite evaluation, smile design, and a discussion of whether fixed full-arch, snap-on dentures, or traditional dentures fit best.', implantRelated],
+    ['snap-on-denture-cost-killeen-tx', 'Snap-On Denture Cost in Killeen, TX | Elm Ridge', 'Snap-On Denture Cost', 'Snap-on dentures commonly range from $8,000-$14,000 per arch. Cost depends on implant number, attachments, whether teeth need removal, bone grafting, and denture design.', ['Two to four implants', 'New or existing denture', 'Extractions', 'Attachment maintenance', 'Insurance benefits', 'Financing'], 'An exam clarifies whether snap-on dentures are realistic and whether a traditional denture or full-arch fixed plan should also be compared.', implantRelated],
+    ['crown-cost-killeen-tx', 'Dental Crown Cost in Killeen, TX | Elm Ridge', 'Dental Crown Cost', 'Lab-made crowns commonly range from $900-$1,600 per tooth. A core buildup commonly ranges from $250-$500 when needed.', ['Tooth location', 'Need for buildup', 'Lab-made material', 'Root canal history', 'Insurance coverage', 'Replacement of old dental work'], 'A crown estimate requires checking how much tooth remains and whether the bite and nerve are healthy.', [{ label: 'Dental crowns', href: '/dental-crowns-killeen-tx' }, serviceLinks.insurance]],
+    ['root-canal-cost-killeen-tx', 'Root Canal Cost in Killeen, TX | Elm Ridge', 'Root Canal Cost', 'Root canals commonly range from $600-$1,200. Cost depends on the tooth type, number of canals, infection, crown needs, and insurance benefits. Elm Ridge performs many root canals, including molars, but not retreatments.', ['Front tooth, premolar, or molar', 'Canal complexity', 'Need for crown', 'Emergency visit', 'Insurance coverage', 'Financing'], 'Diagnosis and X-rays are needed because a toothache might require a filling, crown, root canal, extraction, or referral.', [{ label: 'Root canals', href: '/root-canal-killeen-tx' }, { label: 'Molar root canals', href: '/molar-root-canal-killeen-tx' }, serviceLinks.insurance]],
+    ['clear-aligner-cost-killeen-tx', 'Clear Aligner Cost in Killeen, TX | Elm Ridge', 'Clear Aligner Cost', 'Clear aligners commonly range from $3,500-$5,500. Cost depends on case complexity, treatment length, records, refinements, retainers, and insurance orthodontic benefits.', ['Complexity of movement', 'Treatment length', 'Records and monitoring', 'Retainers', 'Insurance orthodontic benefits', 'Financing'], 'A clear aligner consultation is needed to confirm whether aligners are appropriate and which brand or workflow fits.', [{ label: 'Clear aligners', href: '/clear-aligners-killeen-tx' }, serviceLinks.insurance]],
+    ['emergency-dentist-cost-killeen-tx', 'Emergency Dentist Cost in Killeen, TX | Elm Ridge', 'Emergency Dentist Cost', 'Emergency exam, X-ray, and triage commonly range from $150-$350. Treatment is separate and depends on diagnosis.', ['Emergency exam', 'X-rays or imaging', 'Same-day treatment', 'Staged treatment', 'Insurance benefits', 'Financing'], 'An emergency visit starts with diagnosis because the same symptom can have very different causes and costs.', emergencyRelated],
+    ['sleep-apnea-appliance-cost-killeen-tx', 'Sleep Apnea Appliance Cost in Killeen, TX | Elm Ridge', 'Sleep Apnea Appliance Cost', 'Sleep apnea oral appliances commonly range from $2,500-$3,500. Medical insurance may help when requirements are met. Elm Ridge bills medical insurance for appliances only, not sleep studies.', ['Physician diagnosis', 'Medical insurance requirements', 'Appliance type', 'Records and scans', 'Follow-up adjustment', 'Documentation'], 'A physician diagnosis is required before appliance delivery, and the dental visit confirms whether oral appliance therapy is appropriate.', [{ label: 'Sleep apnea dentist', href: '/sleep-apnea-dentist-killeen-tx' }, serviceLinks.insurance, serviceLinks.jeff]],
   ].forEach(([slug, title, h1, answer, factors, exam, related]) => createCostPage({
     slug,
     title,
@@ -1194,7 +1896,7 @@ function buildCostPages() {
     exam,
     related,
     ownerApprovedRange: ownerCostRangeData[slug]?.ownerApprovedRange || '',
-    description: `${h1} explained without fake online prices. Learn what affects estimates, insurance, financing, and why Elm Ridge verifies benefits before treatment.`,
+    description: `${h1} explained clearly. Learn what affects estimates, insurance, financing, and why Elm Ridge verifies benefits before treatment.`,
     crumb: h1,
     intro: 'Cost should be estimated honestly after diagnosis, not invented for a web page.',
   }));
@@ -1407,22 +2109,6 @@ function buildReviewsBeforeAfterAiPages() {
   if (fs.existsSync('reviews') && fs.statSync('reviews').isFile()) fs.rmSync('reviews');
   writeCustomPage('reviews/index.html', '/reviews', 'Patient Reviews | Elm Ridge Implant and Family Dentistry', 'Read patient reviews for Elm Ridge Implant and Family Dentistry in Killeen. 5.0 Google rating from 550+ reviews.', 'Reviews', `${hero('Patient Reviews', 'Real reviews from real patients', reviewPhrase)}<section class="py-16 bg-white"><div class="max-w-7xl mx-auto px-6 space-y-12"><div><p class="text-charcoal/65 leading-7 max-w-3xl">These comments come from public patient reviews and testimonials. They are shared as patient feedback, not as review schema.</p></div><div id="review-carousel" class="overflow-hidden border-y border-teal-light py-6" aria-label="Featured patient review carousel"><div id="review-track" class="flex gap-4">${reviewCards(reviews.slice(0, 12), true)}</div></div><div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-5">${reviewCards(reviews)}</div><div class="bg-stone border border-teal-light p-8">${pillLinks([{ label: 'New patients', href: '/new-patients' }, { label: 'Services', href: '/services' }, { label: 'Request appointment', href: '/request-appointment' }, { label: 'Call ' + phoneDisplay, href: phoneHref }])}</div></div></section><script>(function(){const carousel=document.getElementById('review-carousel');const track=document.getElementById('review-track');if(!carousel||!track)return;track.innerHTML+=track.innerHTML;let pos=0;let paused=false;const reduce=window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)').matches;carousel.addEventListener('mouseenter',()=>paused=true);carousel.addEventListener('mouseleave',()=>paused=false);carousel.addEventListener('focusin',()=>paused=true);carousel.addEventListener('focusout',()=>paused=false);function tick(){if(!reduce&&!paused){pos-=0.55;const midpoint=track.scrollWidth/2;if(Math.abs(pos)>=midpoint)pos=0;track.style.transform='translateX('+pos+'px)';}requestAnimationFrame(tick);}tick();})();</script>`);
 
-  const gallery = [
-    ['cosmetic dentistry 2before.webp', 'Before smile photo shared with patient consent'],
-    ['cosmetic dentistry 2after.webp', 'After smile photo shared with patient consent'],
-    ['cosmeticdentistry3.webp', 'Smile result photo shared with patient consent'],
-    ['cosmeticdentistry5.webp', 'Smile result photo shared with patient consent'],
-    ['cosmetic dentistry before 11.jpg', 'Before smile photo shared with patient consent'],
-    ['cosmetic dentistry 11 after.jpg', 'After smile photo shared with patient consent'],
-    ['all on 4 before.jpg', 'Before full-arch smile photo shared with patient consent'],
-    ['all on 4 after.JPG', 'After full-arch smile photo shared with patient consent'],
-    ['cosmetic killeen before.jpg', 'Before smile photo shared with patient consent'],
-    ['cosmetic killeen after.jpg', 'After smile photo shared with patient consent'],
-    ['cosmetic before 1.jpg', 'Before smile photo shared with patient consent'],
-    ['cosmetic after 1.jpg', 'After smile photo shared with patient consent'],
-  ];
-  writeCustomPage('before-and-after', '/before-and-after', 'Before and After Gallery | Elm Ridge Dental', 'View Elm Ridge before and after smile photos shared with patient consent. Individual results vary.', 'Before and After', `${hero('Before and After', 'Before & After Gallery', 'Individual results vary. Images are shared with patient consent.')}<section class="py-16 bg-white"><div class="max-w-7xl mx-auto px-6"><p class="mb-8 text-charcoal/65">Individual results vary. Images are shared with patient consent.</p><div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-5">${gallery.map(([src, alt]) => `<figure class="bg-stone border border-teal-light p-3"><img src="/${src}" alt="${alt}" class="w-full aspect-[4/3] object-cover" loading="lazy" decoding="async" /><figcaption class="sr-only">${alt}</figcaption></figure>`).join('')}</div><div class="mt-10">${pillLinks([{ label: 'Cosmetic dentistry', href: '/cosmetic-dentistry-killeen-tx' }, { label: 'Dental implants', href: '/dental-implants-killeen-tx' }, { label: 'Full-arch implants', href: '/full-arch-dental-implants-killeen-tx' }, { label: 'Veneers', href: '/veneers-killeen-tx' }, { label: 'Bonding', href: '/cosmetic-bonding-killeen-tx' }, { label: 'Whitening', href: '/teeth-whitening-killeen-tx' }])}</div></div></section>`);
-
   writePage('cosmetic-smile-simulator-killeen-tx', {
     path: '/cosmetic-smile-simulator-killeen-tx',
     title: 'Cosmetic Smile Simulator in Killeen, TX | Elm Ridge',
@@ -1435,7 +2121,7 @@ function buildReviewsBeforeAfterAiPages() {
       <h2>Before You Upload</h2><p>This tool uses a third-party AI-assisted tool. Every submission is emailed to the practice and reviewed by Elm Ridge. Uploaded images are stored in email. There is no fixed deletion timeline. A user cannot submit without becoming a lead.</p>
       <div class="border border-teal-light bg-stone p-6 not-prose"><p class="font-semibold text-charcoal">This is not a secure patient portal. Do not submit sensitive medical information or emergency concerns.</p><p class="text-charcoal/70 mt-3"><a href="${phoneHref}" class="text-teal-dark font-semibold">For urgent dental problems, call ${phoneDisplay} instead of using this tool.</a></p></div>
       <h2>What It Is and Is Not</h2><p>The preview is for education and consultation planning only. It is not a diagnosis, not a treatment plan, not a dental record, and not a guarantee of results. Submitting the tool does not create a doctor-patient relationship and does not replace an exam.</p>
-      ${pillLinks([{ label: 'Cosmetic dentistry', href: '/cosmetic-dentistry-killeen-tx' }, { label: 'Before and after', href: '/before-and-after' }, { label: 'Request appointment', href: '/request-appointment' }])}
+      ${pillLinks([{ label: 'Cosmetic dentistry', href: '/cosmetic-dentistry-killeen-tx' }, { label: 'Veneers', href: '/veneers-killeen-tx' }, { label: 'Request appointment', href: '/request-appointment' }])}
     </div></section>`,
     faq: [['Is the smile simulator a diagnosis?', 'No. It is not a diagnosis, not a treatment plan, not a dental record, and not a guarantee of results.'], ['Is it a secure patient portal?', 'No. Do not submit sensitive medical information or emergency concerns.']],
   });
@@ -1477,7 +2163,9 @@ function buildLocationPages() {
   ];
 
   locations.forEach(([slug, city, h1, intro]) => {
-    const areaText = city === 'Killeen' ? 'Elm Ridge is located in Killeen at 2601 E Elms Rd.' : `Patients from ${city} visit the Elm Ridge office in Killeen for dental care.`;
+    const areaText = city === 'Killeen'
+      ? 'Elm Ridge has one Killeen office at 2601 E Elms Rd. Patients choose the practice for personal treatment planning, private-practice continuity, and care that does not feel rushed.'
+      : `Elm Ridge has one Killeen office. Patients from ${city} choose Elm Ridge because the care is personal, thorough, and worth the short drive for people who want clear treatment planning instead of a corporate-feeling visit.`;
     writePage(slug, {
       path: `/${slug}`,
       title: `${h1} | Elm Ridge`,
@@ -1495,14 +2183,15 @@ function buildLocationPages() {
           { label: 'Dental implants', href: '/dental-implants-killeen-tx', text: 'Single implants, implant bridges, snap-on dentures, and full-arch options.' },
           { label: 'Emergency dentistry', href: '/emergency-dentist-killeen-tx', text: 'Call first for urgent tooth pain, swelling, broken teeth, or lost crowns.' },
           { label: 'Cosmetic dentistry', href: '/cosmetic-dentistry-killeen-tx', text: 'Veneers, bonding, whitening, clear aligners, and natural-looking smile planning.' },
+          { label: 'Sleep apnea appliances', href: '/sleep-apnea-dentist-killeen-tx', text: 'Take-home sleep study workflow and oral appliances after physician diagnosis.' },
         ])}
         <h2>Emergency Guidance</h2><p>Call first for urgent dental concerns. Go to the ER for severe swelling, trouble breathing, trouble swallowing, uncontrolled bleeding, major trauma, or a medical emergency.</p>
         <h2>Visit the Killeen Office</h2><p><a href="${mapHref}" target="_blank" rel="noopener">${addressLine}</a>. Hours: Monday-Thursday 8 AM-5 PM. Friday-Sunday closed.</p>
         ${pillLinks([serviceLinks.services, serviceLinks.newPatients, serviceLinks.insurance, serviceLinks.appointment])}
       </div></section>`,
       faq: [
-        [`Does Elm Ridge have an office in ${city}?`, city === 'Killeen' ? 'Yes. Elm Ridge is located in Killeen.' : `No. Patients from ${city} visit the Killeen office.`],
-        [`Can ${city} patients schedule emergency visits?`, 'Yes. Call first; same-day emergency appointments are offered when possible.'],
+        [`What services do ${city} patients visit Elm Ridge for?`, 'Patients commonly visit for family dentistry, implants, dentures, cosmetic dentistry, emergency care, sleep apnea oral appliances, second opinions, and more involved treatment planning.'],
+        [`Can ${city} patients schedule emergency visits?`, 'Yes. Call first; same-day emergency appointments are offered when possible. Severe swelling, trouble breathing, trouble swallowing, uncontrolled bleeding, major trauma, or a medical emergency should go to the ER.'],
       ],
       headSchemas: [simpleSchema('WebPage', h1, `/${slug}`, intro, { areaServed: [{ '@type': city.includes('Fort') ? 'Place' : 'City', name: city }] })],
     });
@@ -1533,7 +2222,6 @@ Key pages:
 - /insurance-and-financing
 - /request-appointment
 - /reviews
-- /before-and-after
 - /ai-summary
 
 Services:
@@ -1649,7 +2337,7 @@ function cleanupText(html) {
     ['href="/#contact"', 'href="/request-appointment"'],
     ['href="/#team"', 'href="/doctors"'],
     ['href="/#reviews"', 'href="/reviews"'],
-    ['href="/#before-after"', 'href="/before-and-after"'],
+    ['href="/#before-after"', 'href="/cosmetic-dentistry-killeen-tx"'],
     ['"name":"Dr. Jeff Muszynski, DDS"', '"name":"Jeff Muszynski, DDS"'],
     ['"name":"Dr. Kayla Muszynski, DDS"', '"name":"Kayla Muszynski, DDS"'],
     ['"url":"https://www.elmridgedental.com/#team"', '"url":"https://www.elmridgedental.com/doctors"'],
@@ -1667,6 +2355,8 @@ function cleanupText(html) {
     ['Clear Aligners with clear aligners', 'Clear aligner treatment'],
     ['Clear Aligners is often thought of as cosmetic treatment', 'Clear aligner treatment is often thought of as cosmetic treatment'],
     ['In-office whitening delivers similar results in a single visit.', 'Elm Ridge uses custom take-home whitening trays with professional whitening gel.'],
+    ['href="/insurance/invisalign"', 'href="/insurance-and-financing"'],
+    ['Invisalign', 'clear aligners'],
     ['Looking for a dentist for dentures near me in Killeen? Compare traditional dentures, snap-on dentures, and full-arch implants at Elm Ridge.', 'Compare traditional dentures, snap-on dentures, and full-arch implants at Elm Ridge in Killeen.'],
     ['If you have been searching for a <strong>dentist for dentures near me</strong>, you may already know there is not just one way to replace missing teeth.', 'If you are comparing denture and implant options, you may already know there is not just one way to replace missing teeth.'],
     ['Implant dentist in Killeen, TX guide covering experience, CBCT imaging, guided surgery, treatment planning, and private practice care.', 'Learn how to compare implant dentistry experience, CBCT imaging, guided surgery, treatment planning, and private-practice care in Killeen.'],
@@ -1679,11 +2369,14 @@ function cleanupText(html) {
   out = normalizeCategory(out);
   out = out.replace(/"aggregateRating":\{"@type":"AggregateRating","ratingValue":"[^"]+","reviewCount":"[^"]+","bestRating":"[^"]+","worstRating":"[^"]+"\},?/g, '');
   out = out.replace(/,\s*("hasOfferCatalog")/g, ',$1').replace(/\{\s*,/g, '{');
+  out = out.replace(/<li><a href="\/before-and-after"[^>]*>Before &amp; After<\/a><\/li>/g, '');
+  out = out.replaceAll('href="/before-and-after"', 'href="/cosmetic-dentistry-killeen-tx"');
   out = out.replace(/<label for="appointment-website">Website<\/label>\s*/g, '');
   return out;
 }
 
 const redirectedArtifacts = [
+  'before-and-after',
   'sleep-dentistry-killeen-tx',
   'implant-bridges-killeen-tx',
   'invisalign-killeen-tx',
@@ -1739,6 +2432,57 @@ function cleanupBlogs() {
       const full = path.join('blog', file);
       if (String(full).endsWith('index.html')) updateFile(full);
     }
+  }
+}
+
+function patchPreservedDesignedServicePages() {
+  const implantFile = 'dental-implants-killeen-tx';
+  if (fs.existsSync(implantFile)) {
+    let html = fs.readFileSync(implantFile, 'utf8');
+    html = html.replaceAll('conscious sedation with triazolam', 'oral conscious sedation');
+    html = html.replaceAll('All-on-4 style', 'All-on-4-style');
+    html = html.replace(
+      '<p>Patients naturally want to know what dental implants cost. The honest answer is that pricing depends on the number of teeth being replaced, the number of implants needed, the type of final restoration, whether bone grafting is required, the condition of the remaining teeth, and the patient&apos;s medical history. A simple single implant is a very different treatment than rebuilding a full arch. Elm Ridge offers paid consultations so the recommendation is based on an exam, imaging, and a real plan instead of a generic online number.</p>',
+      '<p>Patients naturally want to know what dental implants cost. A single dental implant commonly ranges from $3,500-$6,500. The lower end is closer to implant, abutment, and crown only; the higher end may include extraction, socket preservation grafting, and other needed extras. A simple single implant is a very different treatment than rebuilding a full arch, so diagnosis, imaging, and a restorative plan still matter. We can estimate benefits, but final payment is determined by the insurance company.</p>',
+    );
+    if (!html.includes('data-service-refinement="implants"')) {
+      const implantBlock = `<section data-service-refinement="implants" class="py-16 bg-stone"><div class="max-w-5xl mx-auto px-6 space-y-8">
+        <div class="max-w-3xl"><p class="font-body text-xs tracking-widest uppercase text-teal-dark mb-3">Implant Decision Guide</p><h2 class="font-display text-4xl text-charcoal mb-4">What matters before an implant is placed</h2><p class="text-charcoal/70 leading-8">The implant screw is only one part of the result. Elm Ridge plans the final tooth, bite, bone, gum shape, smile line, and cleaning access before recommending treatment.</p></div>
+        <div class="grid md:grid-cols-2 gap-5 text-charcoal/70 leading-7">
+          <div class="bg-white border border-teal-light p-6"><h3 class="font-display text-3xl text-charcoal mb-3">Strong long-term value</h3><p>Implants usually cost more upfront than a removable denture or traditional bridge, but they can be more cost-effective over time because they are designed for longevity and do not rely on reshaping neighboring teeth.</p></div>
+          <div class="bg-white border border-teal-light p-6"><h3 class="font-display text-3xl text-charcoal mb-3">A realistic timeline</h3><p>When extraction, socket preservation, implant placement, and a final restoration are needed, treatment often happens in stages: extraction and graft when appropriate, implant placement about 3-4 months later, implant scans about 3-4 months after placement, and final tooth about 1 month after that.</p></div>
+          <div class="bg-white border border-teal-light p-6"><h3 class="font-display text-3xl text-charcoal mb-3">When another option may be better</h3><p>A bridge, partial, denture, staged graft, or referral may be better when the anatomy, neighboring teeth, medical history, infection level, bite forces, timeline, or budget point away from an implant.</p></div>
+          <div class="bg-white border border-teal-light p-6"><h3 class="font-display text-3xl text-charcoal mb-3">Outside implant restorations</h3><p>Elm Ridge can evaluate and restore implants placed elsewhere when appropriate. Helpful records include implant brand or system, connection, size, placement date, prior X-rays, and restorative parts information. Nobel and Straumann connections are commonly seen, but every system has to be evaluated.</p></div>
+        </div>
+        <div class="bg-white border border-teal-light p-6 text-charcoal/70 leading-8"><h3 class="font-display text-3xl text-charcoal mb-3">Complex cases can still start here</h3><p>Some implant and bone grafting cases require an oral surgeon or specialist for the surgical phase. Dr. Jeff can still evaluate the restorative goals, coordinate the plan, help determine what the final teeth need to look and function like, and restore the case after surgery when appropriate.</p><div class="mt-5">${pillLinks([{ label: 'Single tooth implants', href: '/single-tooth-implant-killeen-tx' }, { label: 'Implant bridges', href: '/implant-bridge-killeen-tx' }, { label: 'Bone grafting', href: '/bone-grafting-killeen-tx' }, { label: 'Sinus lifts', href: '/sinus-lift-killeen-tx' }, { label: 'Implant cost', href: '/dental-implant-cost-killeen-tx' }, serviceLinks.jeff])}</div></div>
+      </div></section>`;
+      html = html.replace('<h2 class="font-display text-4xl text-charcoal">Cost, Timing, and Why We Do Not Quote One-Size-Fits-All Prices</h2>', `${implantBlock}<h2 class="font-display text-4xl text-charcoal">Cost, Timing, and Why We Do Not Quote One-Size-Fits-All Prices</h2>`);
+    }
+    html = cleanupText(html);
+    fs.writeFileSync(implantFile, html);
+  }
+
+  const cosmeticFile = 'cosmetic-dentistry-killeen-tx';
+  if (fs.existsSync(cosmeticFile)) {
+    let html = fs.readFileSync(cosmeticFile, 'utf8');
+    if (!html.includes('Individual results vary. Images are shared with patient consent.')) {
+      html = html.replace('<h2 class="font-display text-4xl md:text-5xl font-light italic text-charcoal mb-14 leading-snug">Before &amp; After.</h2>', '<h2 class="font-display text-4xl md:text-5xl font-light italic text-charcoal mb-5 leading-snug">Before &amp; After.</h2><p class="text-charcoal/60 leading-7 mb-10">Individual results vary. Images are shared with patient consent.</p>');
+    }
+    if (!html.includes('data-service-refinement="cosmetic"')) {
+      const cosmeticBlock = `<section data-service-refinement="cosmetic" class="py-16 bg-stone"><div class="max-w-5xl mx-auto px-6 space-y-8">
+        <div class="max-w-3xl"><p class="font-body text-xs tracking-widest uppercase text-teal-dark mb-3">Cosmetic Decision Guide</p><h2 class="font-display text-4xl text-charcoal mb-4">The right cosmetic plan depends on the problem</h2><p class="text-charcoal/70 leading-8">Elm Ridge plans cosmetic dentistry with restraint. Some patients need one conservative touchup; others need whitening, alignment, bonding, veneers, crowns, or implant planning in the right order.</p></div>
+        <div class="grid md:grid-cols-2 gap-5 text-charcoal/70 leading-7">
+          <div class="bg-white border border-teal-light p-6"><h3 class="font-display text-3xl text-charcoal mb-3">Conservative first when appropriate</h3><p>Whitening, bonding, and clear aligners can sometimes improve the smile while preserving more tooth structure. Veneers or crowns make more sense when shape, old dental work, cracks, wear, or strength needs require porcelain coverage.</p></div>
+          <div class="bg-white border border-teal-light p-6"><h3 class="font-display text-3xl text-charcoal mb-3">Function still matters</h3><p>Cosmetic treatment should fit the bite, not just the photo. Worn, chipped, or short teeth may need a bite and restorative conversation before porcelain or bonding is chosen.</p></div>
+          <div class="bg-white border border-teal-light p-6"><h3 class="font-display text-3xl text-charcoal mb-3">Typical public ranges</h3><p>Custom tray whitening commonly ranges from $250-$500. Clear aligners commonly range from $3,500-$5,500. Porcelain veneers commonly range from $1,200-$2,500 per tooth. We can estimate benefits, but final payment is determined by the insurance company.</p></div>
+          <div class="bg-white border border-teal-light p-6"><h3 class="font-display text-3xl text-charcoal mb-3">When to pause cosmetic work</h3><p>Active decay, gum disease, infection, unstable bite problems, severe grinding, or failing old dental work may need to be addressed first so cosmetic treatment lasts and feels comfortable.</p></div>
+        </div>
+        <div class="bg-white border border-teal-light p-6"><h3 class="font-display text-3xl text-charcoal mb-3">Compare the cosmetic options</h3>${pillLinks([{ label: 'Veneers', href: '/veneers-killeen-tx' }, { label: 'Cosmetic bonding', href: '/cosmetic-bonding-killeen-tx' }, { label: 'Teeth whitening', href: '/teeth-whitening-killeen-tx' }, { label: 'Clear aligners', href: '/clear-aligners-killeen-tx' }, { label: 'Reviews', href: '/reviews' }, { label: 'Request appointment', href: '/request-appointment' }])}</div>
+      </div></section>`;
+      html = html.replace('<section id="smile-simulator"', `${cosmeticBlock}<section id="smile-simulator"`);
+    }
+    html = cleanupText(html);
+    fs.writeFileSync(cosmeticFile, html);
   }
 }
 
@@ -1805,7 +2549,7 @@ function patchHomepage() {
 
   <!-- SERVICES -->`);
   html = html.replaceAll('href="#contact"', 'href="/request-appointment"');
-  html = html.replaceAll('href="#before-after"', 'href="/before-and-after"');
+  html = html.replaceAll('href="#before-after"', 'href="/cosmetic-dentistry-killeen-tx"');
   html = html.replaceAll('href="#reviews"', 'href="/reviews"');
   html = html.replaceAll('href="#services"', 'href="/services"');
   html = html.replaceAll('href="/request-appointment"', 'href="/request-appointment"');
@@ -1863,6 +2607,7 @@ function main() {
   buildMachineFiles();
   cleanupAllHtml();
   cleanupBlogs();
+  patchPreservedDesignedServicePages();
   patchHomepage();
   removeRedirectedArtifacts();
   buildSitemap();

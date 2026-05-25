@@ -66,6 +66,7 @@ const oldUrlRedirects = new Map([
   ['/snapondentures', '/snap-on-dentures-killeen-tx'],
   ['/cosmeticdentistry', '/cosmetic-dentistry-killeen-tx'],
   ['/cosmetic-dentistry', '/cosmetic-dentistry-killeen-tx'],
+  ['/before-and-after', '/cosmetic-dentistry-killeen-tx'],
   ['/invisalign', '/clear-aligners-killeen-tx'],
   ['/invisalign-killeen-tx', '/clear-aligners-killeen-tx'],
   ['/rootcanals', '/root-canal-killeen-tx'],

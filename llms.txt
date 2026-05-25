@@ -21,7 +21,6 @@ Key pages:
 - /insurance-and-financing
 - /request-appointment
 - /reviews
-- /before-and-after
 - /ai-summary
 
 Services:
