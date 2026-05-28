@@ -52,13 +52,13 @@ We'll tell you this directly: if you're a candidate for full-arch implants, full
 
 This is the option we'd choose for ourselves.
 
-## All-on-4, All-on-6, and Custom Configurations
+## All-on-4, All-on-X, and Custom Configurations
 
 "All-on-4" is the most-known protocol — four implants per arch, with the back two angled to use available bone and support a fixed bridge. It's an excellent solution for many patients because it minimizes the number of implants while still providing a stable, lifelong prosthesis.
 
 For some patients, six or more implants per arch produce a stronger long-term result, especially when bone is plentiful or bite forces are heavy. Dr. Jeff plans each case based on your CBCT scan, bone quality, bite, medical history, and goals. We won't place fewer implants than your case needs to last decades — and we won't place more than that either.
 
-Whether your case is best treated with All-on-4, All-on-6, or a custom configuration is determined at the consultation, not by a brochure.
+Whether your case is best treated with All-on-4, All-on-X, or a custom configuration is determined at the consultation, not by a brochure.
 
 ## The Treatment Process
 
@@ -182,7 +182,7 @@ All-on-4 may not be the best protocol if:
 - Bone is severely compromised throughout the arch — alternative protocols may apply
 - The patient prefers separate, individual implant restorations for back teeth — different treatment plan
 
-## All-on-4 vs. All-on-6 vs. More
+## All-on-4 vs. All-on-X vs. More
 
 The number of implants in a full-arch case isn't a marketing decision. It's a clinical one based on bone, bite, and longevity goals. Dr. Jeff plans each case from a CBCT scan and recommends the implant count your case actually needs — sometimes that's four, sometimes six, occasionally more. We don't add implants to inflate the bill, and we don't subtract them to undercut a quote.
 
@@ -209,7 +209,7 @@ Yes, in most cases. The provisional bridge is attached the same day. You won't g
 **How long do All-on-4 implants last?**
 The implants themselves can last decades. The provisional bridge is replaced with a final at three to six months. Final bridges typically last 15-25 years.
 
-**Is All-on-4 cheaper than All-on-6?**
+**Is All-on-4 cheaper than other full-arch approaches?**
 Usually somewhat — fewer implants means lower implant material cost. But the final cost depends on the prosthesis materials and whether grafting or extractions are needed.
 
 **Can I do All-on-4 on just my upper arch?**
@@ -427,7 +427,7 @@ Snap-on dentures are an **honest middle option** for the right patient — typic
 
 ## Option 3: Full-Arch Fixed Implant Restorations
 
-Full-arch fixed implants — including All-on-4 and All-on-6 — replace an entire arch of teeth with a fixed bridge supported by 4-6 implants. The bridge is screwed onto the implants and stays in your mouth 24 hours a day. You don't take it out.
+Full-arch fixed implants — including All-on-4 and All-on-X approaches — replace an entire arch of teeth with a fixed bridge supported by implants. The bridge is screwed onto the implants and stays in your mouth 24 hours a day. You don't take it out.
 
 ### What fixed full-arch implants do well
 
@@ -447,7 +447,7 @@ Full-arch fixed implants — including All-on-4 and All-on-6 — replace an enti
 
 ### Honest framing
 
-Fixed full-arch implants are the **gold standard** for replacing a full arch of teeth. They restore function, esthetics, comfort, and bone health more completely than any other option. The cost is real, but framing them as a luxury misses the point: they restore daily function — eating, speaking, smiling — that most patients don't realize they've been compromising on.
+Fixed full-arch implants are often one of the strongest long-term options for replacing a full arch of teeth. They can restore function, esthetics, comfort, and bone health more completely than removable options. The cost is real, but framing them as a luxury misses the point: they restore daily function — eating, speaking, smiling — that most patients don't realize they've been compromising on.
 
 [Full-Arch Dental Implants detail page →](/full-arch-dental-implants-killeen-tx)
 

@@ -233,7 +233,7 @@ Healing after an extraction follows a predictable pattern. The first 24 hours ar
 
 For most teeth (other than wisdom teeth), we'll discuss replacement options at the same visit:
 
-- **Dental implants** — the gold standard, replacing the tooth root and crown
+- **Dental implants** — often one of the strongest long-term options, replacing the tooth root and crown
 - **Implant bridges** — replacing several teeth with fewer implants
 - **Traditional bridges** — using neighboring teeth as anchors
 - **Partial dentures** — removable, cost-effective option

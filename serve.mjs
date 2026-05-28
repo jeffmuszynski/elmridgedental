@@ -759,6 +759,17 @@ export const server = createServer(async (req, res) => {
   const normalizedPath = requestUrl.pathname.replace(/\/+$/, '') || '/';
   const oldDestination = oldUrlRedirects.get(normalizedPath.toLowerCase());
 
+  if (requestUrl.pathname === '/reviews/') {
+    const destination = new URL('/reviews', requestUrl.origin);
+    destination.search = requestUrl.search;
+    res.writeHead(301, {
+      Location: destination.toString(),
+      'Cache-Control': 'public, max-age=3600',
+    });
+    res.end();
+    return;
+  }
+
   if (normalizedPath === '/api/contact' || (normalizedPath === '/contact' && req.method === 'POST')) {
     await handleContactForm(req, res);
     return;

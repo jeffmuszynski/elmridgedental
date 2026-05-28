@@ -55,5 +55,11 @@
     "onlineScheduling": "appointment request only",
     "walkInsGuaranteed": false
   },
+  "inHouseScopePrecision": {
+    "boneGrafting": "socket preservation bone grafting; broader ridge augmentation, block grafting, vertical grafting, and staged complex graft reconstruction may require referral",
+    "sinusLift": "limited sinus lift/sinus bump with implant placement when appropriate; staged sinus lifts requiring separate grafting and healing are not routine in-house scope",
+    "sleepApnea": "take-home sleep studies are available, recorded data is sent to a sleep physician for official diagnosis, and physician diagnosis is required before appliance delivery",
+    "beforeAndAfter": "no standalone public before-and-after page; before-and-after imagery is kept within cosmetic dentistry and relevant sections"
+  },
   "reviewPhrase": "5.0 Google rating from 550+ reviews"
 }

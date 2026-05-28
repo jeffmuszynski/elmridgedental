@@ -1,0 +1,22 @@
+{
+  "name": "Elm Ridge Implant and Family Dentistry",
+  "short_name": "Elm Ridge",
+  "description": "Private implant and family dentistry in Killeen, TX.",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#7FBDBD",
+  "icons": [
+    {
+      "src": "/favicon-192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "/favicon-512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}
