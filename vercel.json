@@ -76,6 +76,11 @@
       "permanent": true
     },
     {
+      "source": "/implant-bridges-killeen-tx/",
+      "destination": "https://www.elmridgedental.com/implant-bridge-killeen-tx",
+      "permanent": true
+    },
+    {
       "source": "/invisalign-killeen-tx",
       "destination": "https://www.elmridgedental.com/clear-aligners-killeen-tx",
       "permanent": true

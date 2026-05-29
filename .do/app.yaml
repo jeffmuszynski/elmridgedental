@@ -56,6 +56,18 @@ ingress:
         redirect_code: 301
     - match:
         path:
+          exact: /implant-bridges-killeen-tx
+      redirect:
+        uri: /implant-bridge-killeen-tx
+        redirect_code: 301
+    - match:
+        path:
+          exact: /implant-bridges-killeen-tx/
+      redirect:
+        uri: /implant-bridge-killeen-tx
+        redirect_code: 301
+    - match:
+        path:
           exact: /patient-reviews/
       redirect:
         uri: /patient-reviews
