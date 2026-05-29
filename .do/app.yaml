@@ -32,9 +32,27 @@ ingress:
         redirect_code: 301
     - match:
         path:
+          exact: /reviews
+      redirect:
+        uri: /patient-reviews
+        redirect_code: 301
+    - match:
+        path:
           exact: /reviews/
       redirect:
         uri: /patient-reviews
+        redirect_code: 301
+    - match:
+        path:
+          exact: /before-and-after
+      redirect:
+        uri: /cosmetic-dentistry-killeen-tx
+        redirect_code: 301
+    - match:
+        path:
+          exact: /before-and-after/
+      redirect:
+        uri: /cosmetic-dentistry-killeen-tx
         redirect_code: 301
     - match:
         path:

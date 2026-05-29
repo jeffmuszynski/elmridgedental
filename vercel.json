@@ -5,15 +5,16 @@
   "cleanUrls": true,
   "rewrites": [
     {
-      "source": "/reviews",
-      "destination": "/patient-reviews"
-    },
-    {
       "source": "/patient-reviews",
       "destination": "/patient-reviews.html"
     }
   ],
   "redirects": [
+    {
+      "source": "/reviews",
+      "destination": "https://www.elmridgedental.com/patient-reviews",
+      "permanent": true
+    },
     {
       "source": "/reviews/",
       "destination": "https://www.elmridgedental.com/patient-reviews",

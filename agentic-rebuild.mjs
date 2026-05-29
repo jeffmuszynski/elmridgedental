@@ -906,7 +906,7 @@ function costRangeHtml(range, note = '') {
 }
 
 function simpleTable(headers, rows) {
-  return `<div class="not-prose overflow-x-auto my-5"><table class="w-full border-collapse text-sm"><thead><tr>${headers.map((header) => `<th class="border border-teal-light bg-stone p-3 text-left font-semibold text-charcoal">${esc(header)}</th>`).join('')}</tr></thead><tbody>${rows.map((row) => `<tr>${row.map((cell) => `<td class="border border-teal-light p-3 align-top text-charcoal/75 leading-7">${cell}</td>`).join('')}</tr>`).join('')}</tbody></table></div>`;
+  return `<div class="not-prose grid gap-4 my-5">${rows.map((row) => `<article class="border border-teal-light bg-stone p-5"><h3 class="font-display text-2xl text-charcoal mb-3">${row[0]}</h3>${row.slice(1).map((cell, index) => `<p class="text-charcoal/70 leading-7">${headers[index + 1] && !/^what to know$|^best fit$|^tradeoff$|^likely conversation$|^how elm ridge explains it$/i.test(headers[index + 1]) ? `<span class="font-semibold text-charcoal">${esc(headers[index + 1])}: </span>` : ''}${cell}</p>`).join('')}</article>`).join('')}</div>`;
 }
 
 const implantTimelineHtml = htmlList([
@@ -1105,21 +1105,24 @@ const serviceEnhancements = {
     ],
   },
   'full-arch-dental-implants-killeen-tx': {
-    title: 'Full-Arch Dental Implants in Killeen, TX | All-on-4 & All-on-X Options | Elm Ridge',
-    h1: 'Full-Arch Dental Implants in Killeen',
-    answer: 'Many patients search for All-on-4 or All-on-X when they are really looking for fixed implant teeth that replace an entire upper or lower arch. Elm Ridge uses the broader term full-arch dental implants because the best plan is not always exactly four implants.',
+    title: 'Full-Arch Dental Implants in Killeen, TX | Fixed Implant Teeth | Elm Ridge',
+    description: 'Full-arch dental implants in Killeen for replacing an entire upper or lower arch with fixed implant teeth planned for comfort, esthetics, function, and durability.',
+    h1: 'Full-Arch Dental Implants for Replacing an Entire Arch of Teeth',
+    intro: 'Full-arch dental implants are for patients who need to replace an entire upper or lower arch and want the strongest, most natural, comfortable, esthetic, functional, and durable option they can choose. Often searched as All-on-4, All-on-X, or fixed implant teeth, this treatment is planned around your bone, bite, face, smile, speech, and long-term function.',
+    answer: 'If you are tired of failing teeth, loose dentures, or patchwork dentistry that keeps breaking down, full-arch dental implants are the fixed option designed to rebuild a whole upper or lower arch. The goal is teeth that look natural, feel secure, let you chew with confidence, and are built for long-term durability.',
     glance: [
       ['Typical range', `${costRanges.fullArch}; ${costRanges.fullArchBoth}`],
       ['Final material', 'Zirconia is the go-to; acrylic is rare/selective'],
       ['Timeline', 'Final teeth commonly around 5-7 months after healing and records'],
       ['Provider focus', 'Jeff Muszynski, DDS'],
     ],
-    who: 'Full-arch implants may help patients with failing teeth, severe denture frustration, or a goal of fixed teeth that do not come out at night.',
-    approach: 'Elm Ridge discusses goals, smile, bite, bone, health history, finances, and final tooth design before treatment. The number and position of implants depends on the case; not every full-arch case uses exactly four implants.',
+    who: 'Full-arch implants may help patients who need to replace most or all teeth in one arch, have teeth that are no longer predictable to save, are tired of loose dentures, or want fixed implant teeth instead of a removable appliance.',
+    approach: 'Elm Ridge plans full-arch treatment backward from the final teeth: the smile, bite, chewing function, speech, cleaning access, facial support, and final material. The number and position of implants depends on the case; not every full-arch case uses exactly four implants.',
     detailSections: [
-      { title: 'All-on-4, All-on-X, and fixed implant teeth', html: '<p>Many patients search for All-on-4 or All-on-X when they are really looking for the same broad solution: fixed implant teeth that replace an entire upper or lower arch. At Elm Ridge, the plan is based on bone, bite, anatomy, restorative space, hygiene access, and final tooth design instead of forcing every patient into one implant count.</p>' },
+      { title: 'What full-arch treatment is really for', html: '<p>Full-arch dental implants are not just a denture upgrade. They are a premium fixed-tooth replacement option for patients who need to replace an entire upper or lower arch and want the closest practical alternative to strong natural teeth. The goal is a result that is stable, esthetic, comfortable, functional, and durable.</p>' },
+      { title: 'All-on-4, All-on-X, and fixed implant teeth', html: '<p>Many patients search for All-on-4 or All-on-X when they are really looking for fixed implant teeth that replace an entire arch. At Elm Ridge, the plan is based on bone, bite, anatomy, restorative space, hygiene access, facial support, and final tooth design instead of forcing every patient into one implant count.</p>' },
       { title: 'Workflow and timeline', html: htmlList(['Consultation and imaging.', 'Discussion of goals, smile, bite, bone, health history, finances, and final tooth design.', 'Extractions and implant placement when appropriate.', 'Immediate temporary fixed teeth the same day or next day when possible.', 'Healing phase.', 'Final zirconia teeth after healing, commonly around 5-7 months. Timelines vary.']) },
-      { title: 'Full-arch fixed implants vs snap-on dentures', html: simpleTable(['Option', 'What to know'], [['Full-arch fixed implants', 'Teeth do not come out at night, usually feel stronger for chewing, and are often best when the patient wants maximum stability. They are more expensive and involve more planning.'], ['Snap-on dentures', 'Removable and usually less expensive than fixed full-arch treatment. Lower snap-ons can be a strong middle-ground option; upper snap-ons are more case-dependent.']]) },
+      { title: 'Full-arch fixed implants vs snap-on dentures', html: simpleTable(['Option', 'What to know'], [['Full-arch fixed implants', 'Teeth do not come out at night, usually feel stronger for chewing, and are often the best fit when the patient wants maximum stability, comfort, esthetics, and function. They are more expensive and involve more planning.'], ['Snap-on dentures', 'Removable and usually less expensive than fixed full-arch treatment. Lower snap-ons can be a strong middle-ground option; upper snap-ons are more case-dependent.']]) },
       { title: 'Upper arch planning', html: '<p>For the upper arch, fixed full-arch dental implants may be a better fit than an upper snap-on denture when the patient wants the palate uncovered, stronger stability, and a result that does not depend on removable denture suction. Upper snap-on dentures can work in selected cases, but softer upper-jaw bone, sinus anatomy, implant angulation, and attachment design can make them less forgiving than lower snap-on dentures.</p>' },
       { title: 'Complex surgical cases', html: '<p>Some complex full-arch surgical cases may require oral surgeon involvement. Elm Ridge can still manage restorative planning and restore the case when appropriate.</p>' },
       { title: 'Typical cost range', html: costRangeHtml(`${costRanges.fullArch}, or ${costRanges.fullArchBoth}`, 'Costs vary with extractions, implant number and position, temporary teeth, final zirconia design, bone needs, and financing choices.') },
@@ -2159,8 +2162,6 @@ function buildReviewsBeforeAfterAiPages() {
   const reviewsPageBody = `${hero('Patient Reviews', 'Real reviews from real patients', reviewPhrase)}<section class="py-16 bg-white"><div class="max-w-7xl mx-auto px-6 space-y-12"><div><p class="text-charcoal/65 leading-7 max-w-3xl">These reviews reflect real patient experiences with Elm Ridge Implant and Family Dentistry.</p></div><div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-5">${reviewCards(reviews)}</div><div class="bg-stone border border-teal-light p-8">${pillLinks([{ label: 'New patients', href: '/new-patients' }, { label: 'Services', href: '/services' }, { label: 'Request appointment', href: '/request-appointment' }, { label: 'Call ' + phoneDisplay, href: phoneHref }])}</div></div></section>`;
   writeCustomPage('patient-reviews', '/patient-reviews', 'Patient Reviews | Elm Ridge Implant and Family Dentistry', 'Read patient reviews for Elm Ridge Implant and Family Dentistry in Killeen. 5.0 Google rating from 550+ reviews.', 'Reviews', reviewsPageBody);
   fs.copyFileSync('patient-reviews', 'patient-reviews.html');
-  fs.copyFileSync('patient-reviews', 'reviews');
-  fs.copyFileSync('patient-reviews', 'reviews.html');
 
   writePage('cosmetic-smile-simulator-killeen-tx', {
     path: '/cosmetic-smile-simulator-killeen-tx',
@@ -2869,16 +2870,21 @@ function patchHomepage() {
   html = html.replaceAll('href="#reviews"', 'href="/patient-reviews"');
   html = html.replaceAll('href="#services"', 'href="/services"');
   html = html.replaceAll('href="/request-appointment"', 'href="/request-appointment"');
+  html = html.replace("From your child's first checkup to a complete smile transformation - Elm Ridge delivers expert, precision dentistry with the personal attention only a family-owned practice can offer. Privately led by Drs. Jeff &amp; Kayla Muszynski.", "From your child's first checkup to a complete smile transformation, Elm Ridge delivers thoughtful, precise dental care with the personal attention of a doctor-owned private practice. Privately led by Drs. Jeff and Kayla Muszynski.");
+  html = html.replaceAll('Drs. Jeff &amp; Kayla Muszynski', 'Drs. Jeff and Kayla Muszynski');
+  html = html.replaceAll('Privately Owned &amp; Operated', 'Privately Owned and Operated');
+  html = html.replaceAll('Insurance &amp; Financing', 'Insurance and Financing');
   html = html.replace(/<label for="appointment-website">Website<\/label>\s*/g, '');
   html = html.replace(
     /<input id="appointment-website" type="text" name="website" tabindex="-1" autocomplete="off"(?![^>]*aria-hidden="true")\s*\/>/g,
     '<input id="appointment-website" type="text" name="website" tabindex="-1" autocomplete="off" aria-hidden="true" />',
   );
   html = html.replace('Upload a clear smile photo to create an AI-assisted cosmetic smile preview.', 'Upload a clear smile photo to create an educational preview using a third-party AI-assisted tool.');
-  if (!html.includes('This is not a secure patient portal. Do not submit sensitive medical information or emergency concerns.')) {
+  html = html.replace(/<div style="margin: 16px 0; padding: 14px; background: #fff7ed; border: 1px solid #fed7aa; border-radius: 12px; color: #7c2d12; font-size: 14px; line-height: 1\.5;"><strong>This is not a secure patient portal\. Do not submit sensitive medical information or emergency concerns\.<\/strong><br \/>For urgent dental problems, call 254-699-4127 instead of using this tool\. Every submission is emailed to the practice and reviewed by Elm Ridge\. Uploaded images are stored in email\. There is no fixed deletion timeline\. The preview is not a diagnosis, not a treatment plan, not a dental record, not a doctor-patient relationship, and not a guarantee of results\. It does not replace an exam\.<\/div>\s*/g, '');
+  if (!html.includes('Important Privacy Note')) {
     html = html.replace(
       /(\s*)<input\s+id="smilePhoto"/,
-      `$1<div style="margin: 16px 0; padding: 14px; background: #fff7ed; border: 1px solid #fed7aa; border-radius: 12px; color: #7c2d12; font-size: 14px; line-height: 1.5;"><strong>This is not a secure patient portal. Do not submit sensitive medical information or emergency concerns.</strong><br />For urgent dental problems, call 254-699-4127 instead of using this tool. Every submission is emailed to the practice and reviewed by Elm Ridge. Uploaded images are stored in email. There is no fixed deletion timeline. The preview is not a diagnosis, not a treatment plan, not a dental record, not a doctor-patient relationship, and not a guarantee of results. It does not replace an exam.</div>$1<input id="smilePhoto"`,
+      `$1<details style="margin: 16px 0; padding: 14px; background: #fff7ed; border: 1px solid #fed7aa; border-radius: 12px; color: #7c2d12; font-size: 14px; line-height: 1.5;"><summary style="cursor: pointer; font-weight: 700;">Important Privacy Note</summary><div style="margin-top: 10px;">This is not a secure patient portal. Do not submit sensitive medical information or emergency concerns. For urgent dental problems, call 254-699-4127 instead of using this tool. Every submission is emailed to the practice and reviewed by Elm Ridge. Uploaded images are stored in email. There is no fixed deletion timeline. The preview is not a diagnosis, not a treatment plan, not a dental record, not a doctor-patient relationship, and not a guarantee of results. It does not replace an exam.</div></details>$1<input id="smilePhoto"`,
     );
   }
   html = html.replace('I understand this creates a simulated cosmetic preview for educational\n        purposes only. It is not a diagnosis, treatment plan, or guarantee of outcome.', 'I understand this third-party AI-assisted preview is for education and consultation planning only. It is not a diagnosis, not a treatment plan, not a dental record, not a doctor-patient relationship, and not a guarantee of results.');
