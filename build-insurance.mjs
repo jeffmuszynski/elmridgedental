@@ -53,7 +53,7 @@ ${header()}
   <section class="bg-charcoal text-white py-20">
     <div class="max-w-5xl mx-auto px-6">
       <nav class="text-xs uppercase tracking-widest text-teal mb-6"><a href="/">Home</a> / ${crumb}</nav>
-      <p class="font-body text-xs uppercase tracking-widest text-teal mb-4">Insurance &amp; Financing</p>
+      <p class="font-body text-xs uppercase tracking-widest text-teal mb-4">Insurance and Financing</p>
       <h1 class="font-display text-5xl md:text-6xl font-light leading-tight mb-6">${title}</h1>
       <p class="text-white/70 leading-8 text-lg max-w-3xl">${intro}</p>
     </div>
@@ -164,7 +164,7 @@ const supportPages = [
     <h2>Estimates Are Not Guarantees</h2><p>We provide our best estimate based on available information, but insurance companies do not guarantee final payment in advance. Final payment is determined after claim processing. Patients are responsible for any amount not paid by insurance.</p>
     <p>If a pre-treatment estimate is submitted, it can be useful for planning, but it is still not a promise that the claim will pay exactly as expected. Eligibility can change, benefits can be used by another claim, and plan rules may be applied differently when the final claim is processed.</p>
     <h2>How Elm Ridge Helps</h2><p>Our team helps estimate benefits, submit claims when possible, and explain expected patient portions before treatment. We also help patients understand why a crown is recommended clinically, so the decision is not based only on what insurance may or may not pay.</p>
-    <p>Learn more about <a href="/dental-crowns-killeen-tx">dental crowns in Killeen</a> or return to <a href="/insurance-and-financing">Insurance &amp; Financing</a>.</p>`,
+    <p>Learn more about <a href="/dental-crowns-killeen-tx">dental crowns in Killeen</a> or return to <a href="/insurance-and-financing">Insurance and Financing</a>.</p>`,
     faq: [
       ['Are dental crowns covered by insurance?', 'Crowns are often partially covered when plan requirements are met, but coverage depends on your specific benefits, deductible, and limitations.'],
       ['Can insurance deny a crown?', 'Yes. A plan may deny a crown because of frequency limits, replacement rules, missing information, or plan exclusions.'],
@@ -196,7 +196,7 @@ const supportPages = [
     <p>Elm Ridge focuses on providing the best care—not limiting treatment based on insurance restrictions. Dr. Jeff uses CBCT imaging for implant planning and discusses realistic options based on your bone, bite, missing teeth, medical history, and long-term goals.</p>
     <h2>Financing and Implant Treatment</h2><p>Financing is commonly used for implant treatment because dental insurance may only offset part of the cost. Elm Ridge works with CareCredit and Cherry to help eligible patients spread treatment costs over time, subject to approval and plan terms.</p>
     <p>At the consultation, the goal is to understand what kind of implant solution fits the patient first: one missing tooth, several missing teeth, a loose denture, or a full-arch replacement. After the clinical plan is clear, insurance and financing can be discussed with better context.</p>
-    <p>Learn more about <a href="/dental-implants-killeen-tx">dental implants in Killeen</a> or return to <a href="/insurance-and-financing">Insurance &amp; Financing</a>.</p>`,
+    <p>Learn more about <a href="/dental-implants-killeen-tx">dental implants in Killeen</a> or return to <a href="/insurance-and-financing">Insurance and Financing</a>.</p>`,
     faq: [
       ['Does insurance cover dental implants?', 'Coverage varies widely. Some plans include implant benefits, some exclude implants, and some only contribute toward related parts of treatment.'],
       ['Can I use out-of-network benefits for implants?', 'Often, yes. Being out-of-network does not prevent treatment, and many patients use out-of-network benefits successfully.'],
@@ -233,7 +233,7 @@ const supportPages = [
     <p>For many adults, the decision comes down to timing, comfort, and value. A limited insurance benefit can help, but it may not cover the full fee. Patients should also consider the convenience of removable aligners, the esthetic advantage of clear trays, and the benefit of improving tooth position before future dental work is needed.</p>
     <p>Patients from Killeen and nearby communities often ask whether Invisalign is "worth it" if insurance only pays a small amount. The answer depends on the diagnosis and goals. If alignment can improve smile balance, make hygiene easier, reduce crowding, or support restorative care, it may still be a good investment even when insurance only offsets part of the cost.</p>
     <p>We keep the insurance conversation straightforward: we estimate what we can, explain what is uncertain, and avoid promising payment that the insurance company has not guaranteed.</p>
-    <p>Learn more about <a href="/invisalign-killeen-tx">Invisalign in Killeen</a> or return to <a href="/insurance-and-financing">Insurance &amp; Financing</a>.</p>`,
+    <p>Learn more about <a href="/invisalign-killeen-tx">Invisalign in Killeen</a> or return to <a href="/insurance-and-financing">Insurance and Financing</a>.</p>`,
     faq: [
       ['Does insurance cover Invisalign?', 'Some plans cover Invisalign under orthodontic benefits, but adult coverage and clear aligner coverage vary by plan.'],
       ['What is an orthodontic lifetime maximum?', 'It is the total amount a plan may pay toward orthodontic care over a person’s lifetime, and it usually does not reset each year.'],
@@ -268,7 +268,7 @@ const supportPages = [
     <h2>How to Avoid Surprises</h2><p>The best way to reduce surprises is to provide accurate insurance information early, let the team know about any plan changes, and understand that estimates are not guarantees. We can help estimate benefits, but patients are responsible for any amount not paid by insurance.</p>
     <p>If something looks wrong on an explanation of benefits, our team can help you understand what the insurance company sent back. Sometimes the issue is missing information. Other times it is a plan limitation. Either way, clear communication helps patients know what happened and what the next reasonable step should be.</p>
     <h2>What Elm Ridge Can Do</h2><p>We can help submit claims, provide supporting documentation when appropriate, and explain the information we receive from the insurance company. We cannot force an insurance company to pay, and estimates are not guarantees.</p>
-    <p>Return to <a href="/insurance-and-financing">Insurance &amp; Financing</a> or explore our <a href="/#services">dental services</a>.</p>`,
+    <p>Return to <a href="/insurance-and-financing">Insurance and Financing</a> or explore our <a href="/#services">dental services</a>.</p>`,
     faq: [
       ['Why did insurance pay less than expected?', 'Common reasons include deductibles, annual maximums, waiting periods, frequency limits, downgrade clauses, alternate benefits, or missing tooth clauses.'],
       ['Does a denial mean treatment was unnecessary?', 'No. Insurance denials often reflect plan rules, not whether treatment was clinically needed.'],
@@ -301,7 +301,7 @@ const supportPages = [
     <h2>Questions Worth Asking</h2><p>Helpful questions include how much of your annual maximum remains, when the benefit year renews, whether a deductible still applies, and whether any planned treatment has frequency limits or waiting periods. Our team can help gather available information, but the insurance company controls final claim processing.</p>
     <h2>Planning Around Benefits</h2><p>Our team can help estimate how much of the annual maximum remains and how that may affect the treatment plan. Estimates are not guarantees, because the insurance company determines final payment after processing claims.</p>
     <p>Financing may also help eligible patients move forward when annual maximums are not enough for needed care. Elm Ridge offers CareCredit and Cherry financing options, subject to approval and plan terms.</p>
-    <p>Return to <a href="/insurance-and-financing">Insurance &amp; Financing</a> or explore our <a href="/#services">dental services</a>.</p>`,
+    <p>Return to <a href="/insurance-and-financing">Insurance and Financing</a> or explore our <a href="/#services">dental services</a>.</p>`,
     faq: [
       ['What is a dental insurance annual maximum?', 'It is the total amount the insurance company will pay toward covered dental care during a benefit year.'],
       ['Does unused dental insurance roll over?', 'Usually no. Most unused benefits do not roll over when the benefit year ends.'],
@@ -322,7 +322,7 @@ for (const page of supportPages) {
     faq: page.faq,
     body: `<section class="py-16 bg-white"><div class="max-w-4xl mx-auto px-6 prose-page space-y-7">
       <div class="not-prose mb-8 flex flex-col sm:flex-row gap-3">
-        <a href="/insurance-and-financing" class="inline-block border border-teal px-6 py-3 text-center font-body text-xs font-semibold uppercase tracking-widest text-teal-dark hover:bg-teal-pale">Insurance &amp; Financing</a>
+        <a href="/insurance-and-financing" class="inline-block border border-teal px-6 py-3 text-center font-body text-xs font-semibold uppercase tracking-widest text-teal-dark hover:bg-teal-pale">Insurance and Financing</a>
         <a href="${page.servicePath}" class="inline-block bg-teal px-6 py-3 text-center font-body text-xs font-semibold uppercase tracking-widest text-white hover:bg-teal-dark">${page.serviceLabel}</a>
       </div>
       <h2>${page.h2}</h2>
@@ -338,7 +338,7 @@ function insertFooterLink(html) {
   if (html.includes('/insurance-and-financing')) return html;
   return html.replace(
     '<li><a href="/post-operative-instructions" class="font-body text-sm text-white/55 hover:text-white">Post-Op Instructions</a></li>',
-    '<li><a href="/insurance-and-financing" class="font-body text-sm text-white/55 hover:text-white">Insurance &amp; Financing</a></li><li><a href="/post-operative-instructions" class="font-body text-sm text-white/55 hover:text-white">Post-Op Instructions</a></li>'
+    '<li><a href="/insurance-and-financing" class="font-body text-sm text-white/55 hover:text-white">Insurance and Financing</a></li><li><a href="/post-operative-instructions" class="font-body text-sm text-white/55 hover:text-white">Post-Op Instructions</a></li>'
   );
 }
 

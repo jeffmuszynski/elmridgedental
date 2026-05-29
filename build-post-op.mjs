@@ -455,7 +455,7 @@ function insertFooterLink(html) {
   if (html.includes('/post-operative-instructions')) return html;
   return html.replace(
     '<li><a href="/blog" class="font-body text-sm text-white/55 hover:text-white">Blog</a></li>',
-    '<li><a href="/insurance-and-financing" class="font-body text-sm text-white/55 hover:text-white">Insurance &amp; Financing</a></li><li><a href="/post-operative-instructions" class="font-body text-sm text-white/55 hover:text-white">Post-Op Instructions</a></li><li><a href="/blog" class="font-body text-sm text-white/55 hover:text-white">Blog</a></li>'
+    '<li><a href="/insurance-and-financing" class="font-body text-sm text-white/55 hover:text-white">Insurance and Financing</a></li><li><a href="/post-operative-instructions" class="font-body text-sm text-white/55 hover:text-white">Post-Op Instructions</a></li><li><a href="/blog" class="font-body text-sm text-white/55 hover:text-white">Blog</a></li>'
   );
 }
 
