@@ -1213,7 +1213,7 @@ const serviceEnhancements = {
       ['How long does a crown take?', 'A typical crown is prepared first, then the final crown is cemented about 2 weeks later.'],
       ['Will I have a temporary crown?', 'Yes, in most crown workflows. The temporary protects the tooth while the lab-made crown is being made.'],
       ['Which crown material is best?', 'It depends on tooth location, bite, strength needs, esthetics, and clinical situation.'],
-      ['Do back teeth need crowns after root canals?', 'Crowns are strongly recommended for molars and really all posterior teeth after root canal treatment.'],
+      ['Do back teeth need crowns after root canals?', 'Crowns are strongly recommended for posterior teeth after root canal treatment because back teeth absorb heavier chewing forces and are at higher risk of fracture.'],
     ],
   },
   'root-canal-killeen-tx': {
@@ -1228,7 +1228,7 @@ const serviceEnhancements = {
     approach: 'Elm Ridge uses CBCT for nearly every root canal case, especially posterior teeth, because missed canals can contribute to failed treatment. Rotary endodontics is used, and same-day start is offered when possible.',
     detailSections: [
       { title: 'Root canal vs extraction', html: '<p>A root canal is meant to save a tooth by cleaning the infected or inflamed nerve space and sealing it. Extraction may be better when the tooth is cracked beyond repair, lacks enough structure for a crown, has severe bone loss, or has a poor long-term outlook.</p>' },
-      { title: 'Why posterior teeth often need crowns', html: '<p>Molars and premolars take heavy chewing forces. Crowns are strongly recommended for molars and really all posterior teeth after root canal treatment to reduce fracture risk.</p>' },
+      { title: 'Why posterior teeth often need crowns', html: '<p>Crowns are strongly recommended for posterior teeth after root canal treatment because back teeth absorb heavier chewing forces and are at higher risk of fracture.</p>' },
       { title: 'Boundary: retreatments', html: '<p>Elm Ridge performs many root canals, including molars, but does not perform root canal retreatments. If retreatment is needed, the team will explain referral options.</p>' },
       { title: 'Typical cost range', html: costRangeHtml(costRanges.rootCanal, 'A crown after root canal treatment is a separate restoration and may be recommended for long-term strength.') },
     ],
@@ -2144,7 +2144,8 @@ function reviewCards(items, compact = false) {
 
 function buildReviewsBeforeAfterAiPages() {
   if (fs.existsSync('reviews')) fs.rmSync('reviews', { recursive: true, force: true });
-  writeCustomPage('reviews', '/reviews', 'Patient Reviews | Elm Ridge Implant and Family Dentistry', 'Read patient reviews for Elm Ridge Implant and Family Dentistry in Killeen. 5.0 Google rating from 550+ reviews.', 'Reviews', `${hero('Patient Reviews', 'Real reviews from real patients', reviewPhrase)}<section class="py-16 bg-white"><div class="max-w-7xl mx-auto px-6 space-y-12"><div><p class="text-charcoal/65 leading-7 max-w-3xl">These comments come from public patient reviews and testimonials. They are shared as patient feedback, not as review schema.</p></div><div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-5">${reviewCards(reviews)}</div><div class="bg-stone border border-teal-light p-8">${pillLinks([{ label: 'New patients', href: '/new-patients' }, { label: 'Services', href: '/services' }, { label: 'Request appointment', href: '/request-appointment' }, { label: 'Call ' + phoneDisplay, href: phoneHref }])}</div></div></section>`);
+  if (fs.existsSync('reviews.html')) fs.rmSync('reviews.html', { force: true });
+  writeCustomPage('reviews.html', '/reviews', 'Patient Reviews | Elm Ridge Implant and Family Dentistry', 'Read patient reviews for Elm Ridge Implant and Family Dentistry in Killeen. 5.0 Google rating from 550+ reviews.', 'Reviews', `${hero('Patient Reviews', 'Real reviews from real patients', reviewPhrase)}<section class="py-16 bg-white"><div class="max-w-7xl mx-auto px-6 space-y-12"><div><p class="text-charcoal/65 leading-7 max-w-3xl">These comments come from public patient reviews and testimonials. They are shared as patient feedback, not as review schema.</p></div><div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-5">${reviewCards(reviews)}</div><div class="bg-stone border border-teal-light p-8">${pillLinks([{ label: 'New patients', href: '/new-patients' }, { label: 'Services', href: '/services' }, { label: 'Request appointment', href: '/request-appointment' }, { label: 'Call ' + phoneDisplay, href: phoneHref }])}</div></div></section>`);
 
   writePage('cosmetic-smile-simulator-killeen-tx', {
     path: '/cosmetic-smile-simulator-killeen-tx',
@@ -2657,6 +2658,10 @@ function buildSitemap() {
   for (const entry of fs.readdirSync('.', { withFileTypes: true })) {
     if (entry.name.startsWith('.') || ['node_modules', 'temporary screenshots'].includes(entry.name)) continue;
     if (entry.isFile()) {
+      if (entry.name !== 'index.html' && entry.name.endsWith('.html')) {
+        add(entry.name.replace(/\.html$/, ''));
+        continue;
+      }
       if (entry.name !== 'index.html' && path.extname(entry.name)) continue;
       const text = fs.readFileSync(entry.name, 'utf8');
       if (text.includes('<html') && entry.name !== 'index.html') add(entry.name);

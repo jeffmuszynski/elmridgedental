@@ -826,8 +826,13 @@ export const server = createServer(async (req, res) => {
     try {
       data = await readFile(servedPath);
     } catch {
-      servedPath = join(filePath, 'index.html');
-      data = await readFile(servedPath);
+      try {
+        servedPath = join(filePath, 'index.html');
+        data = await readFile(servedPath);
+      } catch {
+        servedPath = `${filePath}.html`;
+        data = await readFile(servedPath);
+      }
     }
     const ext = extname(servedPath).toLowerCase();
     const contentType = ext ? (mime[ext] || 'application/octet-stream') : 'text/html; charset=utf-8';
