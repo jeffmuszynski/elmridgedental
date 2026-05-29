@@ -32,6 +32,12 @@ ingress:
         redirect_code: 301
     - match:
         path:
+          exact: /reviews/
+      redirect:
+        uri: /reviews
+        redirect_code: 301
+    - match:
+        path:
           prefix: /reviews
       component:
         name: web
