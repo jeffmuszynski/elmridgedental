@@ -1933,7 +1933,9 @@ function buildCostPages() {
     ownerApprovedRange: ownerCostRangeData[slug]?.ownerApprovedRange || '',
     description: `${h1} explained clearly. Learn what affects estimates, insurance, financing, and why Elm Ridge verifies benefits before treatment.`,
     crumb: h1,
-    intro: 'Cost should be estimated honestly after diagnosis, not invented for a web page.',
+    intro: slug === 'emergency-dentist-cost-killeen-tx'
+      ? 'Emergency visits start with diagnosis, then treatment options and costs are explained clearly before care whenever possible.'
+      : 'Cost should be estimated honestly after diagnosis, not invented for a web page.',
   }));
 }
 
