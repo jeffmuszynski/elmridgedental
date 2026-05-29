@@ -770,6 +770,23 @@ export const server = createServer(async (req, res) => {
     return;
   }
 
+  if (requestUrl.pathname === '/reviews') {
+    try {
+      const data = await readFile(join(__dirname, 'reviews.html'));
+      const body = data.toString('utf8').replaceAll('__RECAPTCHA_SITE_KEY__', process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY || '');
+      res.writeHead(200, {
+        'Content-Type': 'text/html; charset=utf-8',
+        'Cache-Control': 'no-cache',
+        'X-Content-Type-Options': 'nosniff'
+      });
+      res.end(body);
+    } catch {
+      res.writeHead(404, { 'Content-Type': 'text/plain; charset=utf-8' });
+      res.end('404 Not Found');
+    }
+    return;
+  }
+
   if (normalizedPath === '/api/contact' || (normalizedPath === '/contact' && req.method === 'POST')) {
     await handleContactForm(req, res);
     return;

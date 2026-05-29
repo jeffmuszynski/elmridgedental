@@ -3,6 +3,12 @@
   "buildCommand": null,
   "outputDirectory": ".",
   "cleanUrls": true,
+  "rewrites": [
+    {
+      "source": "/reviews",
+      "destination": "/reviews.html"
+    }
+  ],
   "redirects": [
     {
       "source": "/reviews/",
