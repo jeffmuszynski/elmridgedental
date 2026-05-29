@@ -20,7 +20,7 @@ Key pages:
 - /new-patients
 - /insurance-and-financing
 - /request-appointment
-- /reviews
+- /patient-reviews
 - /ai-summary
 
 Services:

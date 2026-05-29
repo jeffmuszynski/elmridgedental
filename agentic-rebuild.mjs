@@ -139,7 +139,7 @@ function simpleSchema(type, name, pagePath, description, extra = {}) {
 }
 
 function pageIntroBlock(answer) {
-  return `<section class="py-10 bg-white"><div class="max-w-4xl mx-auto px-6"><div class="border border-teal-light bg-teal-pale/50 p-6"><p class="font-body text-xs tracking-[0.28em] uppercase text-teal-dark mb-3">Short Answer</p><p class="text-charcoal/75 leading-8 text-lg">${answer}</p></div></div></section>`;
+  return `<section class="py-10 bg-white"><div class="max-w-4xl mx-auto px-6"><div class="border border-teal-light bg-teal-pale/50 p-6"><p class="font-body text-xs tracking-[0.28em] uppercase text-teal-dark mb-3">Quick Take</p><p class="text-charcoal/75 leading-8 text-lg">${answer}</p></div></div></section>`;
 }
 
 function atAGlance(items) {
@@ -412,7 +412,7 @@ function defaultNextQuestions(page, related) {
 
 function nextQuestionsSection(items = []) {
   if (!items.length) return '';
-  return `<h2>Common Next Questions</h2><div class="not-prose grid sm:grid-cols-2 gap-4">${items.map((item) => `<a href="${item.href}" class="block border border-teal-light bg-stone p-5 hover:border-teal transition-colors"><p class="font-semibold text-charcoal mb-2">${esc(item.label)}</p><p class="text-sm leading-7 text-charcoal/65">${esc(item.text).replaceAll('\u2014', '&mdash;')}</p></a>`).join('')}</div>`;
+  return `<h2>Helpful Next Reads</h2><div class="not-prose grid sm:grid-cols-2 gap-4">${items.map((item) => `<a href="${item.href}" class="block border border-teal-light bg-stone p-5 hover:border-teal transition-colors"><p class="font-semibold text-charcoal mb-2">${esc(item.label)}</p><p class="text-sm leading-7 text-charcoal/65">${esc(item.text).replaceAll('\u2014', '&mdash;')}</p></a>`).join('')}</div>`;
 }
 
 function serviceBody(page) {
@@ -2139,7 +2139,16 @@ function buildNewPatientInsuranceAppointmentPages() {
 }
 
 function reviewCards(items, compact = false) {
-  return items.map(([name, quote]) => `<article class="bg-white border border-teal-light p-6 ${compact ? 'min-w-[300px] max-w-[300px]' : ''}"><p class="text-teal text-sm tracking-[0.28em] mb-5">&#9733;&#9733;&#9733;&#9733;&#9733;</p><p class="font-display text-xl leading-8 italic text-charcoal/80">"${esc(quote)}"</p><p class="font-body text-sm font-semibold text-charcoal mt-6">${esc(name)}</p></article>`).join('');
+  const seen = new Set();
+  return items
+    .filter(([name, quote]) => {
+      const key = `${name}|${quote}`;
+      if (seen.has(key)) return false;
+      seen.add(key);
+      return true;
+    })
+    .map(([name, quote]) => `<article class="bg-white border border-teal-light p-6 ${compact ? 'min-w-[300px] max-w-[300px]' : ''}"><p class="text-teal text-sm tracking-[0.28em] mb-5">&#9733;&#9733;&#9733;&#9733;&#9733;</p><p class="font-display text-xl leading-8 italic text-charcoal/80">"${esc(quote)}"</p><p class="font-body text-sm font-semibold text-charcoal mt-6">${esc(name)}</p></article>`)
+    .join('');
 }
 
 function buildReviewsBeforeAfterAiPages() {
@@ -2147,7 +2156,7 @@ function buildReviewsBeforeAfterAiPages() {
   if (fs.existsSync('reviews.html')) fs.rmSync('reviews.html', { force: true });
   if (fs.existsSync('patient-reviews')) fs.rmSync('patient-reviews', { recursive: true, force: true });
   if (fs.existsSync('patient-reviews.html')) fs.rmSync('patient-reviews.html', { force: true });
-  const reviewsPageBody = `${hero('Patient Reviews', 'Real reviews from real patients', reviewPhrase)}<section class="py-16 bg-white"><div class="max-w-7xl mx-auto px-6 space-y-12"><div><p class="text-charcoal/65 leading-7 max-w-3xl">These comments come from public patient reviews and testimonials. They are shared as patient feedback, not as review schema.</p></div><div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-5">${reviewCards(reviews)}</div><div class="bg-stone border border-teal-light p-8">${pillLinks([{ label: 'New patients', href: '/new-patients' }, { label: 'Services', href: '/services' }, { label: 'Request appointment', href: '/request-appointment' }, { label: 'Call ' + phoneDisplay, href: phoneHref }])}</div></div></section>`;
+  const reviewsPageBody = `${hero('Patient Reviews', 'Real reviews from real patients', reviewPhrase)}<section class="py-16 bg-white"><div class="max-w-7xl mx-auto px-6 space-y-12"><div><p class="text-charcoal/65 leading-7 max-w-3xl">These reviews reflect real patient experiences with Elm Ridge Implant and Family Dentistry.</p></div><div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-5">${reviewCards(reviews)}</div><div class="bg-stone border border-teal-light p-8">${pillLinks([{ label: 'New patients', href: '/new-patients' }, { label: 'Services', href: '/services' }, { label: 'Request appointment', href: '/request-appointment' }, { label: 'Call ' + phoneDisplay, href: phoneHref }])}</div></div></section>`;
   writeCustomPage('patient-reviews', '/patient-reviews', 'Patient Reviews | Elm Ridge Implant and Family Dentistry', 'Read patient reviews for Elm Ridge Implant and Family Dentistry in Killeen. 5.0 Google rating from 550+ reviews.', 'Reviews', reviewsPageBody);
   fs.copyFileSync('patient-reviews', 'patient-reviews.html');
   fs.copyFileSync('patient-reviews', 'reviews');
@@ -2172,12 +2181,12 @@ function buildReviewsBeforeAfterAiPages() {
 
   writePage('ai-summary', {
     path: '/ai-summary',
-    title: 'Elm Ridge Practice Facts for AI Agents',
-    description: 'Plain-English facts about Elm Ridge Implant and Family Dentistry for patients, search systems, and AI agents.',
+    title: 'Elm Ridge Practice Facts',
+    description: 'Plain-English facts about Elm Ridge Implant and Family Dentistry for patients and search systems.',
     crumb: 'AI Summary',
     kicker: 'Practice Facts',
     h1: 'Elm Ridge Practice Facts',
-    intro: 'A plain-English facts page for patients, search systems, and AI agents.',
+    intro: 'A plain-English facts page about Elm Ridge Implant and Family Dentistry.',
     body: `<section class="py-16 bg-white"><div class="max-w-4xl mx-auto px-6 prose-page space-y-7">
       <h2>Identity</h2><p>${practiceName}. Address: ${addressLine}. Phone: ${phoneDisplay}. Hours: Monday-Thursday 8 AM-5 PM; Friday-Sunday closed.</p>
       <h2>Doctors</h2><p>Jeff Muszynski, DDS and Kayla Muszynski, DDS. Both attended Abilene Christian University and the University of Oklahoma College of Dentistry.</p>
@@ -2191,7 +2200,7 @@ function buildReviewsBeforeAfterAiPages() {
       <h2>Review Phrase</h2><p>${reviewPhrase}.</p>
     </div></section>`,
     faq: [],
-    headSchemas: [simpleSchema('WebPage', 'Elm Ridge Practice Facts', '/ai-summary', 'Practice facts for AI agents and humans.', { about: organizationEntityRef })],
+    headSchemas: [simpleSchema('WebPage', 'Elm Ridge Practice Facts', '/ai-summary', 'Plain-English practice facts about Elm Ridge Implant and Family Dentistry.', { about: organizationEntityRef })],
   });
 }
 
@@ -2657,6 +2666,7 @@ function buildSitemap() {
   const urls = [''];
   function add(route) {
     const normalized = route.replaceAll('\\', '/').replace(/\/index\.html$/, '').replace(/^\.?\//, '');
+    if (normalized === 'reviews') return;
     if (!normalized || excluded.has(normalized)) return;
     if (normalized.includes('node_modules') || normalized.includes('temporary screenshots')) return;
     if (!urls.includes(normalized)) urls.push(normalized);
