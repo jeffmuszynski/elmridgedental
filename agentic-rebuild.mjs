@@ -123,7 +123,7 @@ function uniqueLinks(items) {
 }
 
 function cardGrid(items) {
-  return `<div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-5 not-prose">${items.map((item) => `<a href="${item.href}" class="block bg-white border border-teal-light p-6 hover:border-teal transition-colors"><p class="text-xs uppercase tracking-[0.26em] text-teal-dark mb-3">${esc(item.kicker || 'Service')}</p><h3 class="font-display text-3xl text-charcoal mb-3">${esc(item.label)}</h3><p class="text-charcoal/65 leading-7">${esc(item.text || 'Learn how Elm Ridge approaches this service with clear planning and practical options.')}</p></a>`).join('')}</div>`;
+  return `<div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-5 not-prose">${items.map((item) => `<a href="${item.href}" class="block bg-white border border-teal-light p-6 hover:border-teal transition-colors"><p class="text-xs uppercase tracking-[0.26em] text-teal-dark mb-3">${esc(item.kicker || 'Dental care')}</p><h3 class="font-display text-3xl text-charcoal mb-3">${esc(item.label)}</h3><p class="text-charcoal/65 leading-7">${esc(item.text || 'See when this care may help and what Elm Ridge considers before recommending it.')}</p></a>`).join('')}</div>`;
 }
 
 function simpleSchema(type, name, pagePath, description, extra = {}) {
@@ -147,7 +147,7 @@ function atAGlance(items) {
 }
 
 function relatedSection(items) {
-  return `<h2>Related Services</h2>${pillLinks(items)}`;
+  return `<h2>Related Care</h2>${pillLinks(items)}`;
 }
 
 const relatedDescriptions = {
@@ -200,7 +200,7 @@ function providerLinks(names = ['Jeff Muszynski, DDS', 'Kayla Muszynski, DDS']) 
     ? [{ label: 'Jeff Muszynski, DDS', href: '/dr-jeff-muszynski-dds' }]
     : [];
   if (names.includes('Kayla Muszynski, DDS')) links.push({ label: 'Kayla Muszynski, DDS', href: '/dr-kayla-muszynski-dds' });
-  return `<h2>Provider Links</h2>${pillLinks(links)}`;
+  return `<h2>Dentists Who May Help</h2>${pillLinks(links)}`;
 }
 
 function serviceKind(page) {
@@ -406,13 +406,13 @@ function defaultNextQuestions(page, related) {
     .map((item) => ({
       label: item.label,
       href: item.href,
-      text: relatedDescriptions[item.href] || `${item.label} - Learn how this option fits into a clear treatment plan at Elm Ridge.`,
+      text: relatedDescriptions[item.href] || `${item.label} - See when this may help and what Elm Ridge considers before recommending it.`,
     }));
 }
 
 function nextQuestionsSection(items = []) {
   if (!items.length) return '';
-  return `<h2>Helpful Next Reads</h2><div class="not-prose grid sm:grid-cols-2 gap-4">${items.map((item) => `<a href="${item.href}" class="block border border-teal-light bg-stone p-5 hover:border-teal transition-colors"><p class="font-semibold text-charcoal mb-2">${esc(item.label)}</p><p class="text-sm leading-7 text-charcoal/65">${esc(item.text).replaceAll('\u2014', '&mdash;')}</p></a>`).join('')}</div>`;
+  return `<h2>Related Questions Patients Ask</h2><div class="not-prose grid sm:grid-cols-2 gap-4">${items.map((item) => `<a href="${item.href}" class="block border border-teal-light bg-stone p-5 hover:border-teal transition-colors"><p class="font-semibold text-charcoal mb-2">${esc(item.label)}</p><p class="text-sm leading-7 text-charcoal/65">${esc(item.text).replaceAll('\u2014', '&mdash;')}</p></a>`).join('')}</div>`;
 }
 
 function serviceBody(page) {
@@ -454,7 +454,7 @@ function createServicePage(page) {
     title: page.title,
     description: page.description,
     crumb: page.crumb || page.h1,
-    kicker: page.kicker || 'Dental Service',
+    kicker: page.kicker || 'Dental Care',
     h1: page.h1,
     intro: page.intro,
     image: page.image || 'Building.webp',
@@ -466,8 +466,8 @@ function createServicePage(page) {
     heroPrimaryHref: page.isEmergency ? phoneHref : '/request-appointment',
     heroSecondaryLabel: page.isEmergency ? 'Request Appointment' : `Call ${phoneDisplay}`,
     heroSecondaryHref: page.isEmergency ? '/request-appointment' : phoneHref,
-    footerTitle: page.footerTitle || 'Need a clear dental plan?',
-    footerText: page.footerText || 'Elm Ridge will explain what is happening, what your options are, and what makes sense for your mouth.',
+    footerTitle: page.footerTitle || 'Ready to talk through your options?',
+    footerText: page.footerText || 'Elm Ridge will explain what is happening, what choices are realistic, and what makes sense for your mouth.',
     footerPrimaryLabel: page.isEmergency ? 'Call First' : 'Request an Appointment',
     footerPrimaryHref: page.isEmergency ? phoneHref : '/request-appointment',
     footerSecondaryLabel: page.isEmergency ? 'Request Appointment' : `Call ${phoneDisplay}`,
@@ -487,7 +487,7 @@ function createServicePage(page) {
 
 function standardFaq(name) {
   return [
-    [`Is ${name} right for everyone?`, 'No. Elm Ridge starts with an exam, appropriate imaging, and a discussion of your goals before recommending treatment.'],
+    ['How do I know what I actually need?', 'Elm Ridge starts with an exam, appropriate imaging, and a conversation about your symptoms and goals before recommending treatment.'],
     ['Will insurance help?', `${insuranceCaveat} Coverage depends on your employer, plan, diagnosis, and remaining benefits.`],
     ['How do I schedule?', `Call ${phoneDisplay} or use the appointment request page. Online scheduling is an appointment request, not guaranteed real-time booking.`],
   ];
@@ -1321,7 +1321,7 @@ const serviceEnhancements = {
     payment: costContext,
   },
   'immediate-dentures-killeen-tx': {
-    h1: 'Immediate Dentures for Planned Tooth Removal',
+    h1: 'Immediate Dentures When Going Without Teeth Isn&rsquo;t the Plan',
     glance: [
       ['Typical range', costRanges.immediateDentures],
       ['Placed', 'The day teeth are removed when appropriate'],
@@ -1680,11 +1680,11 @@ function makePage(overrides) {
   return {
     slug: page.slug,
     title: page.title || `${name} in Killeen, TX | Elm Ridge`,
-    description: page.description || `${practiceName} provides ${name.toLowerCase()} in Killeen with clear explanations, private-practice care, and practical next steps.`,
+    description: page.description || `${practiceName} provides ${name.toLowerCase()} in Killeen with diagnosis-first care and plain-English explanations.`,
     h1: page.h1 || name,
     crumb: page.crumb || name,
-    kicker: page.kicker || 'Dental Service',
-    intro: page.intro || `Clear, practical ${name.toLowerCase()} guidance from Elm Ridge Implant and Family Dentistry in Killeen.`,
+    kicker: page.kicker || 'Dental Care',
+    intro: page.intro || `Elm Ridge explains when ${name.toLowerCase()} makes sense, what it can and cannot fix, and what your next step looks like.`,
     answer: page.answer || `${name} may be recommended when it is the most sensible way to protect comfort, function, appearance, or long-term oral health. Elm Ridge starts with diagnosis before recommending treatment.`,
     glance: page.glance || defaultServiceGlance(page),
     who: page.who || defaultWhoText(page),
@@ -1731,13 +1731,13 @@ function buildServicePages() {
     makePage({ slug: 'dental-fillings-killeen-tx', name: 'Dental Fillings', h1: 'Tooth-Colored Fillings for Cavities and Small Breaks', answer: 'Dental fillings repair small to moderate areas of decay or damage. Elm Ridge uses tooth-colored materials and explains when a filling is enough versus when a crown is the better long-term answer.', related: [{ label: 'Dental crowns', href: '/dental-crowns-killeen-tx' }, { label: 'Broken tooth', href: '/broken-tooth-killeen-tx' }, serviceLinks.kayla] }),
     makePage({ slug: 'dental-bridges-killeen-tx', name: 'Dental Bridges', h1: 'Fixed Bridges for Missing Teeth', answer: 'A dental bridge can replace one or more missing teeth when the neighboring teeth can support crowns. Elm Ridge also compares implant bridges when implants may be a better foundation.', related: [{ label: 'Implant bridge', href: '/implant-bridge-killeen-tx' }, { label: 'Single tooth implant', href: '/single-tooth-implant-killeen-tx' }, { label: 'Dentures', href: '/dentures-killeen-tx' }, serviceLinks.kayla] }),
     makePage({ slug: 'dental-crowns-killeen-tx', name: 'Dental Crowns', title: 'Natural-Looking Dental Crowns in Killeen, TX | Elm Ridge', h1: 'A stronger, longer-lasting fix for a cracked, worn, or heavily filled tooth', answer: 'Elm Ridge provides lab-made crowns only. A crown may protect a cracked, heavily filled, root-canal-treated, or worn tooth while being shaped and shaded to blend naturally.', related: [{ label: 'Root canals', href: '/root-canal-killeen-tx' }, { label: 'Broken tooth', href: '/broken-tooth-killeen-tx' }, { label: 'Crown cost', href: '/crown-cost-killeen-tx' }, serviceLinks.kayla] }),
-    makePage({ slug: 'root-canal-killeen-tx', name: 'Root Canal Therapy', title: 'Root Canals in Killeen, TX | Elm Ridge', h1: 'Root Canal Treatment When a Tooth Can Still Be Saved', answer: 'Elm Ridge performs many root canals, including molar root canals. The practice does not perform root canal retreatments.', providers: ['Jeff Muszynski, DDS'], related: [{ label: 'Molar root canals', href: '/molar-root-canal-killeen-tx' }, { label: 'Dental crowns', href: '/dental-crowns-killeen-tx' }, { label: 'Toothache', href: '/toothache-killeen-tx' }, { label: 'Root canal cost', href: '/root-canal-cost-killeen-tx' }, serviceLinks.jeff], faq: [['Do you do molar root canals?', 'Yes. Elm Ridge performs many root canals, including molar root canals.'], ['Do you do root canal retreatments?', 'No. Elm Ridge does not perform root canal retreatments and will explain referral options when retreatment is needed.'], ['Will I need a crown after a root canal?', 'Often, especially on back teeth. Elm Ridge will explain whether a crown is recommended for your tooth.']] }),
+    makePage({ slug: 'root-canal-killeen-tx', name: 'Root Canal Therapy', title: 'Root Canals in Killeen, TX | Elm Ridge', h1: 'Root Canal Treatment When a Tooth Can Still Be Saved', intro: 'When infection or deep decay reaches the nerve, a root canal may be needed so you can keep the tooth instead of removing it.', answer: 'When infection or deep decay reaches the nerve, a root canal may be needed so you can keep the tooth instead of removing it.', providers: ['Jeff Muszynski, DDS'], related: [{ label: 'Molar root canals', href: '/molar-root-canal-killeen-tx' }, { label: 'Dental crowns', href: '/dental-crowns-killeen-tx' }, { label: 'Toothache', href: '/toothache-killeen-tx' }, { label: 'Root canal cost', href: '/root-canal-cost-killeen-tx' }, serviceLinks.jeff], faq: [['Do you do molar root canals?', 'Yes. Elm Ridge performs many root canals, including molar root canals.'], ['Do you do root canal retreatments?', 'No. Elm Ridge does not perform root canal retreatments and will explain referral options when retreatment is needed.'], ['Will I need a crown after a root canal?', 'Often, especially on posterior teeth. Elm Ridge will explain whether a crown is recommended for your tooth.']] }),
     makePage({ slug: 'molar-root-canal-killeen-tx', name: 'Molar Root Canals', h1: 'Molar Root Canals Without Guesswork', answer: 'Elm Ridge performs many molar root canals when the tooth can be predictably saved. Root canal retreatments are not performed.', providers: ['Jeff Muszynski, DDS'], related: [{ label: 'Root canals', href: '/root-canal-killeen-tx' }, { label: 'Dental crowns', href: '/dental-crowns-killeen-tx' }, { label: 'Toothache', href: '/toothache-killeen-tx' }, { label: 'Dental abscess', href: '/dental-abscess-killeen-tx' }, { label: 'Emergency dentistry', href: '/emergency-dentist-killeen-tx' }, serviceLinks.jeff], faq: [['Do you perform root canal retreatment?', 'No. Elm Ridge performs many root canals, including molars, but does not perform retreatments.'], ['Why do molars often need crowns?', 'Molars take heavy chewing forces, so crowns are often recommended after root canal treatment to protect the tooth.']] }),
-    makePage({ slug: 'tooth-extractions-killeen-tx', name: 'Tooth Extractions', h1: 'Tooth Extractions With a Replacement Plan When Needed', answer: 'Elm Ridge performs simple and surgical extractions, including many wisdom tooth cases. If a tooth can be saved predictably, the team will say so.', providers: ['Jeff Muszynski, DDS'], related: [{ label: 'Wisdom teeth', href: '/wisdom-teeth-removal-killeen-tx' }, { label: 'Bone grafting', href: '/bone-grafting-killeen-tx' }, { label: 'Single tooth implant', href: '/single-tooth-implant-killeen-tx' }, serviceLinks.jeff] }),
+    makePage({ slug: 'tooth-extractions-killeen-tx', name: 'Tooth Extractions', h1: 'Tooth Extractions With a Replacement Plan When Needed', answer: 'Elm Ridge performs simple and surgical extractions, including many wisdom tooth cases. If a tooth can be saved predictably, the team will say so.', providers: ['Jeff Muszynski, DDS'], related: [{ label: 'Wisdom teeth', href: '/wisdom-teeth-removal-killeen-tx' }, { label: 'Bone grafting', href: '/bone-grafting-killeen-tx' }, { label: 'Single tooth implant', href: '/single-tooth-implant-killeen-tx' }, serviceLinks.jeff], faq: [['Do I really need the tooth removed?', 'There are several reasons a tooth might need to be extracted, but Elm Ridge will explain whether the tooth can or should be saved predictably with a filling, crown, root canal, or periodontal care before recommending extraction.'], ['Will insurance help?', `${insuranceCaveat} Coverage depends on your employer, plan, diagnosis, and remaining benefits.`], ['How do I schedule?', `Call ${phoneDisplay} or use the appointment request page. Online scheduling is an appointment request, not guaranteed real-time booking.`]] }),
     makePage({ slug: 'wisdom-teeth-removal-killeen-tx', name: 'Wisdom Teeth Removal', h1: 'Wisdom Teeth Removal, Case by Case', answer: 'Elm Ridge removes most wisdom teeth, depending on anatomy and complexity. If a wisdom tooth case is unusually complex or better suited for a specialist, the practice will explain options and refer appropriately.', providers: ['Jeff Muszynski, DDS'], related: [{ label: 'Tooth extractions', href: '/tooth-extractions-killeen-tx' }, { label: 'Oral conscious sedation', href: '/oral-conscious-sedation-killeen-tx' }, { label: 'Nitrous oxide', href: '/nitrous-oxide-dentist-killeen-tx' }, serviceLinks.jeff] }),
     makePage({ slug: 'dentures-killeen-tx', name: 'Dentures', h1: 'Dentures, Partials, Immediate Dentures, and Implant Options', answer: 'Elm Ridge offers traditional dentures, partial dentures, immediate dentures, snap-on dentures, and implant-supported options. The point is to compare comfort, function, cost, and long-term maintenance honestly.', providers: ['Jeff Muszynski, DDS'], related: [{ label: 'Partial dentures', href: '/partial-dentures-killeen-tx' }, { label: 'Immediate dentures', href: '/immediate-dentures-killeen-tx' }, { label: 'Snap-on dentures', href: '/snap-on-dentures-killeen-tx' }, { label: 'Dentures vs implants', href: '/dentures-vs-implants-killeen-tx' }, serviceLinks.jeff] }),
     makePage({ slug: 'partial-dentures-killeen-tx', name: 'Partial Dentures', h1: 'Partial Dentures for Several Missing Teeth', answer: 'Partial dentures can replace several missing teeth with a removable appliance. Elm Ridge compares them with bridges and implants so patients understand the tradeoffs.', related: [{ label: 'Dentures', href: '/dentures-killeen-tx' }, { label: 'Dental bridges', href: '/dental-bridges-killeen-tx' }, { label: 'Implant bridge', href: '/implant-bridge-killeen-tx' }] }),
-    makePage({ slug: 'immediate-dentures-killeen-tx', name: 'Immediate Dentures', h1: 'Immediate Dentures for Same-Day Tooth Removal Plans', answer: 'Immediate dentures can be placed the day teeth are removed when appropriate. They are temporary in the sense that gums and bone change after extractions, so adjustments and follow-up matter.', providers: ['Jeff Muszynski, DDS'], related: [{ label: 'Tooth extractions', href: '/tooth-extractions-killeen-tx' }, { label: 'Dentures', href: '/dentures-killeen-tx' }, { label: 'Post-op instructions', href: '/post-op/immediate-dentures' }] }),
+    makePage({ slug: 'immediate-dentures-killeen-tx', name: 'Immediate Dentures', h1: 'Immediate Dentures When Going Without Teeth Isn&rsquo;t the Plan', intro: 'Immediate dentures can be placed the day teeth are removed, so you do not have to be without teeth while you heal. Elm Ridge helps you understand the whole process &mdash; the first day, the adjustment period, and what may come next.', answer: 'Immediate dentures can be placed the day teeth are removed, so you do not have to be without teeth while you heal. Elm Ridge helps you understand the whole process &mdash; the first day, the adjustment period, and what may come next.', providers: ['Jeff Muszynski, DDS'], related: [{ label: 'Tooth extractions', href: '/tooth-extractions-killeen-tx' }, { label: 'Dentures', href: '/dentures-killeen-tx' }, { label: 'Post-op instructions', href: '/post-op/immediate-dentures' }] }),
     makePage({ slug: 'dental-implants-killeen-tx', name: 'Dental Implants', title: 'Dental Implants in Killeen, TX | Elm Ridge', h1: 'Dental Implants Planned, Placed, and Restored in One Killeen Office', answer: 'Elm Ridge provides dental implants in Killeen, including single implants, implant bridges, snap-on dentures, full-arch dental implants, bone grafting, sinus lifts, and restoration of implants placed elsewhere after evaluation.', providers: ['Jeff Muszynski, DDS'], related: implantRelated, image: 'cbct-implant-planning-killeen.webp', alt: '3D dental implant planning at Elm Ridge in Killeen' }),
     makePage({ slug: 'single-tooth-implant-killeen-tx', name: 'Single Tooth Implant', h1: 'Replacing One Missing Tooth With an Implant', answer: 'A single tooth implant can replace one missing tooth without reshaping healthy neighboring teeth, when bone, gum health, bite, and timing support the plan.', providers: ['Jeff Muszynski, DDS'], related: implantRelated }),
     makePage({ slug: 'implant-bridge-killeen-tx', name: 'Implant Bridge', h1: 'Implant Bridges for Multiple Missing Teeth', answer: 'An implant bridge can replace multiple missing teeth with fewer implants than one implant per tooth. Elm Ridge plans both the surgical and restorative parts of the case.', providers: ['Jeff Muszynski, DDS'], related: implantRelated, faq: [['Can an implant bridge replace several teeth?', 'Yes. It can replace multiple teeth in a row when the implants and bite can support the design.'], ['Can Elm Ridge restore implants placed elsewhere?', 'Yes, after evaluation and with records, system information, and imaging as needed.']] }),
@@ -2340,8 +2340,6 @@ Do not infer:
 }
 
 const blogTitleChanges = [
-  ['Dentist for Dentures Near Me in Killeen: Options That Fit', 'Dentures in Killeen: Traditional, Snap-On, and Full-Arch Options'],
-  ['Emergency Dentist Killeen TX Guide', 'Emergency Dentist in Killeen: When to Call and When to Go to the ER'],
   ['Emergency Dentist in Killeen: When to Call and When to Go to the ER', 'Emergency Dentist in Killeen: When to Call and When to Go to the ER'],
   ['How to Choose the Right Implant Dentist in Killeen', 'How to Choose the Right Implant Dentist in Killeen'],
   ['What to Look for in an Implant Dentist in Killeen, TX', 'Choosing an Implant Dentist in Killeen: What Actually Matters'],
@@ -2426,10 +2424,9 @@ function cleanupText(html) {
     ['In-office whitening delivers similar results in a single visit.', 'Elm Ridge uses custom take-home whitening trays with professional whitening gel.'],
     ['href="/insurance/invisalign"', 'href="/insurance-and-financing"'],
     ['Invisalign', 'clear aligners'],
-    ['Looking for a dentist for dentures near me in Killeen? Compare traditional dentures, snap-on dentures, and full-arch implants at Elm Ridge.', 'Compare traditional dentures, snap-on dentures, and full-arch implants at Elm Ridge in Killeen.'],
-    ['If you have been searching for a <strong>dentist for dentures near me</strong>, you may already know there is not just one way to replace missing teeth.', 'If you are comparing denture and implant options, you may already know there is not just one way to replace missing teeth.'],
     ['Implant dentist in Killeen, TX guide covering experience, CBCT imaging, guided surgery, treatment planning, and private practice care.', 'Learn how to compare implant dentistry experience, CBCT imaging, guided surgery, treatment planning, and private-practice care in Killeen.'],
     ['Contact / Appointment', 'request appointment'],
+    ["Killeen's Trusted Family and Implant Dental Home", 'Killeen&rsquo;s Trusted Family and Implant Dental Home'],
     ['/request-appointment', '/request-appointment'],
   ];
   let out = html;
@@ -2824,3 +2821,4 @@ function main() {
 main();
 
 export { blogTitleChanges };
+
