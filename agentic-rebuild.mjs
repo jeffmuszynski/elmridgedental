@@ -2205,25 +2205,139 @@ function buildReviewsBeforeAfterAiPages() {
 }
 
 function buildLocationPages() {
-  const locations = [
-    ['dentist-killeen-tx', 'Killeen', 'Dental Care in Killeen, TX', 'Elm Ridge is located in Killeen and provides family dentistry, implants, cosmetic care, emergency dentistry, and more from one private office.'],
-    ['dentist-harker-heights-tx', 'Harker Heights', 'Dental Care for Harker Heights Patients', 'Patients from Harker Heights visit the nearby Killeen office for private dental care, implants, cosmetic dentistry, emergencies, and routine visits.'],
-    ['dentist-copperas-cove-tx', 'Copperas Cove', 'Dental Care for Copperas Cove Patients', 'Patients from Copperas Cove visit Elm Ridge in Killeen for clear explanations, private-practice continuity, and comprehensive dental care.'],
-    ['dentist-near-fort-hood', 'Fort Cavazos / Fort Hood', 'Dental Care for Fort Cavazos / Fort Hood Families', 'Elm Ridge serves Fort Cavazos / Fort Hood families, spouses, dependents, and nearby households from the Killeen office.'],
-    ['dentist-belton-tx', 'Belton', 'Dental Care for Belton Patients', 'Belton patients visit Elm Ridge in Killeen for private dental care, implant planning, cosmetic dentistry, and second opinions.'],
-    ['dentist-salado-tx', 'Salado', 'Dental Care for Salado Patients', 'Salado patients visit Elm Ridge for quality-focused private dentistry, cosmetic care, implants, and long-term planning.'],
-    ['dentist-temple-tx', 'Temple', 'Dental Care for Temple Patients', 'Temple patients visit the Killeen office for thoughtful dental planning, implants, cosmetic care, emergencies, and private-practice continuity.'],
-    ['dentist-nolanville-tx', 'Nolanville', 'Dental Care for Nolanville Patients', 'Nolanville patients visit Elm Ridge in Killeen for family dentistry, emergency care, implants, and a calmer private-practice experience.'],
+  const cityCtas = [
+    { label: 'Request appointment', href: '/request-appointment' },
+    serviceLinks.services,
+    { label: 'Dental implants', href: '/dental-implants-killeen-tx' },
+    { label: 'Full-arch dental implants', href: '/full-arch-dental-implants-killeen-tx' },
+    { label: 'Cosmetic dentistry', href: '/cosmetic-dentistry-killeen-tx' },
+    { label: 'Family dentistry', href: '/family-dentist-killeen-tx' },
+    { label: 'Emergency dentistry', href: '/emergency-dentist-killeen-tx' },
+    serviceLinks.insurance,
   ];
 
-  locations.forEach(([slug, city, h1, intro]) => {
-    const areaText = city === 'Killeen'
-      ? 'Elm Ridge has one Killeen office at 2601 E Elms Rd. Patients choose the practice for personal treatment planning, private-practice continuity, and care that does not feel rushed.'
-      : `Elm Ridge has one Killeen office. Patients from ${city} choose Elm Ridge because the care is personal, thorough, and worth the short drive for people who want clear treatment planning instead of a corporate-feeling visit.`;
+  const insuranceText = 'Elm Ridge is in-network with most major PPO dental plans and can file many out-of-network PPO plans. We can estimate benefits, but final payment is determined by the insurance company. CareCredit and Cherry are available.';
+  const emergencyText = 'Call first for urgent dental problems. Same-day appointments are available when possible. For severe swelling, trouble breathing or swallowing, uncontrolled bleeding, major trauma, or a medical emergency, go to the ER.';
+
+  const cityPages = [
+    {
+      slug: 'dentist-killeen-tx',
+      city: 'Killeen',
+      h1: 'Dental Care in Killeen, TX',
+      title: 'Dental Care in Killeen, TX | Elm Ridge Implant and Family Dentistry',
+      description: `Elm Ridge is located in Killeen and provides family dentistry, implants, cosmetic care, emergency dentistry, and more from one private office. Call ${phoneDisplay} to schedule.`,
+      intro: 'Elm Ridge is located in Killeen and provides family dentistry, implants, cosmetic care, emergency dentistry, and more from one private office.',
+      whyHeading: 'Why Killeen Patients Choose Elm Ridge',
+      why: 'Elm Ridge has one Killeen office at 2601 E Elms Rd. Patients choose the practice for personal treatment planning, private-practice continuity, and care that does not feel rushed.',
+      faq: [
+        ['What services do Killeen patients visit Elm Ridge for?', 'Patients commonly visit for family dentistry, implants, dentures, cosmetic dentistry, emergency care, sleep apnea oral appliances, second opinions, and more involved treatment planning.'],
+        ['Can Killeen patients schedule emergency visits?', emergencyText],
+      ],
+    },
+    {
+      slug: 'dentist-belton-tx',
+      city: 'Belton',
+      h1: 'Dental Care for Belton Patients',
+      title: 'Dentist for Belton, TX | Elm Ridge Implant and Family Dentistry',
+      description: 'Belton patients visit Elm Ridge in Killeen for private-practice dental care, implants, full-arch treatment, cosmetic dentistry, and clear treatment planning.',
+      intro: 'Belton has several dental options, but patients come to Elm Ridge when they want private-practice attention, clear treatment planning, and services like dental implants, full-arch care, and cosmetic dentistry handled with continuity. Kayla Muszynski, DDS is from Belton, so this community is personal to Elm Ridge.',
+      whyHeading: 'Why Belton Patients Choose Elm Ridge',
+      why: 'Patients from Belton often choose Elm Ridge for care that benefits from planning and continuity: dental implants, full-arch dental implants, cosmetic dentistry, second opinions, and more involved restorative treatment. Instead of bouncing between offices without a clear plan, patients can start with a doctor-owned practice that explains the options, the sequence, and the long-term goal.',
+      faq: [
+        ['Why would Belton patients drive to Elm Ridge?', 'Belton has several dental options, but some patients choose Elm Ridge when they want private-practice attention, clear treatment planning, and services like dental implants, full-arch care, and cosmetic dentistry handled with continuity.'],
+        ['Does Elm Ridge offer financing for implants or cosmetic work?', 'Yes. CareCredit and Cherry are available, and Elm Ridge reviews cost, insurance estimates, and treatment sequence before larger cases begin.'],
+      ],
+    },
+    {
+      slug: 'dentist-temple-tx',
+      city: 'Temple',
+      h1: 'Dental Care for Temple Patients',
+      title: 'Dentist for Temple, TX | Elm Ridge Implant and Family Dentistry',
+      description: 'Temple patients visit Elm Ridge in Killeen for private dental care, implants, cosmetic dentistry, and restorative treatment planned with continuity.',
+      intro: 'Temple patients often make the drive to Elm Ridge when they want more than a quick appointment. For implants, cosmetic dentistry, and more involved restorative care, the value is in having a doctor-owned practice that explains the plan clearly and keeps the surgical and restorative pieces connected whenever possible. For something as important as your teeth, about a 30-minute drive is an easy tradeoff for the right fit.',
+      whyHeading: 'Why Temple Patients Choose Elm Ridge',
+      why: 'Patients from Temple often choose Elm Ridge when they want thoughtful treatment planning, not a rushed appointment. Implant treatment, full-arch dental implants, cosmetic dentistry, and larger restorative cases all benefit from having a clear plan from the beginning. Elm Ridge keeps as much planning, surgery, and restoration connected as possible, and when a specialist is needed, the restorative plan still has a home.',
+      faq: [
+        ['Is the drive from Temple worth it for dental care?', 'For many patients, yes - especially for implants, cosmetic dentistry, full-arch dental implants, or more involved restorative care. For something as important as your teeth, about a 30-minute drive is an easy tradeoff when the office is the right fit.'],
+        ['Why do Temple patients choose Elm Ridge?', 'Temple patients often choose Elm Ridge for doctor-owned care, clear explanations, and treatment planning that keeps surgical and restorative pieces connected whenever possible.'],
+      ],
+    },
+    {
+      slug: 'dentist-nolanville-tx',
+      city: 'Nolanville',
+      h1: 'Dental Care for Nolanville Families',
+      title: 'Dentist for Nolanville, TX | Elm Ridge Implant and Family Dentistry',
+      description: 'Nolanville patients visit Elm Ridge in Killeen for private family, cosmetic, emergency, and implant dental care in one office.',
+      intro: 'Elm Ridge is a short drive from Nolanville, only about 15 minutes away, and a great fit for patients who want a private dental office with family, cosmetic, emergency, and implant care in one place.',
+      whyHeading: 'Why Nolanville Patients Choose Elm Ridge',
+      why: 'Nolanville patients are close enough that Elm Ridge can be convenient for routine care, but the bigger value is continuity. Patients can bring the family for cleanings and exams, call for urgent dental problems, and also have access to cosmetic dentistry, dental implants, dentures, and restorative care from one private Killeen office.',
+      faq: [
+        ['Is Elm Ridge close to Nolanville?', 'Yes. Elm Ridge is about 15 minutes from Nolanville, making it a practical option for family dentistry, emergency care, cosmetic dentistry, and dental implants.'],
+      ],
+    },
+    {
+      slug: 'dentist-salado-tx',
+      city: 'Salado',
+      h1: 'Dental Care for Salado Patients',
+      title: 'Dentist for Salado, TX | Elm Ridge Implant and Family Dentistry',
+      description: 'Salado patients visit Elm Ridge in Killeen for private-practice family, cosmetic, implant, and restorative dental care with continuity.',
+      intro: 'Many Salado patients are already used to driving for specialized care, but they are looking for a private-practice option that offers more specialized treatment in-house, fewer handoffs, and better continuity of care. Drs. Jeff and Kayla Muszynski are very familiar with the short 25-minute drive from Salado to their office in Killeen because they are Salado locals. They are proud to provide cosmetic dentistry, implants, and family care to their Salado neighbors and love seeing their patients around town, whether at the ball fields or Brookshire Bros.',
+      whyHeading: 'Why Salado Patients Choose Elm Ridge',
+      why: 'Salado patients often choose Elm Ridge when they want a private-practice experience and a plan that feels personal. Cosmetic dentistry, dental implants, full-arch treatment, dentures, and family care all benefit from continuity. When more treatment can be planned and completed in one office, patients can avoid unnecessary handoffs and better understand the whole plan before starting.',
+      faq: [
+        ['Why do Salado patients choose Elm Ridge?', 'Many Salado patients want a private-practice option for cosmetic dentistry, implants, full-arch care, and family dentistry with fewer handoffs and better continuity. Drs. Jeff and Kayla Muszynski are Salado locals and know the short drive to their Killeen office well.'],
+      ],
+    },
+    {
+      slug: 'dentist-near-fort-hood',
+      city: 'Fort Cavazos / Fort Hood',
+      h1: 'Dental Care for Fort Cavazos / Fort Hood Families',
+      title: 'Dentist Near Fort Cavazos / Fort Hood | Elm Ridge Implant and Family Dentistry',
+      description: 'Elm Ridge cares for Fort Cavazos / Fort Hood military families with private dental care, emergency visits when possible, family dentistry, implants, and clear benefit estimates.',
+      intro: 'Elm Ridge is proud to care for military families, spouses, dependents, retirees, and families connected to Fort Cavazos / Fort Hood. We understand that military families move often and that coverage can vary, so our team is happy to review your specific benefits before treatment. Families choose Elm Ridge because they want steady, personal care close to post, not a rotating roster or a rushed corporate experience.',
+      whyHeading: 'Why Military Families Choose Elm Ridge',
+      why: 'Military families often value continuity because life can change quickly. Elm Ridge gives families one private Killeen dental office for cleanings, children\'s visits, emergency care, cosmetic dentistry, dentures, and dental implants. When a family is here for a short assignment or settling in long-term, the goal is the same: clear answers, familiar faces, and a plan that makes sense.',
+      extra: '<h2>Military Insurance and Benefits</h2><p>Every military family\'s coverage can look different. Elm Ridge accepts the TRICARE Dental Program / United Concordia where appropriate and is happy to review specific benefits before treatment. Call with your insurance information so the team can help estimate benefits and explain what to expect.</p>',
+      faq: [
+        ['Do you treat military families from Fort Cavazos / Fort Hood?', 'Yes. Elm Ridge is proud to care for military families, spouses, dependents, retirees, and families connected to Fort Cavazos / Fort Hood. Call with your insurance information and the team can help review your specific benefits.'],
+        ['Can military families be seen quickly for dental emergencies?', 'Call first for urgent tooth pain, swelling, broken teeth, or a knocked-out tooth. Same-day emergency appointments are available when possible.'],
+      ],
+    },
+    {
+      slug: 'dentist-harker-heights-tx',
+      city: 'Harker Heights',
+      h1: 'Dental Care for Harker Heights Families',
+      title: 'Dentist for Harker Heights, TX | Elm Ridge Implant and Family Dentistry',
+      description: 'Harker Heights families visit Elm Ridge in Killeen for private family, cosmetic, emergency, and implant dental care.',
+      intro: 'Elm Ridge is close to Harker Heights, making the drive practical for routine visits and worth it for more involved care. Patients choose Elm Ridge because they want a private dental office where the doctors know their history, explain the plan clearly, and offer family dentistry, cosmetic dentistry, emergency care, and dental implants in one place.',
+      whyHeading: 'Why Harker Heights Patients Choose Elm Ridge',
+      why: 'Harker Heights patients often choose Elm Ridge because the drive is short and the care feels personal. Whether it is a routine cleaning, a second opinion, cosmetic dentistry, or dental implants, the goal is the same: clear answers, familiar doctors, and a treatment plan that makes sense.',
+      extra: '<p>Your care is guided by doctors who know your history and stay involved in the plan.</p>',
+      faq: [
+        ['Why do Harker Heights families choose Elm Ridge?', 'The office is close to Harker Heights, and patients often choose Elm Ridge for private-practice care, familiar doctors, clear explanations, and family, cosmetic, emergency, and implant dentistry in one place.'],
+      ],
+    },
+    {
+      slug: 'dentist-copperas-cove-tx',
+      city: 'Copperas Cove',
+      h1: 'Dental Care for Copperas Cove Families',
+      title: 'Dentist for Copperas Cove, TX | Elm Ridge Implant and Family Dentistry',
+      description: 'Copperas Cove families visit Elm Ridge in Killeen for private family dental care, emergency visits, cosmetic dentistry, dentures, and implants.',
+      intro: 'Copperas Cove families often choose Elm Ridge because they want a private dental office they can stay with for years. The drive is manageable, the care is personal, and many services - from children\'s visits and cleanings to implants, cosmetic dentistry, dentures, and emergency care - can be planned in one office.',
+      whyHeading: 'Why Copperas Cove Families Choose Elm Ridge',
+      why: 'Continuity matters for families, especially in a community where military moves and busy schedules are part of life. Elm Ridge offers family dentistry, emergency care, cosmetic dentistry, dentures, and dental implants from one private Killeen office, so the surgical, restorative, and long-term pieces of care can often be planned together from the beginning.',
+      faq: [
+        ['Why do Copperas Cove families choose Elm Ridge?', 'Many families want one private dental office for routine care, urgent problems, cosmetic dentistry, dentures, and implants, with clear planning from the beginning.'],
+      ],
+    },
+  ];
+
+  cityPages.forEach((page) => {
+    const { slug, city, h1, intro } = page;
     writePage(slug, {
       path: `/${slug}`,
-      title: `${h1} | Elm Ridge`,
-      description: `${intro} Call ${phoneDisplay} to schedule.`,
+      title: page.title,
+      description: page.description,
       crumb: h1,
       kicker: 'Service Area',
       h1,
@@ -2231,22 +2345,21 @@ function buildLocationPages() {
       image: 'Building.webp',
       alt: 'Elm Ridge Implant and Family Dentistry in Killeen, TX',
       body: `<section class="py-16 bg-white"><div class="max-w-4xl mx-auto px-6 prose-page space-y-7">
-        <p>${areaText}</p>
+        <h2>${page.whyHeading}</h2><p>${page.why}</p>
         <h2>Services Patients Commonly Visit For</h2>${cardGrid([
           { label: 'Family dentistry', href: '/family-dentist-killeen-tx', text: 'Cleanings, exams, fillings, crowns, and everyday care.' },
-          { label: 'Dental implants', href: '/dental-implants-killeen-tx', text: 'Single implants, implant bridges, snap-on dentures, and full-arch options.' },
-          { label: 'Emergency dentistry', href: '/emergency-dentist-killeen-tx', text: 'Call first for urgent tooth pain, swelling, broken teeth, or lost crowns.' },
+          { label: 'Dental implants', href: '/dental-implants-killeen-tx', text: 'Single implants, implant bridges, snap-on dentures, and full-arch dental implants.' },
+          { label: 'Emergency dentistry', href: '/emergency-dentist-killeen-tx', text: 'Call first for urgent tooth pain, swelling, broken teeth, knocked-out teeth, or lost crowns.' },
           { label: 'Cosmetic dentistry', href: '/cosmetic-dentistry-killeen-tx', text: 'Veneers, bonding, whitening, clear aligners, and natural-looking smile planning.' },
           { label: 'Sleep apnea appliances', href: '/sleep-apnea-dentist-killeen-tx', text: 'Take-home sleep study workflow and oral appliances after physician diagnosis.' },
         ])}
-        <h2>Emergency Guidance</h2><p>Call first for urgent dental concerns. Go to the ER for severe swelling, trouble breathing, trouble swallowing, uncontrolled bleeding, major trauma, or a medical emergency.</p>
+        ${page.extra || ''}
+        <h2>Insurance and Financing</h2><p>${insuranceText}</p>
+        <h2>Emergency Guidance</h2><p>${emergencyText}</p>
         <h2>Visit the Killeen Office</h2><p><a href="${mapHref}" target="_blank" rel="noopener">${addressLine}</a>. Hours: Monday-Thursday 8 AM-5 PM. Friday-Sunday closed.</p>
-        ${pillLinks([serviceLinks.services, serviceLinks.newPatients, serviceLinks.insurance, serviceLinks.appointment])}
+        ${pillLinks(cityCtas)}
       </div></section>`,
-      faq: [
-        [`What services do ${city} patients visit Elm Ridge for?`, 'Patients commonly visit for family dentistry, implants, dentures, cosmetic dentistry, emergency care, sleep apnea oral appliances, second opinions, and more involved treatment planning.'],
-        [`Can ${city} patients schedule emergency visits?`, 'Yes. Call first; same-day emergency appointments are offered when possible. Severe swelling, trouble breathing, trouble swallowing, uncontrolled bleeding, major trauma, or a medical emergency should go to the ER.'],
-      ],
+      faq: page.faq,
       headSchemas: [simpleSchema('WebPage', h1, `/${slug}`, intro, { areaServed: [{ '@type': city.includes('Fort') ? 'Place' : 'City', name: city }] })],
     });
   });
