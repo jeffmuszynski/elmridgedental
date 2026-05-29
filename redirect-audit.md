@@ -9,7 +9,7 @@ Production diagnosis: the live DigitalOcean App Platform deployment appeared to 
 | Old URL | 301 destination | Notes |
 | --- | --- | --- |
 | `https://www.elmridgedental.com/contact-us` | `https://www.elmridgedental.com/#contact` | Contact section replacement. |
-| `https://www.elmridgedental.com/reviews` | `https://www.elmridgedental.com/#reviews` | Review section replacement. |
+| `https://www.elmridgedental.com/patient-reviews` | `https://www.elmridgedental.com/#reviews` | Review section replacement. |
 | `https://www.elmridgedental.com/before-and-after` | `https://www.elmridgedental.com/#before-after` | Before-and-after section replacement. |
 | `https://www.elmridgedental.com/dentalimplants` | `https://www.elmridgedental.com/dental-implants-killeen-tx` | Direct implant page replacement. |
 | `https://www.elmridgedental.com/cosmeticdentistry` | `https://www.elmridgedental.com/cosmetic-dentistry-killeen-tx` | Direct cosmetic page replacement. |

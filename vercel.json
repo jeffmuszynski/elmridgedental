@@ -6,13 +6,22 @@
   "rewrites": [
     {
       "source": "/reviews",
-      "destination": "/reviews.html"
+      "destination": "/patient-reviews"
+    },
+    {
+      "source": "/patient-reviews",
+      "destination": "/patient-reviews.html"
     }
   ],
   "redirects": [
     {
       "source": "/reviews/",
-      "destination": "https://www.elmridgedental.com/reviews",
+      "destination": "https://www.elmridgedental.com/patient-reviews",
+      "permanent": true
+    },
+    {
+      "source": "/patient-reviews/",
+      "destination": "https://www.elmridgedental.com/patient-reviews",
       "permanent": true
     },
     {

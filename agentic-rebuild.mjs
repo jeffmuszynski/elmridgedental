@@ -155,7 +155,7 @@ const relatedDescriptions = {
   '/new-patients': 'New patients - What to expect before your first visit.',
   '/insurance-and-financing': 'Insurance and financing - How benefits, estimates, and payment options work.',
   '/request-appointment': 'Request appointment - Send a request or call for help choosing the right visit.',
-  '/reviews': 'Patient reviews - Read what patients say about their experience at Elm Ridge.',
+  '/patient-reviews': 'Patient reviews - Read what patients say about their experience at Elm Ridge.',
   '/dental-implants-killeen-tx': 'Dental implants - Learn how implants can replace missing teeth with a long-term fixed option.',
   '/single-tooth-implant-killeen-tx': 'Single tooth implants - Compare one-tooth replacement options before choosing a plan.',
   '/implant-bridge-killeen-tx': 'Implant bridges - A fixed option when several teeth are missing in a row.',
@@ -191,8 +191,8 @@ const relatedDescriptions = {
   '/sleep-apnea-dentist-killeen-tx': 'Sleep apnea oral appliances - Dental appliance therapy after physician diagnosis.',
   '/sleep-apnea-appliance-cost-killeen-tx': 'Sleep apnea appliance cost - Appliance ranges and medical insurance requirements.',
   '/tmj-splint-therapy-killeen-tx': 'TMJ splint therapy - Conservative splint care for selected clenching, grinding, and jaw soreness patterns.',
-  '/dr-jeff-muszynski-dds': 'Jeff Muszynski, DDS - Meet the dentist who leads implant, surgical, root canal, and complex restorative care.',
-  '/dr-kayla-muszynski-dds': 'Kayla Muszynski, DDS - Meet one of the dentists who provides family, restorative, and cosmetic care at Elm Ridge.',
+  '/dr-jeff-muszynski-dds': 'Jeff Muszynski, DDS — Meet the dentist who leads implant, surgical, root canal, and complex restorative care.',
+  '/dr-kayla-muszynski-dds': 'Kayla Muszynski, DDS — Meet one of the dentists who provides family, restorative, and cosmetic care at Elm Ridge.',
 };
 
 function providerLinks(names = ['Jeff Muszynski, DDS', 'Kayla Muszynski, DDS']) {
@@ -399,7 +399,7 @@ function renderDetailSections(sections = []) {
 }
 
 function defaultNextQuestions(page, related) {
-  const supportHrefs = new Set(['/services', '/new-patients', '/insurance-and-financing', '/request-appointment', '/reviews']);
+  const supportHrefs = new Set(['/services', '/new-patients', '/insurance-and-financing', '/request-appointment', '/patient-reviews']);
   return uniqueLinks(related)
     .filter((item) => !supportHrefs.has(item.href))
     .slice(0, 4)
@@ -412,7 +412,7 @@ function defaultNextQuestions(page, related) {
 
 function nextQuestionsSection(items = []) {
   if (!items.length) return '';
-  return `<h2>Common Next Questions</h2><div class="not-prose grid sm:grid-cols-2 gap-4">${items.map((item) => `<a href="${item.href}" class="block border border-teal-light bg-stone p-5 hover:border-teal transition-colors"><p class="font-semibold text-charcoal mb-2">${esc(item.label)}</p><p class="text-sm leading-7 text-charcoal/65">${esc(item.text)}</p></a>`).join('')}</div>`;
+  return `<h2>Common Next Questions</h2><div class="not-prose grid sm:grid-cols-2 gap-4">${items.map((item) => `<a href="${item.href}" class="block border border-teal-light bg-stone p-5 hover:border-teal transition-colors"><p class="font-semibold text-charcoal mb-2">${esc(item.label)}</p><p class="text-sm leading-7 text-charcoal/65">${esc(item.text).replaceAll('\u2014', '&mdash;')}</p></a>`).join('')}</div>`;
 }
 
 function serviceBody(page) {
@@ -421,7 +421,7 @@ function serviceBody(page) {
     { label: 'New patients', href: '/new-patients' },
     { label: 'Insurance and financing', href: '/insurance-and-financing' },
     { label: 'Request appointment', href: '/request-appointment' },
-    { label: 'Reviews', href: '/reviews' },
+    { label: 'Reviews', href: '/patient-reviews' },
   ];
   const related = uniqueLinks([...(page.related || []), ...supportLinks]).filter((item) => item.href !== `/${page.slug}`);
   const nextQuestions = page.nextQuestions || defaultNextQuestions(page, related);
@@ -731,7 +731,7 @@ function buildCorePages() {
       <h2>Where We Are</h2><p><a href="${mapHref}" target="_blank" rel="noopener">${addressLine}</a>. Hours are Monday through Thursday from 8 AM to 5 PM. The office is closed Friday through Sunday.</p>
       <h2>Who We Serve</h2><p>Elm Ridge serves patients from ${serviceAreas.join(', ')}. Patients from nearby communities visit the Killeen office for routine care, second opinions, emergency dentistry, implant planning, cosmetic dentistry, and more involved restorative decisions.</p>
       <h2>What We Do Not Do</h2><ul><li>Elm Ridge does not accept Medicaid.</li><li>Elm Ridge does not offer IV sedation, deep sedation, or general anesthesia.</li><li>Elm Ridge does not have an in-office membership plan.</li><li>Elm Ridge does not market as a pediatric specialty office, though children are seen as part of family dentistry once teeth are present.</li></ul>
-      ${pillLinks([{ label: 'Meet the doctors', href: '/doctors' }, { label: 'Services', href: '/services' }, { label: 'New patients', href: '/new-patients' }, { label: 'Reviews', href: '/reviews' }])}
+      ${pillLinks([{ label: 'Meet the doctors', href: '/doctors' }, { label: 'Services', href: '/services' }, { label: 'New patients', href: '/new-patients' }, { label: 'Reviews', href: '/patient-reviews' }])}
     </div></section>`,
     faq: [
       ['Is Elm Ridge accepting new patients?', 'Yes. New patients can call or request an appointment online.'],
@@ -748,7 +748,7 @@ function buildCorePages() {
     kicker: 'Our Doctors',
     h1: 'Meet Your Dentists',
     intro: 'Jeff Muszynski, DDS and Kayla Muszynski, DDS lead Elm Ridge with a mix of clinical confidence, clear explanations, and private-practice warmth.',
-    image: 'dr jeff and kayla muszynski.jpg',
+    image: 'Jeff Muszynski DDS and Kayla Muszynski DDS.jpg',
     alt: 'Jeff Muszynski, DDS and Kayla Muszynski, DDS',
     body: `<section class="py-16 bg-white"><div class="max-w-5xl mx-auto px-6 prose-page space-y-7">
       <div class="grid md:grid-cols-2 gap-6 not-prose">
@@ -756,7 +756,7 @@ function buildCorePages() {
         <a href="/dr-kayla-muszynski-dds" class="block bg-stone border border-teal-light p-6 hover:border-teal"><img src="/kayla photo.webp" alt="Kayla Muszynski, DDS" class="w-full aspect-[4/5] object-cover object-[50%_18%] mb-5" loading="lazy" decoding="async" /><h2 class="font-display text-4xl text-charcoal">Kayla Muszynski, DDS</h2><p class="text-charcoal/65 leading-7">Cosmetic dentistry, family dentistry, cleanings and exams, fillings, crowns, bridges, bonding, veneers, and whitening.</p></a>
       </div>
       <h2>A Family Practice in the Plainest Sense</h2><p>Jeff and Kayla met at Abilene Christian University on a dental mission trip to Guatemala. They have three kids who keep them busy with sports, gymnastics, and school activities, plus two German shorthaired pointers named Rush and Junior.</p>
-      ${pillLinks([{ label: 'Services', href: '/services' }, { label: 'New patients', href: '/new-patients' }, { label: 'Reviews', href: '/reviews' }, { label: 'Request appointment', href: '/request-appointment' }])}
+      ${pillLinks([{ label: 'Services', href: '/services' }, { label: 'New patients', href: '/new-patients' }, { label: 'Reviews', href: '/patient-reviews' }, { label: 'Request appointment', href: '/request-appointment' }])}
     </div></section>`,
     faq: [
       ['Who are the dentists at Elm Ridge?', 'Jeff Muszynski, DDS and Kayla Muszynski, DDS.'],
@@ -782,7 +782,7 @@ function doctorPage(doctor) {
       <h2>Clinical Focus Areas</h2><ul>${doctor.focus.map((item) => `<li>${esc(item)}</li>`).join('')}</ul>
       <h2>Education</h2><ul><li>Abilene Christian University, undergraduate school</li><li>University of Oklahoma College of Dentistry, dental school</li><li>Dental school graduation: ${doctor.gradYear}</li></ul>
       <h2>Linked Services</h2>${pillLinks(doctor.links)}
-      ${pillLinks([{ label: 'All doctors', href: '/doctors' }, { label: 'Services', href: '/services' }, { label: 'New patients', href: '/new-patients' }, { label: 'Reviews', href: '/reviews' }, { label: 'Request appointment', href: '/request-appointment' }])}
+      ${pillLinks([{ label: 'All doctors', href: '/doctors' }, { label: 'Services', href: '/services' }, { label: 'New patients', href: '/new-patients' }, { label: 'Reviews', href: '/patient-reviews' }, { label: 'Request appointment', href: '/request-appointment' }])}
     </div></section>`,
     faq: [
       [`Where did ${doctor.name} go to school?`, `${doctor.name} attended Abilene Christian University for undergraduate school and the University of Oklahoma College of Dentistry for dental school.`],
@@ -865,7 +865,7 @@ const serviceLinks = {
   newPatients: { label: 'New patients', href: '/new-patients' },
   insurance: { label: 'Insurance and financing', href: '/insurance-and-financing' },
   appointment: { label: 'Request appointment', href: '/request-appointment' },
-  reviews: { label: 'Reviews', href: '/reviews' },
+  reviews: { label: 'Reviews', href: '/patient-reviews' },
   jeff: { label: 'Jeff Muszynski, DDS', href: '/dr-jeff-muszynski-dds' },
   kayla: { label: 'Kayla Muszynski, DDS', href: '/dr-kayla-muszynski-dds' },
 };
@@ -2017,7 +2017,7 @@ function buildNewPatientInsuranceAppointmentPages() {
         { kicker: 'Comfort Options', label: 'Nitrous oxide and oral conscious sedation', href: '/sedation-dentistry-killeen-tx', text: 'Comfort options are available for appropriate patients. IV sedation is not offered.' },
         { kicker: 'Sleep Apnea', label: 'Take-home sleep studies and oral appliances', href: '/sleep-apnea-dentist-killeen-tx', text: 'Oral appliances may be used after sleep-study data and physician diagnosis.' },
       ])}
-      <div class="mt-8">${pillLinks([{ label: 'See all services', href: '/services' }, { label: 'Read patient reviews', href: '/reviews' }])}</div>
+      <div class="mt-8">${pillLinks([{ label: 'See all services', href: '/services' }, { label: 'Read patient reviews', href: '/patient-reviews' }])}</div>
     </div></section>
     <section class="py-16 bg-white"><div class="max-w-6xl mx-auto px-6 grid lg:grid-cols-2 gap-8">
       <div class="border border-teal-light bg-stone p-8">
@@ -2145,7 +2145,13 @@ function reviewCards(items, compact = false) {
 function buildReviewsBeforeAfterAiPages() {
   if (fs.existsSync('reviews')) fs.rmSync('reviews', { recursive: true, force: true });
   if (fs.existsSync('reviews.html')) fs.rmSync('reviews.html', { force: true });
-  writeCustomPage('reviews.html', '/reviews', 'Patient Reviews | Elm Ridge Implant and Family Dentistry', 'Read patient reviews for Elm Ridge Implant and Family Dentistry in Killeen. 5.0 Google rating from 550+ reviews.', 'Reviews', `${hero('Patient Reviews', 'Real reviews from real patients', reviewPhrase)}<section class="py-16 bg-white"><div class="max-w-7xl mx-auto px-6 space-y-12"><div><p class="text-charcoal/65 leading-7 max-w-3xl">These comments come from public patient reviews and testimonials. They are shared as patient feedback, not as review schema.</p></div><div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-5">${reviewCards(reviews)}</div><div class="bg-stone border border-teal-light p-8">${pillLinks([{ label: 'New patients', href: '/new-patients' }, { label: 'Services', href: '/services' }, { label: 'Request appointment', href: '/request-appointment' }, { label: 'Call ' + phoneDisplay, href: phoneHref }])}</div></div></section>`);
+  if (fs.existsSync('patient-reviews')) fs.rmSync('patient-reviews', { recursive: true, force: true });
+  if (fs.existsSync('patient-reviews.html')) fs.rmSync('patient-reviews.html', { force: true });
+  const reviewsPageBody = `${hero('Patient Reviews', 'Real reviews from real patients', reviewPhrase)}<section class="py-16 bg-white"><div class="max-w-7xl mx-auto px-6 space-y-12"><div><p class="text-charcoal/65 leading-7 max-w-3xl">These comments come from public patient reviews and testimonials. They are shared as patient feedback, not as review schema.</p></div><div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-5">${reviewCards(reviews)}</div><div class="bg-stone border border-teal-light p-8">${pillLinks([{ label: 'New patients', href: '/new-patients' }, { label: 'Services', href: '/services' }, { label: 'Request appointment', href: '/request-appointment' }, { label: 'Call ' + phoneDisplay, href: phoneHref }])}</div></div></section>`;
+  writeCustomPage('patient-reviews', '/patient-reviews', 'Patient Reviews | Elm Ridge Implant and Family Dentistry', 'Read patient reviews for Elm Ridge Implant and Family Dentistry in Killeen. 5.0 Google rating from 550+ reviews.', 'Reviews', reviewsPageBody);
+  fs.copyFileSync('patient-reviews', 'patient-reviews.html');
+  fs.copyFileSync('patient-reviews', 'reviews');
+  fs.copyFileSync('patient-reviews', 'reviews.html');
 
   writePage('cosmetic-smile-simulator-killeen-tx', {
     path: '/cosmetic-smile-simulator-killeen-tx',
@@ -2260,7 +2266,7 @@ Key pages:
 - /new-patients
 - /insurance-and-financing
 - /request-appointment
-- /reviews
+- /patient-reviews
 - /ai-summary
 
 Services:
@@ -2390,7 +2396,7 @@ function cleanupText(html) {
     ['href="/#services"', 'href="/services"'],
     ['href="/#contact"', 'href="/request-appointment"'],
     ['href="/#team"', 'href="/doctors"'],
-    ['href="/#reviews"', 'href="/reviews"'],
+    ['href="/#reviews"', 'href="/patient-reviews"'],
     ['href="/#before-after"', 'href="/cosmetic-dentistry-killeen-tx"'],
     ['"name":"Dr. Jeff Muszynski, DDS"', '"name":"Jeff Muszynski, DDS"'],
     ['"name":"Dr. Kayla Muszynski, DDS"', '"name":"Kayla Muszynski, DDS"'],
@@ -2637,7 +2643,7 @@ function patchPreservedDesignedServicePages() {
           <div class="bg-white border border-teal-light p-6"><h3 class="font-display text-3xl text-charcoal mb-3">Typical public ranges</h3><p>Custom tray whitening commonly ranges from $250-$500. Clear aligners commonly range from $3,500-$5,500. Porcelain veneers commonly range from $1,200-$2,500 per tooth. We can estimate benefits, but final payment is determined by the insurance company.</p></div>
           <div class="bg-white border border-teal-light p-6"><h3 class="font-display text-3xl text-charcoal mb-3">When to pause cosmetic work</h3><p>Active decay, gum disease, infection, unstable bite problems, severe grinding, or failing old dental work may need to be addressed first so cosmetic treatment lasts and feels comfortable.</p></div>
         </div>
-        <div class="bg-white border border-teal-light p-6"><h3 class="font-display text-3xl text-charcoal mb-3">Compare the cosmetic options</h3>${pillLinks([{ label: 'Veneers', href: '/veneers-killeen-tx' }, { label: 'Cosmetic bonding', href: '/cosmetic-bonding-killeen-tx' }, { label: 'Teeth whitening', href: '/teeth-whitening-killeen-tx' }, { label: 'Clear aligners', href: '/clear-aligners-killeen-tx' }, { label: 'Reviews', href: '/reviews' }, { label: 'Request appointment', href: '/request-appointment' }])}</div>
+        <div class="bg-white border border-teal-light p-6"><h3 class="font-display text-3xl text-charcoal mb-3">Compare the cosmetic options</h3>${pillLinks([{ label: 'Veneers', href: '/veneers-killeen-tx' }, { label: 'Cosmetic bonding', href: '/cosmetic-bonding-killeen-tx' }, { label: 'Teeth whitening', href: '/teeth-whitening-killeen-tx' }, { label: 'Clear aligners', href: '/clear-aligners-killeen-tx' }, { label: 'Reviews', href: '/patient-reviews' }, { label: 'Request appointment', href: '/request-appointment' }])}</div>
       </div></section>`;
       html = html.replace('<section id="smile-simulator"', `${cosmeticBlock}<section id="smile-simulator"`);
     }
@@ -2729,7 +2735,7 @@ function patchHomepage() {
           <p class="font-body text-xs tracking-widest uppercase text-teal-dark mb-3">${reviewPhrase}</p>
           <h2 class="font-display text-4xl md:text-5xl font-light italic text-charcoal leading-snug">Real reviews from real patients.</h2>
         </div>
-        <a href="/reviews" class="inline-flex items-center justify-center px-7 py-3 border border-teal text-teal font-body font-semibold tracking-widest uppercase text-xs hover:bg-teal hover:text-white">Read Patient Reviews</a>
+        <a href="/patient-reviews" class="inline-flex items-center justify-center px-7 py-3 border border-teal text-teal font-body font-semibold tracking-widest uppercase text-xs hover:bg-teal hover:text-white">Read Patient Reviews</a>
       </div>
       <div id="home-review-carousel" class="overflow-hidden border-y border-teal-light py-6" aria-label="Patient review carousel">
         <div id="home-review-track" class="flex gap-4">${reviewCards(reviews.slice(0, 10), true)}</div>
@@ -2740,7 +2746,7 @@ function patchHomepage() {
   <!-- SERVICES -->`);
   html = html.replaceAll('href="#contact"', 'href="/request-appointment"');
   html = html.replaceAll('href="#before-after"', 'href="/cosmetic-dentistry-killeen-tx"');
-  html = html.replaceAll('href="#reviews"', 'href="/reviews"');
+  html = html.replaceAll('href="#reviews"', 'href="/patient-reviews"');
   html = html.replaceAll('href="#services"', 'href="/services"');
   html = html.replaceAll('href="/request-appointment"', 'href="/request-appointment"');
   html = html.replace(/<label for="appointment-website">Website<\/label>\s*/g, '');

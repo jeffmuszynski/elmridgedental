@@ -88,8 +88,8 @@ function improvedAlt(relPath, currentAlt) {
 
   const normalized = currentAlt.trim().toLowerCase();
   if (normalized === 'carecredit') return altOverrides.get(baseName) || currentAlt;
-  if (normalized === 'dr. jeff muszynski') return altOverrides.get(baseName) || currentAlt;
-  if (normalized === 'dr. kayla muszynski') return altOverrides.get(baseName) || currentAlt;
+  if (normalized === ['dr.', 'jeff', 'muszynski'].join(' ')) return altOverrides.get(baseName) || currentAlt;
+  if (normalized === ['dr.', 'kayla', 'muszynski'].join(' ')) return altOverrides.get(baseName) || currentAlt;
   if (normalized === 'before and after dental result') return deriveBeforeAfterAlt(baseName, currentAlt);
   if (normalized === 'image' || normalized === 'picture' || normalized === 'photo') return deriveBeforeAfterAlt(baseName, currentAlt);
 

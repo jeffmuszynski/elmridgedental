@@ -759,8 +759,8 @@ export const server = createServer(async (req, res) => {
   const normalizedPath = requestUrl.pathname.replace(/\/+$/, '') || '/';
   const oldDestination = oldUrlRedirects.get(normalizedPath.toLowerCase());
 
-  if (requestUrl.pathname === '/reviews/') {
-    const destination = new URL('/reviews', requestUrl.origin);
+  if (requestUrl.pathname === '/reviews' || requestUrl.pathname === '/reviews/') {
+    const destination = new URL('/patient-reviews', requestUrl.origin);
     destination.search = requestUrl.search;
     res.writeHead(301, {
       Location: destination.toString(),
@@ -770,9 +770,20 @@ export const server = createServer(async (req, res) => {
     return;
   }
 
-  if (requestUrl.pathname === '/reviews') {
+  if (requestUrl.pathname === '/patient-reviews/') {
+    const destination = new URL('/patient-reviews', requestUrl.origin);
+    destination.search = requestUrl.search;
+    res.writeHead(301, {
+      Location: destination.toString(),
+      'Cache-Control': 'public, max-age=3600',
+    });
+    res.end();
+    return;
+  }
+
+  if (requestUrl.pathname === '/patient-reviews') {
     try {
-      const data = await readFile(join(__dirname, 'reviews.html'));
+      const data = await readFile(join(__dirname, 'patient-reviews'));
       const body = data.toString('utf8').replaceAll('__RECAPTCHA_SITE_KEY__', process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY || '');
       res.writeHead(200, {
         'Content-Type': 'text/html; charset=utf-8',

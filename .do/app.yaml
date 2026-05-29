@@ -34,11 +34,17 @@ ingress:
         path:
           exact: /reviews/
       redirect:
-        uri: /reviews
+        uri: /patient-reviews
         redirect_code: 301
     - match:
         path:
-          prefix: /reviews
+          exact: /patient-reviews/
+      redirect:
+        uri: /patient-reviews
+        redirect_code: 301
+    - match:
+        path:
+          prefix: /patient-reviews
       component:
         name: web
     - match:
