@@ -2725,6 +2725,7 @@ function patchPreservedDesignedServicePages() {
     let html = fs.readFileSync(implantFile, 'utf8');
     html = modernizePageChrome(html);
     html = html.replaceAll('conscious sedation with triazolam', 'oral conscious sedation');
+    html = html.replace(/\boral\s+oral conscious sedation\b/g, 'oral conscious sedation');
     html = html.replaceAll('All-on-4 style', 'All-on-4-style');
     html = html.replace(
       '<p>Patients naturally want to know what dental implants cost. The honest answer is that pricing depends on the number of teeth being replaced, the number of implants needed, the type of final restoration, whether bone grafting is required, the condition of the remaining teeth, and the patient&apos;s medical history. A simple single implant is a very different treatment than rebuilding a full arch. Elm Ridge offers paid consultations so the recommendation is based on an exam, imaging, and a real plan instead of a generic online number.</p>',
