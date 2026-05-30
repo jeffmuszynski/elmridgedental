@@ -475,14 +475,18 @@ function serviceBody(page) {
   ];
   const related = uniqueLinks([...(page.related || []), ...supportLinks]).filter((item) => item.href !== `/${page.slug}`);
   const nextQuestions = page.nextQuestions || defaultNextQuestions(page, related);
-  return `${pageIntroBlock(page)}
+  const introBlock = page.hideIntroBlock ? '' : pageIntroBlock(page);
+  const approachBlock = page.hideApproachSection ? '' : `
+    <h2>How Elm Ridge Approaches It</h2>
+    <p>${page.approach || defaultApproachText(page)}</p>`;
+
+  return `${introBlock}
   <section class="py-14 bg-white"><div class="max-w-4xl mx-auto px-6 prose-page space-y-7">
     <h2>At a Glance</h2>
     ${atAGlance(page.glance)}
     <h2>Who It Helps</h2>
     <p>${page.who}</p>
-    <h2>How Elm Ridge Approaches It</h2>
-    <p>${page.approach || defaultApproachText(page)}</p>
+    ${approachBlock}
     ${renderDetailSections(page.detailSections)}
     <h2>What to Expect</h2>
     <p>${page.expect}</p>
@@ -1509,20 +1513,22 @@ const serviceEnhancements = {
     payment: costContext,
   },
   'clear-aligners-killeen-tx': {
-    h1: 'Clear Aligners Planned Around Your Bite and Next Steps',
+    h1: 'Invisalign® Clear Aligners',
     glance: [
       ['Typical range', costRanges.clearAligners],
-      ['Brands', 'Multiple clear aligner brands when appropriate'],
+      ['Treatment style', 'Clear aligners without metal brackets or wires'],
       ['Good for', 'Mild/moderate crowding, spacing, relapse after braces, minor bite issues'],
       ['Also useful for', 'Pre-restorative alignment before veneers, crowns, or implants'],
     ],
     who: 'Clear aligners may help adults and teens with mild to moderate crowding, spacing, relapse after braces, minor bite issues, or teeth that need positioning before cosmetic or restorative work.',
-    approach: 'Elm Ridge uses clear aligners as the primary term because the practice can use multiple brands. The goal is responsible tooth movement, not locking every patient into one brand name.',
+    hideIntroBlock: true,
+    hideApproachSection: true,
     detailSections: [
       { title: 'Clear aligners vs cosmetic restorations', html: '<p>Sometimes the best cosmetic move is to move the teeth first, then use less bonding, veneer, or crown material. In other cases, restorations address shape or color better than aligners alone.</p>' },
-      { title: 'Timeline and retainers', html: '<p>Treatment length depends on the amount of movement and how well aligners are worn. Retainers are part of protecting the result after treatment.</p>' },
       { title: 'Typical cost range', html: costRangeHtml(costRanges.clearAligners, 'Cost depends on case complexity, records, monitoring, refinements, retainers, insurance orthodontic benefits, and financing.') },
     ],
+    nextQuestions: [],
+    call: 'gaps, crowding, or crooked teeth keep drawing your attention in photos or conversation, or if you notice more chipping and wear occurring.',
     payment: costContext,
   },
   'sleep-apnea-dentist-killeen-tx': {
@@ -1706,7 +1712,7 @@ function buildServicesHub() {
       ['Veneers', '/veneers-killeen-tx', 'Porcelain veneers for selected smile-design cases.'],
       ['Cosmetic bonding', '/cosmetic-bonding-killeen-tx', 'Conservative repairs for chips, gaps, and small shape changes.'],
       ['Teeth whitening', '/teeth-whitening-killeen-tx', 'Custom trays with take-home whitening gel.'],
-      ['Clear aligners', '/clear-aligners-killeen-tx', 'Clear aligner treatment using multiple brands when appropriate.'],
+      ['Invisalign® Clear Aligners', '/clear-aligners-killeen-tx', 'Discreet, comfortable clear aligners that straighten your teeth with no metal and no hassle.'],
       ['Smile makeovers', '/cosmetic-dentistry-killeen-tx', 'Coordinated cosmetic and restorative planning.'],
     ]],
     ['Emergency Dentistry', [
@@ -1768,6 +1774,8 @@ function makePage(overrides) {
     introBlockAlt: page.introBlockAlt,
     introBlockImageWidth: page.introBlockImageWidth,
     introBlockImageHeight: page.introBlockImageHeight,
+    hideIntroBlock: page.hideIntroBlock,
+    hideApproachSection: page.hideApproachSection,
     extra: page.extra || '',
     providers: page.providers || ['Jeff Muszynski, DDS', 'Kayla Muszynski, DDS'],
     related: page.related || [serviceLinks.services, serviceLinks.newPatients, serviceLinks.insurance, serviceLinks.appointment, serviceLinks.reviews],
@@ -1861,7 +1869,7 @@ function buildServicePages() {
     }),
     makePage({ slug: 'cosmetic-bonding-killeen-tx', name: 'Cosmetic Bonding', h1: 'Cosmetic Bonding for Chips, Gaps, and Small Shape Changes', answer: 'Cosmetic bonding can repair small chips, close selected small gaps, and improve tooth shape with tooth-colored composite. It is often more conservative than veneers but not right for every case.', related: cosmeticRelated, providers: ['Kayla Muszynski, DDS'] }),
     makePage({ slug: 'teeth-whitening-killeen-tx', name: 'Teeth Whitening', h1: 'Custom Take-Home Whitening Trays', answer: 'Elm Ridge offers teeth whitening with custom trays and take-home whitening gel. Crowns, fillings, and veneers do not whiten like natural enamel, so timing matters if dental work is planned.', related: cosmeticRelated, providers: ['Kayla Muszynski, DDS'], image: 'gbp/tooth-whitening-bleaching.png', alt: 'Teeth whitening shade comparison with brighter natural enamel', medical: false }),
-    makePage({ slug: 'clear-aligners-killeen-tx', name: 'Clear Aligners', h1: 'Clear Aligners Without Locking You Into One Brand', answer: 'Elm Ridge offers clear aligners and uses multiple brands when appropriate. The focus is on tooth movement that fits your bite, goals, and long-term dental health.', related: cosmeticRelated, providers: ['Jeff Muszynski, DDS', 'Kayla Muszynski, DDS'] }),
+    makePage({ slug: 'clear-aligners-killeen-tx', name: 'Invisalign® Clear Aligners', h1: 'Invisalign® Clear Aligners', answer: 'Ditch the metal brackets and wires for a more comfortable and convenient alternative to conventional braces - straighten your teeth with clear aligners.', related: cosmeticRelated, providers: ['Jeff Muszynski, DDS', 'Kayla Muszynski, DDS'], image: 'gbp/invisalign-clear-aligners-killeen-tx.png', alt: 'Woman holding clear aligners for Invisalign treatment' }),
     makePage({ slug: 'sedation-dentistry-killeen-tx', name: 'Sedation Dentistry', h1: 'Sedation Options for a Calmer Dental Visit', answer: 'Elm Ridge offers nitrous oxide and oral conscious sedation for evaluated candidates. Elm Ridge does not offer IV sedation, deep sedation, or general anesthesia.', providers: ['Jeff Muszynski, DDS'], related: [{ label: 'Nitrous oxide', href: '/nitrous-oxide-dentist-killeen-tx' }, { label: 'Oral conscious sedation', href: '/oral-conscious-sedation-killeen-tx' }, serviceLinks.jeff, serviceLinks.appointment], faq: [['Do you offer IV sedation?', 'No. Elm Ridge offers nitrous oxide and oral conscious sedation, but not IV sedation.'], ['Can I drive after nitrous oxide?', 'Most patients can drive after nitrous oxide because it wears off quickly.'], ['Do I need a driver for oral conscious sedation?', 'Yes. Oral conscious sedation requires a driver and planning before the appointment.']] }),
     makePage({ slug: 'nitrous-oxide-dentist-killeen-tx', name: 'Nitrous Oxide', h1: 'Nitrous Oxide for Light Dental Relaxation', answer: 'Nitrous oxide can help take the edge off dental visits and wears off quickly after the appointment.', providers: ['Jeff Muszynski, DDS'], related: [{ label: 'Sedation dentistry', href: '/sedation-dentistry-killeen-tx' }, { label: 'Oral conscious sedation', href: '/oral-conscious-sedation-killeen-tx' }, serviceLinks.appointment] }),
     makePage({ slug: 'oral-conscious-sedation-killeen-tx', name: 'Oral Conscious Sedation', h1: 'Oral Conscious Sedation for Evaluated Candidates', answer: 'Oral conscious sedation uses prescribed medication for deeper relaxation while the patient remains responsive. It requires evaluation, instructions, and a driver. It is not IV sedation.', providers: ['Jeff Muszynski, DDS'], related: [{ label: 'Sedation dentistry', href: '/sedation-dentistry-killeen-tx' }, { label: 'Nitrous oxide', href: '/nitrous-oxide-dentist-killeen-tx' }, serviceLinks.jeff] }),
@@ -2644,7 +2652,6 @@ function cleanupText(html) {
     ['Clear Aligners is often thought of as cosmetic treatment', 'Clear aligner treatment is often thought of as cosmetic treatment'],
     ['In-office whitening delivers similar results in a single visit.', 'Elm Ridge uses custom take-home whitening trays with professional whitening gel.'],
     ['href="/insurance/invisalign"', 'href="/insurance-and-financing"'],
-    ['Invisalign', 'clear aligners'],
     ['Implant dentist in Killeen, TX guide covering experience, CBCT imaging, guided surgery, treatment planning, and private practice care.', 'Learn how to compare implant dentistry experience, CBCT imaging, guided surgery, treatment planning, and private-practice care in Killeen.'],
     ['Contact / Appointment', 'request appointment'],
     ["Killeen's Trusted Family and Implant Dental Home", 'Killeen&rsquo;s Trusted Family and Implant Dental Home'],
