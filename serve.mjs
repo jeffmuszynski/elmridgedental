@@ -864,7 +864,7 @@ export const server = createServer(async (req, res) => {
     }
     const ext = extname(servedPath).toLowerCase();
     const contentType = ext ? (mime[ext] || 'application/octet-stream') : 'text/html; charset=utf-8';
-    const longCacheExts = new Set(['.png', '.jpg', '.jpeg', '.gif', '.svg', '.ico', '.webp']);
+    const longCacheExts = new Set(['.png', '.jpg', '.jpeg', '.gif', '.svg', '.ico', '.webp', '.css', '.js', '.woff', '.woff2']);
     const body = contentType.startsWith('text/html')
       ? data.toString('utf8').replaceAll('__RECAPTCHA_SITE_KEY__', process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY || '')
       : data;

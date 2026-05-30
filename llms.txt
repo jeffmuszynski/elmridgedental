@@ -24,7 +24,7 @@ Key pages:
 - /ai-summary
 
 Services:
-Family dentistry, cleanings, exams, fillings, crowns, bridges, root canals including molars, extractions, wisdom teeth removal, dentures, partial dentures, immediate dentures, dental implants, single tooth implants, implant bridges, snap-on dentures, full-arch dental implants, All-on-4 and All-on-X search-related full-arch planning, socket preservation bone grafting, limited sinus lift/sinus bump with implant placement when appropriate, cosmetic dentistry, veneers, cosmetic bonding, take-home teeth whitening, clear aligners, emergency dentistry, nitrous oxide, oral conscious sedation, sleep apnea oral appliances after physician diagnosis, take-home sleep studies workflow, and limited TMJ splint therapy.
+Family dentistry, cleanings, exams, fillings, crowns, bridges, root canals including molars, extractions, wisdom teeth removal, dentures, partial dentures, immediate dentures, dental implants, single tooth implants, implant bridges, snap-on dentures, full-arch dental implants, including treatment patients often search for as All-on-4 or All-on-X, socket preservation bone grafting, limited sinus lift/sinus bump with implant placement when appropriate, cosmetic dentistry, veneers, cosmetic bonding, take-home teeth whitening, clear aligners, emergency dentistry, nitrous oxide, oral conscious sedation, sleep apnea oral appliances after physician diagnosis, take-home sleep studies workflow, and limited TMJ splint therapy.
 
 Insurance summary:
 Elm Ridge is in-network with many major PPO dental plans and can file many out-of-network PPO plans. CareCredit and Cherry are available. We can estimate benefits, but final payment is determined by the insurance company.

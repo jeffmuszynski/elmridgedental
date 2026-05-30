@@ -107,7 +107,7 @@ const firstLinkRules = [
   { key: 'crown', regex: /\bcrown\b/i, href: '/dental-crowns-killeen-tx' },
   { key: 'snap-on dentures', regex: /\bsnap-on dentures\b/i, href: '/snap-on-dentures-killeen-tx' },
   { key: 'denture', regex: /\bdenture(s)?\b/i, href: '/dentures-killeen-tx' },
-  { key: 'implant bridge', regex: /\bimplant bridge\b/i, href: '/implant-bridges-killeen-tx' },
+  { key: 'implant bridge', regex: /\bimplant bridge\b/i, href: '/implant-bridge-killeen-tx' },
   { key: 'sleep apnea', regex: /\bsleep apnea\b/i, href: '/sleep-dentistry-killeen-tx' },
   { key: 'snoring', regex: /\bsnoring\b/i, href: '/sleep-dentistry-killeen-tx' },
   { key: 'night guard', regex: /\bnight guard\b/i, href: '/sleep-dentistry-killeen-tx' },

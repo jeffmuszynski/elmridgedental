@@ -80,11 +80,11 @@ export const beforeAfterLightbox = `  <div id="ba-lightbox" class="ba-lightbox" 
       <div class="ba-lightbox__grid">
         <figure class="ba-lightbox__item">
           <p id="ba-lightbox-before-label">Before</p>
-          <img id="ba-lightbox-before" src="" alt="" />
+          <img id="ba-lightbox-before" src="" alt="" width="1200" height="900" />
         </figure>
         <figure class="ba-lightbox__item ba-lightbox__after">
           <p id="ba-lightbox-after-label">After</p>
-          <img id="ba-lightbox-after" src="" alt="" />
+          <img id="ba-lightbox-after" src="" alt="" width="1200" height="900" />
         </figure>
       </div>
     </div>

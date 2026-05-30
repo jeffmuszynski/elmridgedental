@@ -142,7 +142,7 @@ writePage('what-happens-if-you-dont-replace-a-missing-tooth', {
         <p class="text-charcoal/65 leading-7">A removable option when several teeth are missing or cost is the main constraint.</p>
       </a>
     </div>
-    <p>We also help patients compare <a href="/dental-implants-killeen-tx">dental implants</a>, <a href="/implant-bridges-killeen-tx">implant bridges</a>, and other practical options after extraction so the replacement plan matches the whole mouth, not just one space.</p>
+    <p>We also help patients compare <a href="/dental-implants-killeen-tx">dental implants</a>, <a href="/implant-bridge-killeen-tx">implant bridges</a>, and other practical options after extraction so the replacement plan matches the whole mouth, not just one space.</p>
 
     <h2>When Should a Missing Tooth Be Replaced?</h2>
     <p>Earlier treatment is often simpler than waiting until teeth shift, bone shrinks, bite changes worsen, surrounding teeth become damaged, or treatment becomes more complex. That does not mean every missing tooth has to be replaced immediately. It means the consequences of waiting should be understood before "later" quietly turns into a much harder case.</p>

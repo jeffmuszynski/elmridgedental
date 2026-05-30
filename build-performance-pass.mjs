@@ -105,7 +105,7 @@ function replaceHomepageHero(html, heroDimensions) {
   if (!updated.includes('rel="preload" as="image" href="/hero-1024.webp"')) {
     updated = updated.replace(
       '<link rel="preconnect" href="https://fonts.googleapis.com" />',
-      '<link rel="preload" as="image" href="/hero-1024.webp" imagesrcset="/hero-640.webp 640w, /hero-1024.webp 1024w, /hero-1920.webp 1920w" imagesizes="(max-width: 768px) 100vw, 1920px" fetchpriority="high" />\n  <link rel="preconnect" href="https://fonts.googleapis.com" />'
+      '<link rel="preload" as="image" href="/hero-1024.webp" imagesrcset="/hero-640.webp 640w, /hero-1024.webp 1024w, /hero-1920.webp 1920w" imagesizes="1920px" fetchpriority="high" media="(min-width: 1024px)" />\n  <link rel="preconnect" href="https://fonts.googleapis.com" />'
     );
   }
   return updated;

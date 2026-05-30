@@ -21,6 +21,7 @@ const phoneHref = 'tel:+12546994127';
 const addressLine = '2601 E Elms Rd, Killeen, TX 76542';
 const mapHref = 'https://www.google.com/maps?q=2601+E+Elms+Rd,+Killeen,+TX+76542';
 const reviewPhrase = '5.0 Google rating from 550+ reviews';
+const googleReviewsUrl = 'https://www.google.com/search?sca_esv=1fed64863c61f7e3&rlz=1C1CHBF_enUS838US838&si=AL3DRZEsmMGCryMMFSHJ3StBhOdZ2-6yYkXd_doETEE1OR-qOcCQEtiZEuEbzVOWiTG7IMgdZ9ZulxcIONMcgPSztI-kxn00fuWCL8GJr8FNbnI-DhdVYV91MncWhjtGyCDIANnToFHe-ZPToFzcvLWHKGRiTxRUBzwzAlMQziOr_9QodJKUQnk%3D&q=Elm+Ridge+Implant+and+Family+Dentistry+Reviews&sa=X&ved=2ahUKEwiOw--es9-UAxWYmGoFHaurFh8Q0bkNegQIIxAH&biw=1420&bih=1020&dpr=0.9';
 const insuranceCaveat = 'We can estimate benefits, but final payment is determined by the insurance company.';
 const serviceAreas = ['Killeen', 'Harker Heights', 'Copperas Cove', 'Fort Cavazos / Fort Hood', 'Belton', 'Salado', 'Temple', 'Nolanville'];
 
@@ -123,7 +124,14 @@ function uniqueLinks(items) {
 }
 
 function cardGrid(items) {
-  return `<div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-5 not-prose">${items.map((item) => `<a href="${item.href}" class="block bg-white border border-teal-light p-6 hover:border-teal transition-colors"><p class="text-xs uppercase tracking-[0.26em] text-teal-dark mb-3">${esc(item.kicker || 'Dental care')}</p><h3 class="font-display text-3xl text-charcoal mb-3">${esc(item.label)}</h3><p class="text-charcoal/65 leading-7">${esc(item.text || 'See when this care may help and what Elm Ridge considers before recommending it.')}</p></a>`).join('')}</div>`;
+  return `<div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-5 not-prose">${items.map((item) => {
+    const kicker = item.kicker ? `<p class="text-xs uppercase tracking-[0.26em] text-teal-dark mb-3">${esc(item.kicker)}</p>` : '';
+    return `<a href="${item.href}" class="block bg-white border border-teal-light p-6 hover:border-teal transition-colors">${kicker}<h3 class="font-display text-3xl text-charcoal mb-3">${esc(item.label)}</h3><p class="text-charcoal/65 leading-7">${esc(item.text || 'Learn what Elm Ridge considers before recommending this option.')}</p></a>`;
+  }).join('')}</div>`;
+}
+
+function externalGoogleReviewsLink(classes = 'inline-flex items-center justify-center px-7 py-3 border border-teal text-teal font-body font-semibold tracking-widest uppercase text-xs hover:bg-teal hover:text-white') {
+  return `<a href="${esc(googleReviewsUrl)}" target="_blank" rel="noopener noreferrer" class="${classes}">See more reviews on Google</a>`;
 }
 
 function simpleSchema(type, name, pagePath, description, extra = {}) {
@@ -151,48 +159,48 @@ function relatedSection(items) {
 }
 
 const relatedDescriptions = {
-  '/services': 'Services - Browse the full Elm Ridge care menu.',
-  '/new-patients': 'New patients - What to expect before your first visit.',
-  '/insurance-and-financing': 'Insurance and financing - How benefits, estimates, and payment options work.',
-  '/request-appointment': 'Request appointment - Send a request or call for help choosing the right visit.',
-  '/patient-reviews': 'Patient reviews - Read what patients say about their experience at Elm Ridge.',
-  '/dental-implants-killeen-tx': 'Dental implants - Learn how implants can replace missing teeth with a long-term fixed option.',
-  '/single-tooth-implant-killeen-tx': 'Single tooth implants - Compare one-tooth replacement options before choosing a plan.',
-  '/implant-bridge-killeen-tx': 'Implant bridges - A fixed option when several teeth are missing in a row.',
-  '/snap-on-dentures-killeen-tx': 'Snap-on dentures - A removable implant-retained option, especially useful for loose lower dentures.',
-  '/full-arch-dental-implants-killeen-tx': 'Full-arch dental implants - Fixed implant teeth for a full upper or lower arch.',
-  '/all-on-4-dental-implants-killeen-tx': 'All-on-4 dental implants - How this search term fits into full-arch planning.',
-  '/dentures-vs-implants-killeen-tx': 'Dentures vs implants - Compare stability, cost, maintenance, and long-term tradeoffs.',
-  '/bone-grafting-killeen-tx': 'Socket preservation grafting - How preserving bone after extraction may protect future implant options.',
-  '/sinus-lift-killeen-tx': 'Limited sinus bump planning - When upper back implants need a little more room.',
-  '/dental-implant-cost-killeen-tx': 'Dental implant cost - What affects implant estimates and insurance math.',
-  '/dental-crowns-killeen-tx': 'Dental crowns - Stronger protection for cracked, worn, or heavily filled teeth.',
-  '/crown-cost-killeen-tx': 'Crown cost - What affects crown fees, buildup needs, and insurance estimates.',
-  '/root-canal-killeen-tx': 'Root canals - When infection is the reason a tooth needs more than a crown.',
-  '/molar-root-canal-killeen-tx': 'Molar root canals - Why back teeth need careful canal anatomy and crown planning.',
-  '/root-canal-cost-killeen-tx': 'Root canal cost - How tooth type, complexity, and restoration needs affect the estimate.',
-  '/tooth-extractions-killeen-tx': 'Tooth extractions - When removing a tooth is the right move and how replacement planning works.',
-  '/wisdom-teeth-removal-killeen-tx': 'Wisdom teeth - Case-by-case removal with referral when anatomy is more complex.',
-  '/dentures-killeen-tx': 'Dentures - Traditional, immediate, partial, and implant-supported options explained honestly.',
-  '/partial-dentures-killeen-tx': 'Partial dentures - Removable replacement for several missing teeth.',
-  '/immediate-dentures-killeen-tx': 'Immediate dentures - Same-day tooth removal plans with realistic follow-up expectations.',
-  '/cosmetic-dentistry-killeen-tx': 'Cosmetic dentistry - Natural-looking smile improvements planned around teeth, bite, and goals.',
-  '/veneers-killeen-tx': 'Veneers - Porcelain shape and shade changes when the tooth structure supports it.',
-  '/cosmetic-bonding-killeen-tx': 'Cosmetic bonding - Conservative repairs for small chips, gaps, and shape changes.',
-  '/teeth-whitening-killeen-tx': 'Teeth whitening - Custom trays with take-home whitening gel.',
-  '/clear-aligners-killeen-tx': 'Clear aligners - Tooth movement for crowding, spacing, relapse, and pre-restorative planning.',
-  '/clear-aligner-cost-killeen-tx': 'Clear aligner cost - What affects aligner fees and financing.',
-  '/emergency-dentist-killeen-tx': 'Emergency dentistry - Call first for urgent pain, swelling, broken teeth, or trauma.',
-  '/broken-tooth-killeen-tx': 'Broken tooth - What determines whether a tooth needs a filling, crown, root canal, or extraction.',
-  '/toothache-killeen-tx': 'Toothache - When pain points to decay, cracks, infection, bite stress, or emergency care.',
-  '/dental-abscess-killeen-tx': 'Dental abscess - Swelling and infection signs that should not wait.',
-  '/lost-crown-killeen-tx': 'Lost crown - What to do now and when the tooth needs a new crown or deeper treatment.',
-  '/knocked-out-tooth-killeen-tx': 'Knocked-out tooth - Permanent tooth avulsion is urgent and time-sensitive.',
-  '/sleep-apnea-dentist-killeen-tx': 'Sleep apnea oral appliances - Dental appliance therapy after physician diagnosis.',
-  '/sleep-apnea-appliance-cost-killeen-tx': 'Sleep apnea appliance cost - Appliance ranges and medical insurance requirements.',
-  '/tmj-splint-therapy-killeen-tx': 'TMJ splint therapy - Conservative splint care for selected clenching, grinding, and jaw soreness patterns.',
-  '/dr-jeff-muszynski-dds': 'Jeff Muszynski, DDS — Meet the dentist who leads implant, surgical, root canal, and complex restorative care.',
-  '/dr-kayla-muszynski-dds': 'Kayla Muszynski, DDS — Meet one of the dentists who provides family, restorative, and cosmetic care at Elm Ridge.',
+  '/services': 'Browse the full Elm Ridge care menu.',
+  '/new-patients': 'What to expect before your first visit.',
+  '/insurance-and-financing': 'How benefits, estimates, and payment options work.',
+  '/request-appointment': 'Send a request or call for help choosing the right visit.',
+  '/patient-reviews': 'Read what patients say about their experience at Elm Ridge.',
+  '/dental-implants-killeen-tx': 'Learn how implants can replace missing teeth with a long-term fixed option.',
+  '/single-tooth-implant-killeen-tx': 'Compare one-tooth replacement options before choosing a plan.',
+  '/implant-bridge-killeen-tx': 'A fixed option when several teeth are missing in a row.',
+  '/snap-on-dentures-killeen-tx': 'A removable implant-retained option, especially useful for loose lower dentures.',
+  '/full-arch-dental-implants-killeen-tx': 'Fixed implant teeth for a full upper or lower arch.',
+  '/all-on-4-dental-implants-killeen-tx': 'How this search term fits into full-arch planning.',
+  '/dentures-vs-implants-killeen-tx': 'Compare stability, cost, maintenance, and long-term tradeoffs.',
+  '/bone-grafting-killeen-tx': 'How preserving bone after extraction may protect future implant options.',
+  '/sinus-lift-killeen-tx': 'When upper back implants need a little more room.',
+  '/dental-implant-cost-killeen-tx': 'What affects implant estimates and insurance math.',
+  '/dental-crowns-killeen-tx': 'Stronger protection for cracked, worn, or heavily filled teeth.',
+  '/crown-cost-killeen-tx': 'What affects crown fees, buildup needs, and insurance estimates.',
+  '/root-canal-killeen-tx': 'When infection is the reason a tooth needs more than a crown.',
+  '/molar-root-canal-killeen-tx': 'Why back teeth need careful canal anatomy and crown planning.',
+  '/root-canal-cost-killeen-tx': 'How tooth type, complexity, and restoration needs affect the estimate.',
+  '/tooth-extractions-killeen-tx': 'When removing a tooth is the right move and how replacement planning works.',
+  '/wisdom-teeth-removal-killeen-tx': 'Case-by-case removal with referral when anatomy is more complex.',
+  '/dentures-killeen-tx': 'Traditional, immediate, partial, and implant-supported options explained honestly.',
+  '/partial-dentures-killeen-tx': 'Removable replacement for several missing teeth.',
+  '/immediate-dentures-killeen-tx': 'Same-day tooth removal plans with realistic follow-up expectations.',
+  '/cosmetic-dentistry-killeen-tx': 'Natural-looking smile improvements planned around teeth, bite, and goals.',
+  '/veneers-killeen-tx': 'Porcelain shape and shade changes when the tooth structure supports it.',
+  '/cosmetic-bonding-killeen-tx': 'Conservative repairs for small chips, gaps, and shape changes.',
+  '/teeth-whitening-killeen-tx': 'Custom trays with take-home whitening gel.',
+  '/clear-aligners-killeen-tx': 'Tooth movement for crowding, spacing, relapse, and pre-restorative planning.',
+  '/clear-aligner-cost-killeen-tx': 'What affects aligner fees and financing.',
+  '/emergency-dentist-killeen-tx': 'Call first for urgent pain, swelling, broken teeth, or trauma.',
+  '/broken-tooth-killeen-tx': 'What determines whether a tooth needs a filling, crown, root canal, or extraction.',
+  '/toothache-killeen-tx': 'When pain points to decay, cracks, infection, bite stress, or emergency care.',
+  '/dental-abscess-killeen-tx': 'Swelling and infection signs that should not wait.',
+  '/lost-crown-killeen-tx': 'What to do now and when the tooth needs a new crown or deeper treatment.',
+  '/knocked-out-tooth-killeen-tx': 'Permanent tooth avulsion is urgent and time-sensitive.',
+  '/sleep-apnea-dentist-killeen-tx': 'Dental appliance therapy after physician diagnosis.',
+  '/sleep-apnea-appliance-cost-killeen-tx': 'Appliance ranges and medical insurance requirements.',
+  '/tmj-splint-therapy-killeen-tx': 'Conservative splint care for selected clenching, grinding, and jaw soreness patterns.',
+  '/dr-jeff-muszynski-dds': 'Meet the dentist who leads implant, surgical, root canal, and complex restorative care.',
+  '/dr-kayla-muszynski-dds': 'Meet one of the dentists who provides family, restorative, and cosmetic care at Elm Ridge.',
 };
 
 function providerLinks(names = ['Jeff Muszynski, DDS', 'Kayla Muszynski, DDS']) {
@@ -215,6 +223,23 @@ function serviceKind(page) {
   if (slug.includes('extraction') || slug.includes('wisdom')) return 'oral-surgery';
   if (slug.includes('crown') || slug.includes('bridge') || slug.includes('filling')) return 'restorative';
   return 'family';
+}
+
+function defaultServiceKicker(page) {
+  const kind = serviceKind(page);
+  const labels = {
+    family: 'Family Dentistry',
+    restorative: 'Restorative Dentistry',
+    'root-canal': 'Restorative Dentistry',
+    'oral-surgery': 'Oral Surgery',
+    implant: 'Dental Implants',
+    denture: 'Dentures & Missing Teeth',
+    cosmetic: 'Cosmetic Dentistry',
+    comfort: 'Comfort Options',
+    sleep: 'Sleep Apnea Dentistry',
+    tmj: 'Conservative TMJ Care',
+  };
+  return labels[kind] || 'Family Dentistry';
 }
 
 function defaultServiceGlance(page) {
@@ -406,7 +431,7 @@ function defaultNextQuestions(page, related) {
     .map((item) => ({
       label: item.label,
       href: item.href,
-      text: relatedDescriptions[item.href] || `${item.label} - See when this may help and what Elm Ridge considers before recommending it.`,
+      text: relatedDescriptions[item.href] || 'Learn what Elm Ridge considers before recommending this option.',
     }));
 }
 
@@ -454,7 +479,7 @@ function createServicePage(page) {
     title: page.title,
     description: page.description,
     crumb: page.crumb || page.h1,
-    kicker: page.kicker || 'Dental Care',
+    kicker: page.kicker || defaultServiceKicker(page),
     h1: page.h1,
     intro: page.intro,
     image: page.image || 'Building.webp',
@@ -752,8 +777,8 @@ function buildCorePages() {
     alt: 'Jeff Muszynski, DDS and Kayla Muszynski, DDS',
     body: `<section class="py-16 bg-white"><div class="max-w-5xl mx-auto px-6 prose-page space-y-7">
       <div class="grid md:grid-cols-2 gap-6 not-prose">
-        <a href="/dr-jeff-muszynski-dds" class="block bg-stone border border-teal-light p-6 hover:border-teal"><img src="/Jeff photo.webp" alt="Jeff Muszynski, DDS" class="w-full aspect-[4/5] object-cover mb-5" loading="lazy" decoding="async" /><h2 class="font-display text-4xl text-charcoal">Jeff Muszynski, DDS</h2><p class="text-charcoal/65 leading-7">Implants, oral surgery, root canals, sedation, sleep apnea appliances, cosmetic, restorative, and family dentistry.</p></a>
-        <a href="/dr-kayla-muszynski-dds" class="block bg-stone border border-teal-light p-6 hover:border-teal"><img src="/kayla photo.webp" alt="Kayla Muszynski, DDS" class="w-full aspect-[4/5] object-cover object-[50%_18%] mb-5" loading="lazy" decoding="async" /><h2 class="font-display text-4xl text-charcoal">Kayla Muszynski, DDS</h2><p class="text-charcoal/65 leading-7">Cosmetic dentistry, family dentistry, cleanings and exams, fillings, crowns, bridges, bonding, veneers, and whitening.</p></a>
+        <a href="/dr-jeff-muszynski-dds" class="block bg-stone border border-teal-light p-6 hover:border-teal"><img src="/Jeff photo.webp" alt="Jeff Muszynski, DDS" class="w-full aspect-[4/5] object-cover mb-5" loading="lazy" decoding="async" width="1400" height="2100" /><h2 class="font-display text-4xl text-charcoal">Jeff Muszynski, DDS</h2><p class="text-charcoal/65 leading-7">Implants, oral surgery, root canals, sedation, sleep apnea appliances, cosmetic, restorative, and family dentistry.</p></a>
+        <a href="/dr-kayla-muszynski-dds" class="block bg-stone border border-teal-light p-6 hover:border-teal"><img src="/kayla photo.webp" alt="Kayla Muszynski, DDS" class="w-full aspect-[4/5] object-cover object-[50%_18%] mb-5" loading="lazy" decoding="async" width="1400" height="2100" /><h2 class="font-display text-4xl text-charcoal">Kayla Muszynski, DDS</h2><p class="text-charcoal/65 leading-7">Cosmetic dentistry, family dentistry, cleanings and exams, fillings, crowns, bridges, bonding, veneers, and whitening.</p></a>
       </div>
       <h2>A Family Practice in the Plainest Sense</h2><p>Jeff and Kayla met at Abilene Christian University on a dental mission trip to Guatemala. They have three kids who keep them busy with sports, gymnastics, and school activities, plus two German shorthaired pointers named Rush and Junior.</p>
       ${pillLinks([{ label: 'Services', href: '/services' }, { label: 'New patients', href: '/new-patients' }, { label: 'Reviews', href: '/patient-reviews' }, { label: 'Request appointment', href: '/request-appointment' }])}
@@ -902,7 +927,7 @@ function htmlList(items) {
 }
 
 function costRangeHtml(range, note = '') {
-  return `<p><strong>Typical public range:</strong> ${range}. ${note ? `${note} ` : ''}${costContext}</p>`;
+  return `<p><strong>Typical public range:</strong> ${range}. ${note ? note : ''}</p>`;
 }
 
 function simpleTable(headers, rows) {
@@ -1194,7 +1219,7 @@ const serviceEnhancements = {
     payment: costContext,
   },
   'dental-crowns-killeen-tx': {
-    intro: 'A crown should not just cover a tooth. It should protect what is left, fit the bite, and look like it belongs there.',
+    intro: 'A lab-made crown can protect a tooth when a filling is no longer enough. Elm Ridge plans crowns around strength, fit, bite, and a natural appearance.',
     glance: [
       ['Typical range', costRanges.crown],
       ['Core buildup', costRanges.coreBuildup],
@@ -1396,20 +1421,31 @@ const serviceEnhancements = {
     payment: costContext,
   },
   'veneers-killeen-tx': {
-    h1: 'Veneers Planned for Shape, Proportion, and Restraint',
+    h1: 'Porcelain Veneers That Look Like They Belong',
+    kicker: 'Cosmetic Dentistry',
+    intro: 'Veneers can refine tooth shape, length, color, and symmetry without making your smile look fake. Elm Ridge plans veneers around your face, bite, goals, and how much natural tooth structure should be preserved.',
+    answer: 'Veneers can improve shape, color, symmetry, worn edges, small chips, and proportions, but they should still look like they belong in your mouth.',
     glance: [
       ['Typical range', costRanges.veneers],
       ['Best for', 'Selected front-tooth shape, shade, proportion, and symmetry changes'],
       ['Comparison', 'Veneers vs bonding vs crowns vs whitening'],
       ['Provider focus', 'Kayla Muszynski, DDS and Jeff Muszynski, DDS'],
     ],
-    who: 'Veneers may help when front teeth have cosmetic concerns that whitening or bonding cannot predictably solve.',
+    who: 'Veneers may help when front teeth are worn, chipped, uneven, discolored, short, or out of proportion. They are not the answer for every cosmetic concern.',
+    approach: 'Elm Ridge plans veneers around natural-looking esthetics, bite and function, and preserving healthy tooth structure where possible. Whitening, bonding, crowns, or clear aligners may be better depending on the case.',
     detailSections: [
+      { title: 'What veneers can improve', html: htmlList(['Tooth shape, length, and proportion.', 'Color concerns that whitening cannot predictably fix.', 'Worn edges, small chips, and mild unevenness.', 'Smile symmetry when the bite and tooth structure support it.']) },
       { title: 'Veneers vs other options', html: simpleTable(['Option', 'Best use'], [['Whitening', 'Brightens natural enamel but does not change shape or old dental work.'], ['Bonding', 'Conservative for small chips or gaps, but stains and chips more easily than porcelain.'], ['Veneers', 'Changes front-tooth shape, shade, and proportion when the teeth are strong enough.'], ['Crowns', 'Better when teeth are weak, heavily filled, cracked, or need full coverage.']]) },
       { title: 'When veneers may not be right', html: '<p>Veneers may not be best for severe bite issues, heavy grinding, active decay, unstable gums, or teeth that need crowns instead of thin porcelain coverage.</p>' },
-      { title: 'Typical cost range', html: costRangeHtml(costRanges.veneers, 'Cost depends on tooth number, porcelain choice, bite, records, temporary needs, and lab work.') },
+      { title: 'Typical cost range', html: `<p><strong>Typical public range:</strong> ${costRanges.veneers}. Cost depends on tooth number, porcelain choice, bite, records, temporary needs, and lab work.</p>` },
     ],
-    payment: costContext,
+    payment: `Insurance usually does not cover cosmetic veneers, but benefits vary. CareCredit and Cherry are available. ${insuranceCaveat}`,
+    faq: [
+      ['Will veneers look fake?', 'They should not. Elm Ridge plans veneers around your face, smile, tooth proportions, shade goals, and bite so the result looks natural instead of bulky or artificial.'],
+      ['How much tooth structure is changed for veneers?', 'It depends on the tooth position, color change, material choice, and final shape. The goal is to be as conservative as the case allows while still creating a durable result.'],
+      ['Are veneers better than bonding?', 'Sometimes. Bonding can be more conservative for small chips or minor shape changes. Veneers are often stronger and more color-stable for larger esthetic changes, but they require a case-by-case plan.'],
+      ['Can whitening or clear aligners fix my concern instead?', 'Yes, sometimes. Whitening may be the better first step for color, and clear aligners may be better when tooth position is the main concern. Elm Ridge will explain the tradeoffs before recommending veneers.'],
+    ],
   },
   'cosmetic-bonding-killeen-tx': {
     h1: 'Cosmetic Bonding for Small Changes Without Overdoing It',
@@ -1686,8 +1722,8 @@ function makePage(overrides) {
     description: page.description || `${practiceName} provides ${name.toLowerCase()} in Killeen with diagnosis-first care and plain-English explanations.`,
     h1: page.h1 || name,
     crumb: page.crumb || name,
-    kicker: page.kicker || 'Dental Care',
-    intro: page.intro || `Elm Ridge explains when ${name.toLowerCase()} makes sense, what it can and cannot fix, and what your next step looks like.`,
+    kicker: page.kicker || defaultServiceKicker(page),
+    intro: page.intro || page.answer || `${name} is considered when it supports comfort, function, appearance, or long-term oral health after a diagnosis-first exam.`,
     answer: page.answer || `${name} may be recommended when it is the most sensible way to protect comfort, function, appearance, or long-term oral health. Elm Ridge starts with diagnosis before recommending treatment.`,
     glance: page.glance || defaultServiceGlance(page),
     who: page.who || defaultWhoText(page),
@@ -1717,6 +1753,7 @@ function buildServicePages() {
       name: 'Family Dentistry',
       title: 'Family Dentist in Killeen, TX | Elm Ridge',
       h1: 'Family Dentistry for Kids, Adults, and Grandparents',
+      intro: 'One private Killeen dental office for cleanings, fillings, crowns, second opinions, children&rsquo;s visits, and long-term care that feels personal instead of rushed.',
       answer: 'Elm Ridge sees children once teeth are present, adults, and seniors in one private Killeen office. This is family dentistry, not a pediatric specialty office.',
       glance: [['Children', 'Seen once teeth are present.'], ['Adults', 'Cleanings, exams, fillings, crowns, gum monitoring, and long-term care.'], ['Military families', 'Dependents, spouses, and families are welcome.'], ['Not offered', 'Medicaid and in-office membership plan.']],
       who: 'Family dentistry helps households that want one dependable dental home for preventive care, small repairs, larger restorative needs, and honest guidance as needs change over time.',
@@ -1733,10 +1770,10 @@ function buildServicePages() {
     makePage({ slug: 'dental-cleanings-killeen-tx', name: 'Dental Cleanings', h1: 'Dental Cleanings That Do More Than Polish Teeth', answer: 'Dental cleanings at Elm Ridge remove buildup, check gum health, and help catch small problems before they become expensive surprises.', related: [{ label: 'Family dentistry', href: '/family-dentist-killeen-tx' }, { label: 'Dental fillings', href: '/dental-fillings-killeen-tx' }, serviceLinks.newPatients, serviceLinks.kayla], medical: false }),
     makePage({ slug: 'dental-fillings-killeen-tx', name: 'Dental Fillings', h1: 'Tooth-Colored Fillings for Cavities and Small Breaks', answer: 'Dental fillings repair small to moderate areas of decay or damage. Elm Ridge uses tooth-colored materials and explains when a filling is enough versus when a crown is the better long-term answer.', related: [{ label: 'Dental crowns', href: '/dental-crowns-killeen-tx' }, { label: 'Broken tooth', href: '/broken-tooth-killeen-tx' }, serviceLinks.kayla] }),
     makePage({ slug: 'dental-bridges-killeen-tx', name: 'Dental Bridges', h1: 'Fixed Bridges for Missing Teeth', answer: 'A dental bridge can replace one or more missing teeth when the neighboring teeth can support crowns. Elm Ridge also compares implant bridges when implants may be a better foundation.', related: [{ label: 'Implant bridge', href: '/implant-bridge-killeen-tx' }, { label: 'Single tooth implant', href: '/single-tooth-implant-killeen-tx' }, { label: 'Dentures', href: '/dentures-killeen-tx' }, serviceLinks.kayla] }),
-    makePage({ slug: 'dental-crowns-killeen-tx', name: 'Dental Crowns', title: 'Natural-Looking Dental Crowns in Killeen, TX | Elm Ridge', h1: 'A stronger, longer-lasting fix for a cracked, worn, or heavily filled tooth', answer: 'Elm Ridge provides lab-made crowns only. A crown may protect a cracked, heavily filled, root-canal-treated, or worn tooth while being shaped and shaded to blend naturally.', related: [{ label: 'Root canals', href: '/root-canal-killeen-tx' }, { label: 'Broken tooth', href: '/broken-tooth-killeen-tx' }, { label: 'Crown cost', href: '/crown-cost-killeen-tx' }, serviceLinks.kayla] }),
+    makePage({ slug: 'dental-crowns-killeen-tx', name: 'Dental Crowns', title: 'Natural-Looking Dental Crowns in Killeen, TX | Elm Ridge', kicker: 'Restorative Dentistry', h1: 'A Stronger Fix for a Cracked, Worn, or Heavily Filled Tooth', intro: 'A lab-made crown can protect a tooth when a filling is no longer enough. Elm Ridge plans crowns around strength, fit, bite, and a natural appearance.', answer: 'Elm Ridge provides lab-made crowns only. A crown may protect a cracked, heavily filled, root-canal-treated, or worn tooth while being shaped and shaded to blend naturally.', related: [{ label: 'Root canals', href: '/root-canal-killeen-tx' }, { label: 'Broken tooth', href: '/broken-tooth-killeen-tx' }, { label: 'Crown cost', href: '/crown-cost-killeen-tx' }, serviceLinks.kayla] }),
     makePage({ slug: 'root-canal-killeen-tx', name: 'Root Canal Therapy', title: 'Root Canals in Killeen, TX | Elm Ridge', h1: 'Root Canal Treatment When a Tooth Can Still Be Saved', intro: 'When infection or deep decay reaches the nerve, a root canal may be needed so you can keep the tooth instead of removing it.', answer: 'When infection or deep decay reaches the nerve, a root canal may be needed so you can keep the tooth instead of removing it.', providers: ['Jeff Muszynski, DDS'], related: [{ label: 'Molar root canals', href: '/molar-root-canal-killeen-tx' }, { label: 'Dental crowns', href: '/dental-crowns-killeen-tx' }, { label: 'Toothache', href: '/toothache-killeen-tx' }, { label: 'Root canal cost', href: '/root-canal-cost-killeen-tx' }, serviceLinks.jeff], faq: [['Do you do molar root canals?', 'Yes. Elm Ridge performs many root canals, including molar root canals.'], ['Do you do root canal retreatments?', 'No. Elm Ridge does not perform root canal retreatments and will explain referral options when retreatment is needed.'], ['Will I need a crown after a root canal?', 'Often, especially on posterior teeth. Elm Ridge will explain whether a crown is recommended for your tooth.']] }),
     makePage({ slug: 'molar-root-canal-killeen-tx', name: 'Molar Root Canals', h1: 'Molar Root Canals Without Guesswork', answer: 'Elm Ridge performs many molar root canals when the tooth can be predictably saved. Root canal retreatments are not performed.', providers: ['Jeff Muszynski, DDS'], related: [{ label: 'Root canals', href: '/root-canal-killeen-tx' }, { label: 'Dental crowns', href: '/dental-crowns-killeen-tx' }, { label: 'Toothache', href: '/toothache-killeen-tx' }, { label: 'Dental abscess', href: '/dental-abscess-killeen-tx' }, { label: 'Emergency dentistry', href: '/emergency-dentist-killeen-tx' }, serviceLinks.jeff], faq: [['Do you perform root canal retreatment?', 'No. Elm Ridge performs many root canals, including molars, but does not perform retreatments.'], ['Why do molars often need crowns?', 'Molars take heavy chewing forces, so crowns are often recommended after root canal treatment to protect the tooth.']] }),
-    makePage({ slug: 'tooth-extractions-killeen-tx', name: 'Tooth Extractions', h1: 'Tooth Extractions With a Replacement Plan When Needed', answer: 'Elm Ridge performs simple and surgical extractions, including many wisdom tooth cases. If a tooth can be saved predictably, the team will say so.', providers: ['Jeff Muszynski, DDS'], related: [{ label: 'Wisdom teeth', href: '/wisdom-teeth-removal-killeen-tx' }, { label: 'Bone grafting', href: '/bone-grafting-killeen-tx' }, { label: 'Single tooth implant', href: '/single-tooth-implant-killeen-tx' }, serviceLinks.jeff], faq: [['Do I really need the tooth removed?', 'There are several reasons a tooth might need to be extracted, but Elm Ridge will explain whether the tooth can or should be saved predictably with a filling, crown, root canal, or periodontal care before recommending extraction.'], ['Will insurance help?', `${insuranceCaveat} Coverage depends on your employer, plan, diagnosis, and remaining benefits.`], ['How do I schedule?', `Call ${phoneDisplay} or use the appointment request page. Online scheduling is an appointment request, not guaranteed real-time booking.`]] }),
+    makePage({ slug: 'tooth-extractions-killeen-tx', name: 'Tooth Extractions', h1: 'Tooth Extractions With a Replacement Plan When Needed', intro: 'Sometimes removing a tooth is the right call. Elm Ridge will also tell you when saving the tooth, grafting the socket, or planning replacement teeth makes more sense.', answer: 'Elm Ridge performs simple and surgical extractions, including many wisdom tooth cases. If a tooth can be saved predictably, the team will say so.', providers: ['Jeff Muszynski, DDS'], related: [{ label: 'Wisdom teeth', href: '/wisdom-teeth-removal-killeen-tx' }, { label: 'Bone grafting', href: '/bone-grafting-killeen-tx' }, { label: 'Single tooth implant', href: '/single-tooth-implant-killeen-tx' }, serviceLinks.jeff], faq: [['Do I really need the tooth removed?', 'There are several reasons a tooth might need to be extracted, but Elm Ridge will explain whether the tooth can or should be saved predictably with a filling, crown, root canal, or periodontal care before recommending extraction.'], ['Will insurance help?', `${insuranceCaveat} Coverage depends on your employer, plan, diagnosis, and remaining benefits.`], ['How do I schedule?', `Call ${phoneDisplay} or use the appointment request page. Online scheduling is an appointment request, not guaranteed real-time booking.`]] }),
     makePage({ slug: 'wisdom-teeth-removal-killeen-tx', name: 'Wisdom Teeth Removal', h1: 'Wisdom Teeth Removal, Case by Case', answer: 'Elm Ridge removes most wisdom teeth, depending on anatomy and complexity. If a wisdom tooth case is unusually complex or better suited for a specialist, the practice will explain options and refer appropriately.', providers: ['Jeff Muszynski, DDS'], related: [{ label: 'Tooth extractions', href: '/tooth-extractions-killeen-tx' }, { label: 'Oral conscious sedation', href: '/oral-conscious-sedation-killeen-tx' }, { label: 'Nitrous oxide', href: '/nitrous-oxide-dentist-killeen-tx' }, serviceLinks.jeff] }),
     makePage({ slug: 'dentures-killeen-tx', name: 'Dentures', h1: 'Dentures, Partials, Immediate Dentures, and Implant Options', answer: 'Elm Ridge offers traditional dentures, partial dentures, immediate dentures, snap-on dentures, and implant-supported options. The point is to compare comfort, function, cost, and long-term maintenance honestly.', providers: ['Jeff Muszynski, DDS'], related: [{ label: 'Partial dentures', href: '/partial-dentures-killeen-tx' }, { label: 'Immediate dentures', href: '/immediate-dentures-killeen-tx' }, { label: 'Snap-on dentures', href: '/snap-on-dentures-killeen-tx' }, { label: 'Dentures vs implants', href: '/dentures-vs-implants-killeen-tx' }, serviceLinks.jeff] }),
     makePage({ slug: 'partial-dentures-killeen-tx', name: 'Partial Dentures', h1: 'Partial Dentures for Several Missing Teeth', answer: 'Partial dentures can replace several missing teeth with a removable appliance. Elm Ridge compares them with bridges and implants so patients understand the tradeoffs.', related: [{ label: 'Dentures', href: '/dentures-killeen-tx' }, { label: 'Dental bridges', href: '/dental-bridges-killeen-tx' }, { label: 'Implant bridge', href: '/implant-bridge-killeen-tx' }] }),
@@ -1744,14 +1781,36 @@ function buildServicePages() {
     makePage({ slug: 'dental-implants-killeen-tx', name: 'Dental Implants', title: 'Dental Implants in Killeen, TX | Elm Ridge', h1: 'Dental Implants Planned, Placed, and Restored in One Killeen Office', answer: 'Elm Ridge provides dental implants in Killeen, including single implants, implant bridges, snap-on dentures, full-arch dental implants, bone grafting, sinus lifts, and restoration of implants placed elsewhere after evaluation.', providers: ['Jeff Muszynski, DDS'], related: implantRelated, image: 'cbct-implant-planning-killeen.webp', alt: '3D dental implant planning at Elm Ridge in Killeen' }),
     makePage({ slug: 'single-tooth-implant-killeen-tx', name: 'Single Tooth Implant', h1: 'Replacing One Missing Tooth With an Implant', answer: 'A single tooth implant can replace one missing tooth without reshaping healthy neighboring teeth, when bone, gum health, bite, and timing support the plan.', providers: ['Jeff Muszynski, DDS'], related: implantRelated }),
     makePage({ slug: 'implant-bridge-killeen-tx', name: 'Implant Bridge', h1: 'Implant Bridges for Multiple Missing Teeth', answer: 'An implant bridge can replace multiple missing teeth with fewer implants than one implant per tooth. Elm Ridge plans both the surgical and restorative parts of the case.', providers: ['Jeff Muszynski, DDS'], related: implantRelated, faq: [['Can an implant bridge replace several teeth?', 'Yes. It can replace multiple teeth in a row when the implants and bite can support the design.'], ['Can Elm Ridge restore implants placed elsewhere?', 'Yes, after evaluation and with records, system information, and imaging as needed.']] }),
-    makePage({ slug: 'full-arch-dental-implants-killeen-tx', name: 'Full-Arch Dental Implants', h1: 'Full-Arch Dental Implants for Fixed Tooth Replacement', answer: 'Elm Ridge provides surgery and restorative treatment for full-arch dental implant cases. Zirconia is the go-to final material; acrylic is used only in rare or selected situations when appropriate.', providers: ['Jeff Muszynski, DDS'], related: implantRelated, faq: [['Do you provide both surgery and restoration?', 'Yes. Elm Ridge provides surgery and restorative treatment for full-arch cases.'], ['What final material do you usually use?', 'Zirconia is the go-to final material. Acrylic is reserved for rare or selected situations when appropriate.'], ['Can you restore implants placed elsewhere?', 'Sometimes, after evaluation and with records, system details, and imaging as needed.']] }),
+    makePage({ slug: 'full-arch-dental-implants-killeen-tx', name: 'Full-Arch Dental Implants', h1: 'Full-Arch Dental Implants for Fixed Tooth Replacement', intro: 'Fixed implant teeth can replace a failing upper or lower arch, but the right plan is not always exactly four implants. Elm Ridge plans full-arch treatment around bone, bite, anatomy, hygiene access, and the final tooth design.', answer: 'Elm Ridge provides surgery and restorative treatment for full-arch dental implant cases. Zirconia is the go-to final material; acrylic is used only in rare or selected situations when appropriate.', providers: ['Jeff Muszynski, DDS'], related: implantRelated, faq: [['Do you provide both surgery and restoration?', 'Yes. Elm Ridge provides surgery and restorative treatment for full-arch cases.'], ['What final material do you usually use?', 'Zirconia is the go-to final material. Acrylic is reserved for rare or selected situations when appropriate.'], ['Can you restore implants placed elsewhere?', 'Sometimes, after evaluation and with records, system details, and imaging as needed.']] }),
     makePage({ slug: 'all-on-4-dental-implants-killeen-tx', name: 'All-on-4-Style Treatment', h1: 'All-on-4-Style Treatment as Part of Full-Arch Planning', answer: 'All-on-4-style treatment is one way to support a full arch of teeth. Elm Ridge uses full-arch dental implants as the main term because the right number and position of implants depends on the case.', providers: ['Jeff Muszynski, DDS'], related: implantRelated }),
-    makePage({ slug: 'snap-on-dentures-killeen-tx', name: 'Snap-On Dentures', h1: 'Snap-On Dentures for Better Denture Stability', answer: 'Snap-on dentures attach to dental implants for better stability than traditional dentures, while still being removable for cleaning.', providers: ['Jeff Muszynski, DDS'], related: implantRelated }),
+    makePage({ slug: 'snap-on-dentures-killeen-tx', name: 'Snap-On Dentures', h1: 'Snap-On Dentures for Better Denture Stability', intro: 'Snap-on dentures can be a strong middle-ground option, especially for loose lower dentures. Elm Ridge compares two implants, four implants, and fixed full-arch options honestly.', answer: 'Snap-on dentures attach to dental implants for better stability than traditional dentures, while still being removable for cleaning.', providers: ['Jeff Muszynski, DDS'], related: implantRelated }),
     makePage({ slug: 'dentures-vs-implants-killeen-tx', name: 'Dentures vs Implants', title: 'Dentures vs Implants in Killeen, TX | Elm Ridge', h1: 'Dentures, Snap-On Dentures, and Full-Arch Implants Compared', answer: 'Traditional dentures, snap-on dentures, and full-arch dental implants solve different problems. Elm Ridge helps patients compare stability, chewing, maintenance, surgery, cost, and long-term goals without pretending one option fits everyone.', providers: ['Jeff Muszynski, DDS'], related: implantRelated, faq: [['Will insurance cover full-arch implants?', `${insuranceCaveat} Dental implant benefits vary widely, and many plans limit implant coverage. Elm Ridge can estimate benefits before treatment.`], ['Do dentures stop bone loss?', 'Traditional dentures do not replace tooth roots, so the jawbone can continue to change over time. Implants can help preserve bone where they are placed.']] }),
     makePage({ slug: 'bone-grafting-killeen-tx', name: 'Bone Grafting', h1: 'Bone Grafting for Implant and Extraction Planning', answer: 'Bone grafting may be recommended after an extraction or before an implant when the jaw needs more support or better ridge shape for future treatment.', providers: ['Jeff Muszynski, DDS'], related: implantRelated }),
     makePage({ slug: 'sinus-lift-killeen-tx', name: 'Sinus Lift', h1: 'Sinus Lifts When Upper Implant Planning Needs More Bone', answer: 'A sinus lift may be needed for some upper back tooth implant cases when the sinus is close to the jawbone where an implant would be placed.', providers: ['Jeff Muszynski, DDS'], related: implantRelated }),
     makePage({ slug: 'cosmetic-dentistry-killeen-tx', name: 'Cosmetic Dentistry', title: 'Cosmetic Dentistry in Killeen, TX | Elm Ridge', h1: 'Cosmetic Dentistry That Still Looks Like You', answer: 'Elm Ridge offers veneers, cosmetic bonding, custom take-home whitening trays, clear aligners, crowns, bridges, and smile planning with a natural-looking result as the goal.', related: cosmeticRelated, providers: ['Jeff Muszynski, DDS', 'Kayla Muszynski, DDS'], image: 'cosmetic dentistry killeen 1.webp', alt: 'Cosmetic dentistry result at Elm Ridge in Killeen' }),
-    makePage({ slug: 'veneers-killeen-tx', name: 'Veneers', h1: 'Veneers Planned for Shape, Proportion, and Restraint', answer: 'Veneers can change the visible shape, shade, and proportion of front teeth. Elm Ridge uses them selectively when they make sense for the tooth structure and smile goals.', related: cosmeticRelated, providers: ['Kayla Muszynski, DDS', 'Jeff Muszynski, DDS'] }),
+    makePage({
+      slug: 'veneers-killeen-tx',
+      name: 'Veneers',
+      kicker: 'Cosmetic Dentistry',
+      h1: 'Porcelain Veneers That Look Like They Belong',
+      intro: 'Veneers can refine tooth shape, length, color, and symmetry without making your smile look fake. Elm Ridge plans veneers around your face, bite, goals, and how much natural tooth structure should be preserved.',
+      answer: 'Veneers can improve shape, color, symmetry, worn edges, small chips, and proportions, but they should still look like they belong in your mouth.',
+      who: 'Veneers may help when front teeth are worn, chipped, uneven, discolored, short, or out of proportion. They are not the answer for every cosmetic concern.',
+      approach: 'Elm Ridge plans veneers around natural-looking esthetics, bite and function, and preserving healthy tooth structure where possible. Whitening, bonding, crowns, or clear aligners may be better depending on the case.',
+      detailSections: [
+        { title: 'What Veneers Can Improve', html: htmlList(['Tooth shape, length, and proportion.', 'Color concerns that whitening cannot predictably fix.', 'Worn edges, small chips, and mild unevenness.', 'Smile symmetry when the bite and tooth structure support it.']) },
+        { title: 'When Another Option May Be Better', html: '<p>Not every cosmetic concern needs veneers. Bonding may be more conservative for small chips. Whitening may be enough for color. Clear aligners may be better when tooth position is the main issue. A crown may be stronger when a tooth is cracked, heavily filled, or structurally weak.</p>' },
+      ],
+      payment: `Porcelain veneers typically range from ${costRanges.veneers}. Insurance usually does not cover cosmetic veneers, but benefits vary. CareCredit and Cherry are available. ${insuranceCaveat}`,
+      related: cosmeticRelated,
+      providers: ['Kayla Muszynski, DDS', 'Jeff Muszynski, DDS'],
+      faq: [
+        ['Will veneers look fake?', 'They should not. Elm Ridge plans veneers around your face, smile, tooth proportions, shade goals, and bite so the result looks natural instead of bulky or artificial.'],
+        ['How much tooth structure is changed for veneers?', 'It depends on the tooth position, color change, material choice, and final shape. The goal is to be as conservative as the case allows while still creating a durable result.'],
+        ['Are veneers better than bonding?', 'Sometimes. Bonding can be more conservative for small chips or minor shape changes. Veneers are often stronger and more color-stable for larger esthetic changes, but they require a case-by-case plan.'],
+        ['Can whitening or clear aligners fix my concern instead?', 'Yes, sometimes. Whitening may be the better first step for color, and clear aligners may be better when tooth position is the main concern. Elm Ridge will explain the tradeoffs before recommending veneers.'],
+      ],
+    }),
     makePage({ slug: 'cosmetic-bonding-killeen-tx', name: 'Cosmetic Bonding', h1: 'Cosmetic Bonding for Chips, Gaps, and Small Shape Changes', answer: 'Cosmetic bonding can repair small chips, close selected small gaps, and improve tooth shape with tooth-colored composite. It is often more conservative than veneers but not right for every case.', related: cosmeticRelated, providers: ['Kayla Muszynski, DDS'] }),
     makePage({ slug: 'teeth-whitening-killeen-tx', name: 'Teeth Whitening', h1: 'Custom Take-Home Whitening Trays', answer: 'Elm Ridge offers teeth whitening with custom trays and take-home whitening gel. Crowns, fillings, and veneers do not whiten like natural enamel, so timing matters if dental work is planned.', related: cosmeticRelated, providers: ['Kayla Muszynski, DDS'], medical: false }),
     makePage({ slug: 'clear-aligners-killeen-tx', name: 'Clear Aligners', h1: 'Clear Aligners Without Locking You Into One Brand', answer: 'Elm Ridge offers clear aligners and uses multiple brands when appropriate. The focus is on tooth movement that fits your bite, goals, and long-term dental health.', related: cosmeticRelated, providers: ['Jeff Muszynski, DDS', 'Kayla Muszynski, DDS'] }),
@@ -2072,11 +2131,11 @@ function buildNewPatientInsuranceAppointmentPages() {
       </div>
       <div class="grid md:grid-cols-2 gap-6 not-prose">
         <a href="/dr-jeff-muszynski-dds" class="group block border border-teal-light bg-stone hover:border-teal transition-colors">
-          <img src="/Jeff%20photo.webp" alt="Jeff Muszynski, DDS" class="w-full h-80 object-cover" loading="lazy" decoding="async" />
+          <img src="/Jeff%20photo.webp" alt="Jeff Muszynski, DDS" class="w-full h-80 object-cover" loading="lazy" decoding="async" width="1400" height="2100" />
           <div class="p-6"><h3 class="font-display text-4xl text-charcoal mb-2">Jeff Muszynski, DDS</h3><p class="text-charcoal/65 leading-7">Implants, oral surgery, root canals, restorative dentistry, cosmetic dentistry, and family care.</p><p class="mt-4 text-xs uppercase tracking-[0.22em] text-teal-dark font-semibold">Read Dr. Jeff's profile</p></div>
         </a>
         <a href="/dr-kayla-muszynski-dds" class="group block border border-teal-light bg-stone hover:border-teal transition-colors">
-          <img src="/kayla%20photo.webp" alt="Kayla Muszynski, DDS" class="w-full h-80 object-cover" loading="lazy" decoding="async" />
+          <img src="/kayla%20photo.webp" alt="Kayla Muszynski, DDS" class="w-full h-80 object-cover" loading="lazy" decoding="async" width="1400" height="2100" />
           <div class="p-6"><h3 class="font-display text-4xl text-charcoal mb-2">Kayla Muszynski, DDS</h3><p class="text-charcoal/65 leading-7">Family dentistry, restorative dentistry, cleanings and exams, cosmetic dentistry, veneers, whitening, and clear aligner care.</p><p class="mt-4 text-xs uppercase tracking-[0.22em] text-teal-dark font-semibold">Read Dr. Kayla's profile</p></div>
         </a>
       </div>
@@ -2159,7 +2218,7 @@ function buildReviewsBeforeAfterAiPages() {
   if (fs.existsSync('reviews.html')) fs.rmSync('reviews.html', { force: true });
   if (fs.existsSync('patient-reviews')) fs.rmSync('patient-reviews', { recursive: true, force: true });
   if (fs.existsSync('patient-reviews.html')) fs.rmSync('patient-reviews.html', { force: true });
-  const reviewsPageBody = `${hero('Patient Reviews', 'Real reviews from real patients', reviewPhrase)}<section class="py-16 bg-white"><div class="max-w-7xl mx-auto px-6 space-y-12"><div><p class="text-charcoal/65 leading-7 max-w-3xl">These reviews reflect real patient experiences with Elm Ridge Implant and Family Dentistry.</p></div><div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-5">${reviewCards(reviews)}</div><div class="bg-stone border border-teal-light p-8">${pillLinks([{ label: 'New patients', href: '/new-patients' }, { label: 'Services', href: '/services' }, { label: 'Request appointment', href: '/request-appointment' }, { label: 'Call ' + phoneDisplay, href: phoneHref }])}</div></div></section>`;
+  const reviewsPageBody = `${hero('Patient Reviews', 'Real reviews from real patients', reviewPhrase)}<section class="py-16 bg-white"><div class="max-w-7xl mx-auto px-6 space-y-12"><div><p class="text-charcoal/65 leading-7 max-w-3xl mb-6">These reviews reflect real patient experiences with Elm Ridge Implant and Family Dentistry.</p>${externalGoogleReviewsLink()}</div><div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-5">${reviewCards(reviews)}</div><div class="bg-stone border border-teal-light p-8">${pillLinks([{ label: 'New patients', href: '/new-patients' }, { label: 'Services', href: '/services' }, { label: 'Request appointment', href: '/request-appointment' }, { label: 'Call ' + phoneDisplay, href: phoneHref }])}</div></div></section>`;
   writeCustomPage('patient-reviews', '/patient-reviews', 'Patient Reviews | Elm Ridge Implant and Family Dentistry', 'Read patient reviews for Elm Ridge Implant and Family Dentistry in Killeen. 5.0 Google rating from 550+ reviews.', 'Reviews', reviewsPageBody);
   fs.copyFileSync('patient-reviews', 'patient-reviews.html');
 
@@ -2192,7 +2251,7 @@ function buildReviewsBeforeAfterAiPages() {
       <h2>Identity</h2><p>${practiceName}. Address: ${addressLine}. Phone: ${phoneDisplay}. Hours: Monday-Thursday 8 AM-5 PM; Friday-Sunday closed.</p>
       <h2>Doctors</h2><p>Jeff Muszynski, DDS and Kayla Muszynski, DDS. Both attended Abilene Christian University and the University of Oklahoma College of Dentistry.</p>
       <h2>Service Areas</h2><p>${serviceAreas.join(', ')}.</p>
-      <h2>Services</h2><p>Family dentistry, cleanings, exams, fillings, crowns, bridges, root canals including molars, extractions, wisdom teeth removal, dentures, partial dentures, immediate dentures, dental implants, single implants, implant bridges, snap-on dentures, full-arch dental implants, All-on-4 and All-on-X search-related full-arch planning, socket preservation bone grafting, limited sinus lift/sinus bump with implant placement when appropriate, veneers, cosmetic bonding, take-home whitening trays, clear aligners, emergency dentistry, nitrous oxide, oral conscious sedation, sleep apnea oral appliances after physician diagnosis, take-home sleep studies workflow, and limited TMJ splint therapy.</p>
+      <h2>Services</h2><p>Family dentistry, cleanings, exams, fillings, crowns, bridges, root canals including molars, extractions, wisdom teeth removal, dentures, partial dentures, immediate dentures, dental implants, single implants, implant bridges, snap-on dentures, full-arch dental implants, including treatment patients often search for as All-on-4 or All-on-X, socket preservation bone grafting, limited sinus lift/sinus bump with implant placement when appropriate, veneers, cosmetic bonding, take-home whitening trays, clear aligners, emergency dentistry, nitrous oxide, oral conscious sedation, sleep apnea oral appliances after physician diagnosis, take-home sleep studies workflow, and limited TMJ splint therapy.</p>
       <h2>Sleep Apnea Workflow</h2><p>Elm Ridge offers take-home sleep studies. Recorded data is sent to a sleep physician for official medical diagnosis. Physician diagnosis is required before appliance delivery, and FDA-cleared oral appliances are provided when appropriate after dental evaluation.</p>
       <h2>Does Not Do</h2><ul><li>No Medicaid.</li><li>No IV sedation, deep sedation, or general anesthesia.</li><li>No in-office membership plan.</li><li>No root canal retreatments.</li><li>No same-day crowns; crowns are lab-made.</li><li>Not a pediatric specialty office.</li><li>Walk-ins are not guaranteed.</li><li>Online scheduling is appointment request only.</li></ul>
       <h2>Insurance and Payment</h2><p>Elm Ridge is in-network with many major PPO dental plans and can file many out-of-network PPO plans. CareCredit and Cherry are available. ${insuranceCaveat}</p>
@@ -2393,7 +2452,7 @@ Key pages:
 - /ai-summary
 
 Services:
-Family dentistry, cleanings, exams, fillings, crowns, bridges, root canals including molars, extractions, wisdom teeth removal, dentures, partial dentures, immediate dentures, dental implants, single tooth implants, implant bridges, snap-on dentures, full-arch dental implants, All-on-4 and All-on-X search-related full-arch planning, socket preservation bone grafting, limited sinus lift/sinus bump with implant placement when appropriate, cosmetic dentistry, veneers, cosmetic bonding, take-home teeth whitening, clear aligners, emergency dentistry, nitrous oxide, oral conscious sedation, sleep apnea oral appliances after physician diagnosis, take-home sleep studies workflow, and limited TMJ splint therapy.
+Family dentistry, cleanings, exams, fillings, crowns, bridges, root canals including molars, extractions, wisdom teeth removal, dentures, partial dentures, immediate dentures, dental implants, single tooth implants, implant bridges, snap-on dentures, full-arch dental implants, including treatment patients often search for as All-on-4 or All-on-X, socket preservation bone grafting, limited sinus lift/sinus bump with implant placement when appropriate, cosmetic dentistry, veneers, cosmetic bonding, take-home teeth whitening, clear aligners, emergency dentistry, nitrous oxide, oral conscious sedation, sleep apnea oral appliances after physician diagnosis, take-home sleep studies workflow, and limited TMJ splint therapy.
 
 Insurance summary:
 Elm Ridge is in-network with many major PPO dental plans and can file many out-of-network PPO plans. CareCredit and Cherry are available. ${insuranceCaveat}
@@ -2861,7 +2920,10 @@ function patchHomepage() {
           <p class="font-body text-xs tracking-widest uppercase text-teal-dark mb-3">${reviewPhrase}</p>
           <h2 class="font-display text-4xl md:text-5xl font-light italic text-charcoal leading-snug">Real reviews from real patients.</h2>
         </div>
-        <a href="/patient-reviews" class="inline-flex items-center justify-center px-7 py-3 border border-teal text-teal font-body font-semibold tracking-widest uppercase text-xs hover:bg-teal hover:text-white">Read Patient Reviews</a>
+        <div class="flex flex-col sm:flex-row gap-3">
+          <a href="/patient-reviews" class="inline-flex items-center justify-center px-7 py-3 border border-teal text-teal font-body font-semibold tracking-widest uppercase text-xs hover:bg-teal hover:text-white">Read Patient Reviews</a>
+          ${externalGoogleReviewsLink()}
+        </div>
       </div>
       <div id="home-review-carousel" class="overflow-hidden border-y border-teal-light py-6" aria-label="Patient review carousel">
         <div id="home-review-track" class="flex gap-4">${reviewCards(reviews.slice(0, 10), true)}</div>

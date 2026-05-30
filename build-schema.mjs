@@ -52,7 +52,7 @@ const postOpFaqSchema = {
 const serviceProcedures = {
   'dental-implants-killeen-tx': ['Dental Implants', 'Surgical', 'Jaw'],
   'single-tooth-implant-killeen-tx': ['Single Dental Implant', 'Surgical', 'Jaw'],
-  'implant-bridges-killeen-tx': ['Implant Bridges', 'Surgical', 'Jaw'],
+  'implant-bridge-killeen-tx': ['Implant Bridges', 'Surgical', 'Jaw'],
   'full-arch-dental-implants-killeen-tx': ['Full-Arch Dental Implants', 'Surgical', 'Jaw'],
   'all-on-4-dental-implants-killeen-tx': ['All-on-4 Dental Implants', 'Surgical', 'Jaw'],
   'snap-on-dentures-killeen-tx': ['Snap-On Dentures', 'Surgical', 'Jaw'],

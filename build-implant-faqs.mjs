@@ -5,7 +5,7 @@ const pages = {
     ['How long does a single tooth implant take to heal?', 'A single tooth implant commonly heals for about 3 to 4 months before the final crown is made.'],
     ['Does a single implant protect nearby teeth?', 'A single implant can replace one missing tooth without reshaping the neighboring teeth for a traditional bridge.'],
   ],
-  'implant-bridges-killeen-tx': [
+  'implant-bridge-killeen-tx': [
     ['What is an implant bridge?', 'An implant bridge replaces several missing teeth with a fixed restoration supported by dental implants.'],
     ['Is an implant bridge different from one implant per tooth?', 'Yes. An implant bridge can often replace several teeth with fewer implants than one implant for every missing tooth.'],
   ],

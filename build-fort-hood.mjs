@@ -56,7 +56,7 @@ writePage('dentist-near-fort-hood', {
       <a href="/dental-crowns-killeen-tx" class="block bg-stone border border-teal-light p-6 hover:border-teal transition-colors"><h3 class="font-display text-3xl text-charcoal mb-3">Dental Crowns</h3><p class="text-charcoal/65 leading-7">Protect and restore cracked, broken, or heavily restored teeth.</p></a>
       <a href="/root-canal-killeen-tx" class="block bg-stone border border-teal-light p-6 hover:border-teal transition-colors"><h3 class="font-display text-3xl text-charcoal mb-3">Root Canal Therapy</h3><p class="text-charcoal/65 leading-7">Save painful or infected teeth when extraction is not the best answer.</p></a>
     </div>
-    <p>Patients also come to us for <a href="/invisalign-killeen-tx">Invisalign</a>, crowns, root canals, cleanings, and preventive care when they want one private office that can coordinate both the everyday and the more complex parts of dentistry.</p>
+    <p>Patients also come to us for <a href="/clear-aligners-killeen-tx">clear aligners</a>, crowns, root canals, cleanings, and preventive care when they want one private office that can coordinate both the everyday and the more complex parts of dentistry.</p>
 
     <h2>Why Patients Near Fort Hood Say It Is Worth the Drive</h2>
     <div class="grid sm:grid-cols-2 gap-4 not-prose">
