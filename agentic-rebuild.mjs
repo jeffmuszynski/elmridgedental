@@ -481,15 +481,18 @@ function serviceBody(page) {
   const approachBlock = page.hideApproachSection ? '' : `
     <h2>How Elm Ridge Approaches It</h2>
     <p>${page.approach || defaultApproachText(page)}</p>`;
-
-  return `${introBlock}${afterIntroBlock}
-  <section class="py-14 bg-white"><div class="max-w-4xl mx-auto px-6 prose-page space-y-7">
+  const overviewBlock = page.hideOverviewSections ? '' : `
     <h2>At a Glance</h2>
     ${atAGlance(page.glance)}
     <h2>Who It Helps</h2>
     <p>${page.who}</p>
-    ${approachBlock}
-    ${renderDetailSections(page.detailSections)}
+    ${approachBlock}`;
+  const overviewHtml = overviewBlock ? `${overviewBlock}
+    ` : '';
+
+  return `${introBlock}${afterIntroBlock}
+  <section class="py-14 bg-white"><div class="max-w-4xl mx-auto px-6 prose-page space-y-7">
+    ${overviewHtml}${renderDetailSections(page.detailSections)}
     <h2>What to Expect</h2>
     <p>${page.expect}</p>
     <h2>When to Call</h2>
@@ -1030,6 +1033,23 @@ const cosmeticRelated = [
   serviceLinks.reviews,
 ];
 
+const stopBangItems = [
+  ['Snoring', 'Do you snore loudly enough that others notice?'],
+  ['Tired', 'Do you often feel tired, fatigued, or sleepy during the day?'],
+  ['Observed', 'Has anyone observed you stop breathing, choke, or gasp during sleep?'],
+  ['Pressure', 'Do you have or are you treated for high blood pressure?'],
+  ['BMI', 'Is your BMI over 35?'],
+  ['Age', 'Are you over 50?'],
+  ['Neck', 'Is your neck circumference larger than 16 inches for women or 17 inches for men?'],
+  ['Gender', 'Are you male?'],
+];
+
+function stopBangQuestionnaireHtml() {
+  return `<div class="not-prose border border-teal-light bg-stone p-6 my-6"><h3 class="font-display text-3xl text-charcoal mb-3">STOP-BANG screening questions</h3><p class="text-charcoal/65 leading-7 mb-5">This screening tool does not diagnose sleep apnea. It helps decide whether formal testing should be discussed.</p><div class="grid sm:grid-cols-2 gap-3">${stopBangItems.map(([label, text]) => `<label class="stop-card flex items-start gap-3 bg-white border border-teal-light p-4 text-sm leading-6"><input type="checkbox" aria-label="${label}" class="mt-1" /><span><strong>${label}:</strong> ${text}</span></label>`).join('')}</div><p class="text-charcoal/65 leading-7 mt-5">Count the boxes that sound like you. Three or more yes answers can mean it is worth asking about a take-home sleep study; higher scores often point to higher risk and should be reviewed with a medical provider.</p></div>`;
+}
+
+const sleepApneaIntroHtml = `<section class="py-14 bg-white"><div class="max-w-6xl mx-auto px-6 grid lg:grid-cols-[1.05fr,0.95fr] gap-10 items-center"><div class="prose-page space-y-5"><p class="text-xs uppercase tracking-[0.28em] text-teal-dark font-semibold">Obstructive sleep apnea</p><h2>What obstructive sleep apnea is</h2><p>Obstructive sleep apnea happens when the upper airway repeatedly narrows or collapses during sleep. Breathing can pause or become shallow, oxygen levels may drop, and the brain may briefly wake the body to reopen the airway.</p><p>Common signs include loud snoring, choking or gasping during sleep, morning headaches, dry mouth, restless sleep, daytime sleepiness, and trouble concentrating. Untreated sleep apnea can strain the heart and body over time and is associated with high blood pressure, heart rhythm problems, heart disease, stroke risk, diabetes, mood changes, and drowsy driving.</p><p>Elm Ridge does not independently diagnose sleep apnea. The goal is to help patients recognize risk, complete appropriate testing, and receive an oral appliance only when it fits the physician-directed plan.</p></div><figure class="bg-stone border border-teal-light p-3 shadow-xl"><img src="/gbp/sleep-apnea-airway-killeen-tx.png" alt="Illustration of airway obstruction during sleep apnea" class="w-full object-cover" loading="lazy" decoding="async" width="1672" height="941" /><figcaption class="mt-3 text-sm text-charcoal/60 leading-6">Obstructive sleep apnea can happen when soft tissue narrows or blocks the airway during sleep.</figcaption></figure></div></section>`;
+
 const serviceEnhancements = {
   'dental-implants-killeen-tx': {
     h1: 'Dental Implants Planned Around the Final Tooth',
@@ -1549,6 +1569,11 @@ const serviceEnhancements = {
   },
   'sleep-apnea-dentist-killeen-tx': {
     h1: 'Sleep Apnea Oral Appliance Therapy With Physician Diagnosis',
+    image: 'gbp/mandibular-advancement-device-for-sleep-apnea.png',
+    alt: 'Mandibular advancement oral appliance for sleep apnea',
+    hideIntroBlock: true,
+    hideOverviewSections: true,
+    afterIntroBlockHtml: sleepApneaIntroHtml,
     glance: [
       ['Typical appliance range', costRanges.sleepAppliance],
       ['Testing workflow', 'Take-home sleep studies; data sent to sleep physician'],
@@ -1558,12 +1583,14 @@ const serviceEnhancements = {
     who: 'Oral appliance therapy may help patients with mild to moderate obstructive sleep apnea, patients who cannot tolerate CPAP, or severe OSA cases only with physician involvement.',
     approach: 'Elm Ridge supports the dental side of sleep apnea care. The practice does not independently diagnose sleep apnea; recorded sleep-study data is sent to a sleep physician for official medical diagnosis.',
     detailSections: [
-      { title: 'Snoring vs sleep apnea', html: '<p>Snoring can be annoying, but sleep apnea is a medical condition that needs proper testing and diagnosis. An oral appliance should not be delivered as a shortcut around that process.</p>' },
-      { title: 'How the appliance process works', html: htmlList(['Discuss symptoms, CPAP history, and medical-dental fit.', 'Use a take-home sleep study workflow when appropriate.', 'Send recorded data to a sleep physician for official diagnosis.', 'Deliver an FDA-cleared oral appliance only after physician diagnosis and dental evaluation.', 'Adjust and follow up as needed.']) },
+      { title: 'How sleep apnea is diagnosed', html: `<p>Sleep apnea is diagnosed from sleep-study data interpreted by a sleep physician. Elm Ridge can help with a take-home sleep study workflow when appropriate. The recorded data is sent to a sleep physician for official medical diagnosis, and a physician diagnosis is required before an oral appliance is delivered.</p><p>The questionnaire below can help you decide whether testing is worth discussing. It is not a diagnosis.</p>${stopBangQuestionnaireHtml()}` },
+      { title: 'How sleep apnea is treated', html: '<p>Treatment depends on the physician diagnosis, apnea severity, oxygen levels, symptoms, medical history, and what the patient can actually use consistently.</p><div class="not-prose grid gap-4 my-5"><article class="border border-teal-light bg-stone p-5"><h3 class="font-display text-2xl text-charcoal mb-3">Mild to moderate OSA</h3><p class="text-charcoal/70 leading-7">A custom sleep appliance is often a favored treatment when the patient is an appropriate candidate. CPAP may also be recommended, especially when medical factors or sleep-study findings point that direction.</p></article><article class="border border-teal-light bg-stone p-5"><h3 class="font-display text-2xl text-charcoal mb-3">Severe OSA</h3><p class="text-charcoal/70 leading-7">Severe obstructive sleep apnea is generally treated with CPAP first. A sleep appliance may be considered only when CPAP is not tolerated and the physician supports that plan.</p></article><article class="border border-teal-light bg-stone p-5"><h3 class="font-display text-2xl text-charcoal mb-3">Follow-up</h3><p class="text-charcoal/70 leading-7">Oral appliances are adjusted over time, and follow-up testing may be recommended to confirm the airway is being managed well enough.</p></article></div>' },
       { title: 'Insurance boundary', html: '<p>Medical insurance billing is for appliances only, not sleep studies. Requirements vary by plan and documentation.</p>' },
       { title: 'Typical cost range', html: costRangeHtml(costRanges.sleepAppliance, 'Medical insurance may help when requirements are met.') },
     ],
     payment: costContext,
+    nextQuestions: [],
+    extra: '<h2>Important medical boundary</h2><p>A dentist does not independently diagnose sleep apnea. Severe obstructive sleep apnea is generally treated with CPAP first; an oral appliance may be considered when CPAP is not tolerated and the sleep physician supports that plan.</p>',
   },
   'tmj-splint-therapy-killeen-tx': {
     h1: 'Limited TMJ Splint Therapy for Conservative Care',
@@ -1791,6 +1818,7 @@ function makePage(overrides) {
     introBlockImageWidth: page.introBlockImageWidth,
     introBlockImageHeight: page.introBlockImageHeight,
     hideIntroBlock: page.hideIntroBlock,
+    hideOverviewSections: page.hideOverviewSections,
     hideApproachSection: page.hideApproachSection,
     afterIntroBlockHtml: page.afterIntroBlockHtml,
     extra: page.extra || '',
@@ -1923,7 +1951,7 @@ function buildServicePages() {
     makePage({ slug: 'sedation-dentistry-killeen-tx', name: 'Sedation Dentistry', h1: 'Sedation Options for a Calmer Dental Visit', answer: 'Elm Ridge offers nitrous oxide and oral conscious sedation for evaluated candidates. Elm Ridge does not offer IV sedation, deep sedation, or general anesthesia.', providers: ['Jeff Muszynski, DDS'], related: [{ label: 'Nitrous oxide', href: '/nitrous-oxide-dentist-killeen-tx' }, { label: 'Oral conscious sedation', href: '/oral-conscious-sedation-killeen-tx' }, serviceLinks.jeff, serviceLinks.appointment], faq: [['Do you offer IV sedation?', 'No. Elm Ridge offers nitrous oxide and oral conscious sedation, but not IV sedation.'], ['Can I drive after nitrous oxide?', 'Most patients can drive after nitrous oxide because it wears off quickly.'], ['Do I need a driver for oral conscious sedation?', 'Yes. Oral conscious sedation requires a driver and planning before the appointment.']] }),
     makePage({ slug: 'nitrous-oxide-dentist-killeen-tx', name: 'Nitrous Oxide', h1: 'Nitrous Oxide for Light Dental Relaxation', answer: 'Nitrous oxide can help take the edge off dental visits and wears off quickly after the appointment.', providers: ['Jeff Muszynski, DDS'], related: [{ label: 'Sedation dentistry', href: '/sedation-dentistry-killeen-tx' }, { label: 'Oral conscious sedation', href: '/oral-conscious-sedation-killeen-tx' }, serviceLinks.appointment] }),
     makePage({ slug: 'oral-conscious-sedation-killeen-tx', name: 'Oral Conscious Sedation', h1: 'Oral Conscious Sedation for Evaluated Candidates', answer: 'Oral conscious sedation uses prescribed medication for deeper relaxation while the patient remains responsive. It requires evaluation, instructions, and a driver. It is not IV sedation.', providers: ['Jeff Muszynski, DDS'], related: [{ label: 'Sedation dentistry', href: '/sedation-dentistry-killeen-tx' }, { label: 'Nitrous oxide', href: '/nitrous-oxide-dentist-killeen-tx' }, serviceLinks.jeff] }),
-    makePage({ slug: 'sleep-apnea-dentist-killeen-tx', name: 'Sleep Apnea Oral Appliances', title: 'Sleep Apnea Dentist in Killeen, TX | Elm Ridge', h1: 'Sleep Apnea Oral Appliance Therapy in Killeen', answer: 'Elm Ridge helps with take-home sleep studies and FDA-cleared oral appliances for appropriate mild to moderate obstructive sleep apnea and CPAP-intolerant patients. A sleep physician must make the official diagnosis before appliance delivery.', providers: ['Jeff Muszynski, DDS'], related: [{ label: 'Insurance and financing', href: '/insurance-and-financing' }, serviceLinks.jeff, serviceLinks.appointment], extra: '<h2>Important Medical Boundary</h2><p>Recorded sleep-study data is sent to a sleep physician for official medical diagnosis. Severe OSA is handled with physician involvement. Medical insurance billing applies to appliances only, not sleep studies.</p>', faq: [['Can a dentist diagnose sleep apnea?', 'No. A sleep physician makes the official medical diagnosis.'], ['Do you use FDA-cleared oral appliances?', 'Yes. Elm Ridge uses FDA-cleared oral appliances and does not present one appliance brand as the only option.'], ['Does medical insurance cover sleep studies?', 'Elm Ridge bills medical insurance for appliances only, not sleep studies.']] }),
+    makePage({ slug: 'sleep-apnea-dentist-killeen-tx', name: 'Sleep Apnea Oral Appliances', title: 'Sleep Apnea Dentist in Killeen, TX | Elm Ridge', h1: 'Sleep Apnea Oral Appliance Therapy in Killeen', answer: 'Elm Ridge helps with take-home sleep studies and FDA-cleared oral appliances for appropriate mild to moderate obstructive sleep apnea and CPAP-intolerant patients. A sleep physician must make the official diagnosis before appliance delivery.', providers: ['Jeff Muszynski, DDS'], related: [{ label: 'Insurance and financing', href: '/insurance-and-financing' }, serviceLinks.jeff, serviceLinks.appointment], extra: '<h2>Important medical boundary</h2><p>A dentist does not independently diagnose sleep apnea. Severe obstructive sleep apnea is generally treated with CPAP first; an oral appliance may be considered when CPAP is not tolerated and the sleep physician supports that plan.</p>', faq: [['Can a dentist diagnose sleep apnea?', 'No. A sleep physician makes the official medical diagnosis.'], ['Do you use FDA-cleared oral appliances?', 'Yes. Elm Ridge uses FDA-cleared oral appliances and does not present one appliance brand as the only option.'], ['Does medical insurance cover sleep studies?', 'Elm Ridge bills medical insurance for appliances only, not sleep studies.']] }),
     makePage({ slug: 'tmj-splint-therapy-killeen-tx', name: 'TMJ Splint Therapy', h1: 'TMJ Splint Therapy for Limited TMJ Care', answer: 'Elm Ridge provides limited TMJ care focused on splint therapy. If a patient needs more advanced care, the practice will explain and refer appropriately.', providers: ['Jeff Muszynski, DDS'], related: [serviceLinks.services, serviceLinks.newPatients, serviceLinks.appointment, serviceLinks.jeff] }),
   ];
   const preserveLegacyDesignedPages = new Set([
