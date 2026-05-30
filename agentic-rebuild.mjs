@@ -1285,6 +1285,8 @@ const serviceEnhancements = {
   },
   'root-canal-killeen-tx': {
     h1: 'Root Canal Treatment When a Tooth Can Still Be Saved',
+    image: 'gbp/root-canal-killeen-texas.png',
+    alt: 'Root canal treatment planning at Elm Ridge in Killeen, Texas',
     glance: [
       ['Typical range', costRanges.rootCanal],
       ['Molar root canals', 'Yes, many cases'],
@@ -1427,20 +1429,22 @@ const serviceEnhancements = {
     answer: 'A traditional dental bridge replaces a missing tooth by using crowns on neighboring teeth for support. It can be a good fixed option when those teeth are healthy enough to carry the extra load, and may be a good option when an implant isn\'t possible but a non-removable fix is desired.',
     image: 'gbp/dental-bridge-killeen-tx-dentist.png',
     alt: 'Dental bridge treatment planning at Elm Ridge in Killeen',
+    hideIntroBlock: true,
     glance: [
       ['Best for', 'One or more missing teeth with strong neighboring teeth'],
-      ['Main comparison', 'Traditional bridge vs implant bridge'],
+      ['Main comparison', 'Dental Bridge vs Dental Implant'],
       ['Cleaning', 'Requires cleaning under the bridge'],
       ['Provider focus', 'Jeff Muszynski, DDS and Kayla Muszynski, DDS'],
     ],
     who: 'A bridge may help when a patient wants a fixed replacement and implants are not the best fit because of timeline, anatomy, medical history, budget, or patient preference.',
     detailSections: [
-      { title: 'Traditional bridge vs implant bridge', html: simpleTable(['Option', 'Tradeoff'], [['Traditional bridge', 'Can be faster and less surgical, and insurance may favor it in some cases. It requires reshaping neighboring teeth.'], ['Implant bridge', 'Does not require reshaping adjacent healthy teeth, but involves implant surgery, healing time, and different cost factors.']]) },
+      { title: 'Dental Bridge vs Dental Implant', html: simpleTable(['Option', 'What to know'], [['Traditional bridge', 'Can be completed faster without surgery, but it requires reshaping the neighboring teeth and attaching them together with the dental bridge. Problems with an individual tooth may require the entire bridge to be redone.'], ['Dental Implant', 'Favored because it does not require reshaping or attaching to adjacent teeth, but it involves surgery and more time to complete the treatment. Typically lasts longer than a dental bridge.']]) },
       { title: 'When an implant may be better', html: '<p>An implant may be better when neighboring teeth are healthy and do not need crowns. Preserving those teeth can matter over the long term.</p>' },
       { title: 'Maintenance', html: '<p>Bridges need careful cleaning around the edges and under the replacement tooth. Elm Ridge explains the tools and technique so the supporting teeth stay healthy.</p>' },
       { title: 'Cost and insurance', html: `<p>Bridge cost depends on span length, supporting teeth, materials, buildup needs, and insurance. ${insuranceCaveat}</p>` },
     ],
     payment: costContext,
+    nextQuestions: [],
   },
   'cosmetic-dentistry-killeen-tx': {
     h1: 'Cosmetic Dentistry That Still Looks Like You',
