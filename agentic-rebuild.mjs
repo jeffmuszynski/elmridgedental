@@ -147,8 +147,24 @@ function simpleSchema(type, name, pagePath, description, extra = {}) {
   }, `${pagePath.replaceAll('/', '').replaceAll('-', '_') || 'home'}_${type.toLowerCase()}`);
 }
 
-function pageIntroBlock(answer) {
-  return `<section class="py-10 bg-white"><div class="max-w-4xl mx-auto px-6"><div class="border border-teal-light bg-teal-pale/50 p-6"><p class="font-body text-xs tracking-[0.28em] uppercase text-teal-dark mb-3">Quick Take</p><p class="text-charcoal/75 leading-8 text-lg">${answer}</p></div></div></section>`;
+function pageIntroBlock(content) {
+  const block = typeof content === 'object' && content !== null
+    ? content
+    : { answer: content };
+
+  if (block.introBlockTitle || block.introBlockHtml || block.introBlockImage) {
+    const heading = block.introBlockTitle || 'Quick Take';
+    const bodyHtml = block.introBlockHtml || `<p class="text-charcoal/75 leading-8 text-lg">${block.answer}</p>`;
+    const imageHtml = block.introBlockImage
+      ? `<figure class="bg-white border border-teal-light p-2 shadow-xl"><img src="/${block.introBlockImage}" alt="${block.introBlockAlt || ''}" class="w-full object-cover" loading="lazy" decoding="async" width="${block.introBlockImageWidth || ''}" height="${block.introBlockImageHeight || ''}" /></figure>`
+      : '';
+    const layout = block.introBlockImage ? 'grid lg:grid-cols-[1.1fr,0.9fr] gap-7 items-center' : '';
+    const maxWidth = block.introBlockImage ? 'max-w-5xl' : 'max-w-4xl';
+
+    return `<section class="py-10 bg-white"><div class="${maxWidth} mx-auto px-6"><div class="border border-teal-light bg-teal-pale/50 p-6 ${layout}"><div><h2 class="font-display text-4xl text-charcoal mb-4">${heading}</h2>${bodyHtml}</div>${imageHtml}</div></div></section>`;
+  }
+
+  return `<section class="py-10 bg-white"><div class="max-w-4xl mx-auto px-6"><div class="border border-teal-light bg-teal-pale/50 p-6"><p class="font-body text-xs tracking-[0.28em] uppercase text-teal-dark mb-3">Quick Take</p><p class="text-charcoal/75 leading-8 text-lg">${block.answer}</p></div></div></section>`;
 }
 
 function atAGlance(items) {
@@ -459,7 +475,7 @@ function serviceBody(page) {
   ];
   const related = uniqueLinks([...(page.related || []), ...supportLinks]).filter((item) => item.href !== `/${page.slug}`);
   const nextQuestions = page.nextQuestions || defaultNextQuestions(page, related);
-  return `${pageIntroBlock(page.answer)}
+  return `${pageIntroBlock(page)}
   <section class="py-14 bg-white"><div class="max-w-4xl mx-auto px-6 prose-page space-y-7">
     <h2>At a Glance</h2>
     ${atAGlance(page.glance)}
@@ -1746,6 +1762,12 @@ function makePage(overrides) {
     expect: page.expect || defaultExpectText(page),
     call: page.call || defaultCallText(page),
     payment: page.payment,
+    introBlockTitle: page.introBlockTitle,
+    introBlockHtml: page.introBlockHtml,
+    introBlockImage: page.introBlockImage,
+    introBlockAlt: page.introBlockAlt,
+    introBlockImageWidth: page.introBlockImageWidth,
+    introBlockImageHeight: page.introBlockImageHeight,
     extra: page.extra || '',
     providers: page.providers || ['Jeff Muszynski, DDS', 'Kayla Muszynski, DDS'],
     related: page.related || [serviceLinks.services, serviceLinks.newPatients, serviceLinks.insurance, serviceLinks.appointment, serviceLinks.reviews],
@@ -1774,6 +1796,8 @@ function buildServicePages() {
       expect: 'A first visit usually includes a review of health history, appropriate X-rays, a dental and gum evaluation, and a clear discussion of any findings.',
       call: 'Call for routine care, a new child visit, a second opinion, bleeding gums, a broken tooth, or recurring sensitivity.',
       providers: ['Jeff Muszynski, DDS', 'Kayla Muszynski, DDS'],
+      image: 'gbp/family-dentistry.jpg',
+      alt: 'Children smiling together for Elm Ridge family dentistry',
       related: [{ label: 'Dental cleanings', href: '/dental-cleanings-killeen-tx' }, { label: 'Fillings', href: '/dental-fillings-killeen-tx' }, { label: 'Crowns', href: '/dental-crowns-killeen-tx' }, serviceLinks.newPatients, serviceLinks.kayla],
       faq: [
         ['Do you see kids?', 'Yes. Elm Ridge sees children once teeth are present as part of family dentistry.'],
@@ -1812,6 +1836,12 @@ function buildServicePages() {
       imageCaption: 'Individual results vary. Images are shared with patient consent.',
       intro: 'The goal of veneers is not for people to notice your veneers &mdash; it is for them to notice your smile. Elm Ridge plans veneers around your face, bite, goals, and the amount of natural tooth structure that should be preserved, so the final result looks natural, balanced, and confident.',
       answer: 'Veneers can improve shape, color, symmetry, worn edges, small chips, and proportions while keeping the smile natural and balanced.',
+      introBlockTitle: 'What are Veneers?',
+      introBlockHtml: '<ul class="list-disc pl-5 space-y-3 text-charcoal/75 leading-8 text-lg"><li>Veneers are thin shells of tooth-colored porcelain that are bonded to the front of your teeth.</li><li>They can improve shape, color, symmetry, worn edges, small chips, and proportions while keeping the smile natural and balanced.</li><li>Because they only cover the front of your teeth they can be completed with very little to no tooth structure removal, depending on the case and esthetic goals.</li></ul>',
+      introBlockImage: 'gbp/dental-veneers.png',
+      introBlockAlt: 'Porcelain veneer being placed on a front tooth',
+      introBlockImageWidth: 1536,
+      introBlockImageHeight: 1024,
       who: 'Veneers may help when front teeth are worn, chipped, uneven, discolored, short, or out of proportion. They are not the answer for every cosmetic concern.',
       approach: 'Elm Ridge plans veneers around natural-looking esthetics, bite and function, and preserving healthy tooth structure where possible. Whitening, bonding, crowns, or clear aligners may be better depending on the case.',
       detailSections: [
@@ -1829,7 +1859,7 @@ function buildServicePages() {
       ],
     }),
     makePage({ slug: 'cosmetic-bonding-killeen-tx', name: 'Cosmetic Bonding', h1: 'Cosmetic Bonding for Chips, Gaps, and Small Shape Changes', answer: 'Cosmetic bonding can repair small chips, close selected small gaps, and improve tooth shape with tooth-colored composite. It is often more conservative than veneers but not right for every case.', related: cosmeticRelated, providers: ['Kayla Muszynski, DDS'] }),
-    makePage({ slug: 'teeth-whitening-killeen-tx', name: 'Teeth Whitening', h1: 'Custom Take-Home Whitening Trays', answer: 'Elm Ridge offers teeth whitening with custom trays and take-home whitening gel. Crowns, fillings, and veneers do not whiten like natural enamel, so timing matters if dental work is planned.', related: cosmeticRelated, providers: ['Kayla Muszynski, DDS'], medical: false }),
+    makePage({ slug: 'teeth-whitening-killeen-tx', name: 'Teeth Whitening', h1: 'Custom Take-Home Whitening Trays', answer: 'Elm Ridge offers teeth whitening with custom trays and take-home whitening gel. Crowns, fillings, and veneers do not whiten like natural enamel, so timing matters if dental work is planned.', related: cosmeticRelated, providers: ['Kayla Muszynski, DDS'], image: 'gbp/tooth-whitening-bleaching.png', alt: 'Teeth whitening shade comparison with brighter natural enamel', medical: false }),
     makePage({ slug: 'clear-aligners-killeen-tx', name: 'Clear Aligners', h1: 'Clear Aligners Without Locking You Into One Brand', answer: 'Elm Ridge offers clear aligners and uses multiple brands when appropriate. The focus is on tooth movement that fits your bite, goals, and long-term dental health.', related: cosmeticRelated, providers: ['Jeff Muszynski, DDS', 'Kayla Muszynski, DDS'] }),
     makePage({ slug: 'sedation-dentistry-killeen-tx', name: 'Sedation Dentistry', h1: 'Sedation Options for a Calmer Dental Visit', answer: 'Elm Ridge offers nitrous oxide and oral conscious sedation for evaluated candidates. Elm Ridge does not offer IV sedation, deep sedation, or general anesthesia.', providers: ['Jeff Muszynski, DDS'], related: [{ label: 'Nitrous oxide', href: '/nitrous-oxide-dentist-killeen-tx' }, { label: 'Oral conscious sedation', href: '/oral-conscious-sedation-killeen-tx' }, serviceLinks.jeff, serviceLinks.appointment], faq: [['Do you offer IV sedation?', 'No. Elm Ridge offers nitrous oxide and oral conscious sedation, but not IV sedation.'], ['Can I drive after nitrous oxide?', 'Most patients can drive after nitrous oxide because it wears off quickly.'], ['Do I need a driver for oral conscious sedation?', 'Yes. Oral conscious sedation requires a driver and planning before the appointment.']] }),
     makePage({ slug: 'nitrous-oxide-dentist-killeen-tx', name: 'Nitrous Oxide', h1: 'Nitrous Oxide for Light Dental Relaxation', answer: 'Nitrous oxide can help take the edge off dental visits and wears off quickly after the appointment.', providers: ['Jeff Muszynski, DDS'], related: [{ label: 'Sedation dentistry', href: '/sedation-dentistry-killeen-tx' }, { label: 'Oral conscious sedation', href: '/oral-conscious-sedation-killeen-tx' }, serviceLinks.appointment] }),

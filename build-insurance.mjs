@@ -358,7 +358,11 @@ function addServiceInsuranceLinks() {
   for (const [file, snippet] of snippets) {
     if (!fs.existsSync(file)) continue;
     let html = fs.readFileSync(file, 'utf8');
-    if (html.includes(snippet)) continue;
+    const headingMatch = snippet.match(/<h2[^>]*>([^<]+)<\/h2>/);
+    if (headingMatch) {
+      const heading = headingMatch[1].replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+      html = html.replace(new RegExp(`<section[^>]*>\\s*<div[^>]*>\\s*<h2[^>]*>${heading}<\\/h2>[\\s\\S]*?<\\/div>\\s*<\\/section>`, 'g'), '');
+    }
     html = html.replace('</main>', `${snippet}</main>`);
     fs.writeFileSync(file, html);
   }
