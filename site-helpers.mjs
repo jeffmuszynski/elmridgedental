@@ -10,7 +10,7 @@ export const organizationEntityRef = {
 };
 const fontStylesheetHref = 'https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=DM+Sans:wght@400;500;600;700&display=swap';
 const criticalHeadCss = `<style>*,::before,::after{box-sizing:border-box}html{-webkit-text-size-adjust:100%;scroll-behavior:smooth}body{margin:0;background:#f5f0eb;color:#21343b;font-family:"DM Sans",system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}img,svg{display:block;max-width:100%}a{color:inherit;text-decoration:none}button{font:inherit;background:transparent;border:0}.font-body{font-family:"DM Sans",system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}.font-display{font-family:"Cormorant Garamond",Georgia,serif}.hidden{display:none}.block{display:block}.flex{display:flex}.grid{display:grid}.relative{position:relative}.sticky{position:sticky}.top-0{top:0}.z-50{z-index:50}.bg-stone{background:#f5f0eb}.text-charcoal{color:#21343b}.text-white{color:#fff}.bg-teal{background:#5f9ea0}.overflow-hidden{overflow:hidden}.w-full{width:100%}.h-full{height:100%}.object-cover{object-fit:cover}#nav{position:sticky;top:0;z-index:50;background:rgba(255,255,255,.85);border-bottom:1px solid rgba(255,255,255,.8);backdrop-filter:blur(4px)}#nav>div:first-child{max-width:80rem;margin:0 auto;padding:.75rem 1rem;display:flex;align-items:center;justify-content:space-between;gap:.75rem}#nav img{height:3.5rem;width:auto;max-width:min(68vw,260px);object-fit:contain}#nav nav,#nav>div:first-child>div,#mobile-menu{display:none}#mobile-menu.flex{display:flex;flex-direction:column}#menu-btn{display:block;padding:.5rem;color:#21343b}#menu-btn svg{width:1.5rem;height:1.5rem}.max-w-7xl{max-width:80rem}.mx-auto{margin-left:auto;margin-right:auto}.px-8{padding-left:2rem;padding-right:2rem}.py-16{padding-top:4rem;padding-bottom:4rem}.text-xs{font-size:.75rem;line-height:1rem}.text-base{font-size:1rem;line-height:1.5rem}.text-5xl{font-size:3rem;line-height:1}.uppercase{text-transform:uppercase}.leading-tight{line-height:1.25}.leading-8{line-height:2rem}.mb-4{margin-bottom:1rem}.mb-6{margin-bottom:1.5rem}.mb-8{margin-bottom:2rem}.mb-9{margin-bottom:2.25rem}.italic{font-style:italic}@media (min-width:640px){#nav>div:first-child{padding:1rem 1.5rem}#nav img{height:4rem}.sm\\:flex-row{flex-direction:row}.sm\\:items-center{align-items:center}}@media (min-width:1024px){#nav img{height:80px;max-width:none}#nav nav,#nav>div:first-child>div{display:flex}.lg\\:block{display:block}.lg\\:flex{display:flex}.lg\\:hidden{display:none}.lg\\:px-20{padding-left:5rem;padding-right:5rem}.lg\\:pt-12{padding-top:3rem}.lg\\:pb-8{padding-bottom:2rem}.lg\\:text-7xl{font-size:4.5rem;line-height:1}}@media (max-width:1023.98px){.lg\\:block,.lg\\:flex{display:none!important}}</style>`;
-const performanceHeadAssets = `${criticalHeadCss}<link rel="preload" as="style" href="/assets/tailwind-static.css" /><link rel="stylesheet" href="/assets/tailwind-static.css" /><link rel="preconnect" href="https://fonts.googleapis.com" /><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin /><link rel="preload" as="style" href="${fontStylesheetHref}" /><link rel="stylesheet" href="${fontStylesheetHref}" media="print" onload="this.media='all'" /><noscript><link rel="stylesheet" href="${fontStylesheetHref}" /></noscript>`;
+const performanceHeadAssets = `${criticalHeadCss}<link rel="preload" as="style" href="/assets/tailwind-static.css" onload="this.onload=null;this.rel='stylesheet'" /><noscript><link rel="stylesheet" href="/assets/tailwind-static.css" /></noscript><link rel="preconnect" href="https://fonts.googleapis.com" /><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin /><link rel="preload" as="style" href="${fontStylesheetHref}" /><link rel="stylesheet" href="${fontStylesheetHref}" media="print" onload="this.media='all'" /><noscript><link rel="stylesheet" href="${fontStylesheetHref}" /></noscript>`;
 export const globalDentistSchema = {
   '@context': 'https://schema.org',
   '@type': 'Dentist',
@@ -249,7 +249,7 @@ function getJpegDimensions(buffer) {
   return null;
 }
 
-function getImageDimensions(src) {
+export function getImageDimensions(src) {
   const cleanSrc = String(src || '').replace(/^\/+/, '').replaceAll('%20', ' ');
   if (!cleanSrc || !fs.existsSync(cleanSrc)) return null;
   const buffer = fs.readFileSync(cleanSrc);
@@ -352,6 +352,7 @@ export function writePage(file, opts) {
     intro,
     image,
     alt,
+    imageCaption,
     body,
     faq = [],
     faqHeading = 'Frequently Asked Questions',
@@ -368,7 +369,8 @@ export function writePage(file, opts) {
     headSchemas = [],
   } = opts;
   const faqItems = normalizeFaqItems(faq);
-  const imageHtml = image ? `<div><img src="/${image}" alt="${alt}" class="w-full shadow-2xl" loading="eager" decoding="async"${imageDimensionAttrs(image)} /></div>` : '';
+  const imageCaptionHtml = imageCaption ? `<p class="mt-3 text-xs leading-6 text-white/55">${imageCaption}</p>` : '';
+  const imageHtml = image ? `<div><img src="/${image}" alt="${alt}" class="w-full shadow-2xl" loading="eager" decoding="async"${imageDimensionAttrs(image)} />${imageCaptionHtml}</div>` : '';
   const grid = image ? 'grid lg:grid-cols-2 gap-12 items-center' : '';
   const faqHtml = faqItems.length ? `<section class="py-16 bg-stone"><div class="max-w-4xl mx-auto px-6"><h2 class="font-display text-4xl mb-8">${faqHeading}</h2><div class="space-y-4">${faqItems.map(({ question, answerHtml })=>`<details class="bg-white border border-teal-light p-6"><summary class="font-semibold">${question}</summary><p class="mt-3 text-charcoal/65 leading-7">${answerHtml}</p></details>`).join('')}</div></div></section>` : '';
   const footerSecondaryCta = footerSecondaryLabel ? `<a href="${footerSecondaryHref}" class="inline-block border border-teal px-8 py-4 text-xs uppercase tracking-widest font-semibold text-teal">${footerSecondaryLabel}</a>` : '';

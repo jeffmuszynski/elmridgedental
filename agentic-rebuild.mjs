@@ -126,7 +126,8 @@ function uniqueLinks(items) {
 function cardGrid(items) {
   return `<div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-5 not-prose">${items.map((item) => {
     const kicker = item.kicker ? `<p class="text-xs uppercase tracking-[0.26em] text-teal-dark mb-3">${esc(item.kicker)}</p>` : '';
-    return `<a href="${item.href}" class="block bg-white border border-teal-light p-6 hover:border-teal transition-colors">${kicker}<h3 class="font-display text-3xl text-charcoal mb-3">${esc(item.label)}</h3><p class="text-charcoal/65 leading-7">${esc(item.text || 'Learn what Elm Ridge considers before recommending this option.')}</p></a>`;
+    const text = item.text || relatedDescriptions[item.href] || '';
+    return `<a href="${item.href}" class="block bg-white border border-teal-light p-6 hover:border-teal transition-colors">${kicker}<h3 class="font-display text-3xl text-charcoal mb-3">${esc(item.label)}</h3>${text ? `<p class="text-charcoal/65 leading-7">${esc(text)}</p>` : ''}</a>`;
   }).join('')}</div>`;
 }
 
@@ -164,41 +165,49 @@ const relatedDescriptions = {
   '/insurance-and-financing': 'How benefits, estimates, and payment options work.',
   '/request-appointment': 'Send a request or call for help choosing the right visit.',
   '/patient-reviews': 'Read what patients say about their experience at Elm Ridge.',
-  '/dental-implants-killeen-tx': 'Learn how implants can replace missing teeth with a long-term fixed option.',
-  '/single-tooth-implant-killeen-tx': 'Compare one-tooth replacement options before choosing a plan.',
-  '/implant-bridge-killeen-tx': 'A fixed option when several teeth are missing in a row.',
-  '/snap-on-dentures-killeen-tx': 'A removable implant-retained option, especially useful for loose lower dentures.',
-  '/full-arch-dental-implants-killeen-tx': 'Fixed implant teeth for a full upper or lower arch.',
+  '/family-dentist-killeen-tx': 'One private office for cleanings, fillings, crowns, children’s visits, and long-term care.',
+  '/dental-cleanings-killeen-tx': 'Keep gums healthy, remove buildup, and catch small changes before they become bigger problems.',
+  '/dental-fillings-killeen-tx': 'Repair small cavities or chipped areas with tooth-colored material before the tooth needs something bigger.',
+  '/dental-crowns-killeen-tx': 'Protect a cracked, worn, or heavily filled tooth when a filling is no longer enough.',
+  '/root-canal-killeen-tx': 'Treat infection or deep decay so a tooth may be saved instead of removed.',
+  '/tooth-extractions-killeen-tx': 'Remove a tooth when it cannot be saved predictably, while planning what comes next.',
+  '/dental-implants-killeen-tx': 'Replace missing teeth with a long-term fixed option planned around bone, bite, and final tooth design.',
+  '/single-tooth-implant-killeen-tx': 'Replace one missing tooth without using the neighboring teeth for support.',
+  '/implant-bridge-killeen-tx': 'Replace several missing teeth in a row with a fixed implant-supported option.',
+  '/dental-bridges-killeen-tx': 'Replace missing teeth with a fixed option supported by neighboring teeth.',
+  '/snap-on-dentures-killeen-tx': 'Improve lower denture stability with implant support while comparing removable and fixed options.',
+  '/full-arch-dental-implants-killeen-tx': 'Replace a full upper or lower arch with fixed implant teeth planned around long-term function.',
   '/all-on-4-dental-implants-killeen-tx': 'How this search term fits into full-arch planning.',
   '/dentures-vs-implants-killeen-tx': 'Compare stability, cost, maintenance, and long-term tradeoffs.',
-  '/bone-grafting-killeen-tx': 'How preserving bone after extraction may protect future implant options.',
-  '/sinus-lift-killeen-tx': 'When upper back implants need a little more room.',
+  '/bone-grafting-killeen-tx': 'Preserve the socket after extraction when a future implant may be part of the plan.',
+  '/sinus-lift-killeen-tx': 'Create limited space for an upper back implant when sinus anatomy allows it during implant placement.',
   '/dental-implant-cost-killeen-tx': 'What affects implant estimates and insurance math.',
-  '/dental-crowns-killeen-tx': 'Stronger protection for cracked, worn, or heavily filled teeth.',
   '/crown-cost-killeen-tx': 'What affects crown fees, buildup needs, and insurance estimates.',
-  '/root-canal-killeen-tx': 'When infection is the reason a tooth needs more than a crown.',
   '/molar-root-canal-killeen-tx': 'Why back teeth need careful canal anatomy and crown planning.',
   '/root-canal-cost-killeen-tx': 'How tooth type, complexity, and restoration needs affect the estimate.',
-  '/tooth-extractions-killeen-tx': 'When removing a tooth is the right move and how replacement planning works.',
   '/wisdom-teeth-removal-killeen-tx': 'Case-by-case removal with referral when anatomy is more complex.',
   '/dentures-killeen-tx': 'Traditional, immediate, partial, and implant-supported options explained honestly.',
-  '/partial-dentures-killeen-tx': 'Removable replacement for several missing teeth.',
-  '/immediate-dentures-killeen-tx': 'Same-day tooth removal plans with realistic follow-up expectations.',
-  '/cosmetic-dentistry-killeen-tx': 'Natural-looking smile improvements planned around teeth, bite, and goals.',
-  '/veneers-killeen-tx': 'Porcelain shape and shade changes when the tooth structure supports it.',
-  '/cosmetic-bonding-killeen-tx': 'Conservative repairs for small chips, gaps, and shape changes.',
-  '/teeth-whitening-killeen-tx': 'Custom trays with take-home whitening gel.',
-  '/clear-aligners-killeen-tx': 'Tooth movement for crowding, spacing, relapse, and pre-restorative planning.',
+  '/partial-dentures-killeen-tx': 'Replace several missing teeth with a removable option when implants or bridges are not the best fit.',
+  '/immediate-dentures-killeen-tx': 'Leave with teeth the day teeth are removed, then adjust the fit as healing changes.',
+  '/cosmetic-dentistry-killeen-tx': 'Compare veneers, bonding, whitening, clear aligners, and other options for a natural-looking smile.',
+  '/veneers-killeen-tx': 'Improve tooth shape, color, length, and symmetry so people notice your smile, not the dental work.',
+  '/cosmetic-bonding-killeen-tx': 'Repair small chips, gaps, and uneven edges with conservative tooth-colored resin.',
+  '/teeth-whitening-killeen-tx': 'Brighten natural enamel with custom trays and professional take-home whitening gel.',
+  '/clear-aligners-killeen-tx': 'Improve crowding, spacing, relapse, or tooth position before cosmetic or restorative work.',
   '/clear-aligner-cost-killeen-tx': 'What affects aligner fees and financing.',
-  '/emergency-dentist-killeen-tx': 'Call first for urgent pain, swelling, broken teeth, or trauma.',
-  '/broken-tooth-killeen-tx': 'What determines whether a tooth needs a filling, crown, root canal, or extraction.',
-  '/toothache-killeen-tx': 'When pain points to decay, cracks, infection, bite stress, or emergency care.',
-  '/dental-abscess-killeen-tx': 'Swelling and infection signs that should not wait.',
-  '/lost-crown-killeen-tx': 'What to do now and when the tooth needs a new crown or deeper treatment.',
-  '/knocked-out-tooth-killeen-tx': 'Permanent tooth avulsion is urgent and time-sensitive.',
-  '/sleep-apnea-dentist-killeen-tx': 'Dental appliance therapy after physician diagnosis.',
+  '/emergency-dentist-killeen-tx': 'Call first for urgent tooth pain, swelling, broken teeth, knocked-out teeth, or lost crowns.',
+  '/broken-tooth-killeen-tx': 'Find out whether a broken tooth needs smoothing, bonding, a filling, a crown, a root canal, or removal.',
+  '/toothache-killeen-tx': 'Identify whether pain is coming from decay, cracks, infection, bite stress, or gum problems.',
+  '/dental-abscess-killeen-tx': 'Treat dental infection quickly and know when swelling or systemic symptoms need emergency medical care.',
+  '/lost-crown-killeen-tx': 'Protect the exposed tooth and determine whether the crown can be recemented or needs replacement.',
+  '/knocked-out-tooth-killeen-tx': 'Get urgent guidance for a knocked-out permanent tooth and know when medical care is needed.',
+  '/sleep-apnea-dentist-killeen-tx': 'Use an FDA-cleared oral appliance after physician diagnosis when appropriate.',
   '/sleep-apnea-appliance-cost-killeen-tx': 'Appliance ranges and medical insurance requirements.',
-  '/tmj-splint-therapy-killeen-tx': 'Conservative splint care for selected clenching, grinding, and jaw soreness patterns.',
+  '/sedation-dentistry-killeen-tx': 'Talk through nitrous oxide and oral conscious sedation options for a calmer dental visit.',
+  '/nitrous-oxide-dentist-killeen-tx': 'Take the edge off mild dental anxiety with a short-acting option that wears off quickly for many patients.',
+  '/oral-conscious-sedation-killeen-tx': 'Help appropriate patients feel more relaxed during longer or more anxious dental visits.',
+  '/tmj-splint-therapy-killeen-tx': 'Use conservative splint therapy for clenching, grinding, jaw strain, or tooth wear.',
+  '/post-op/immediate-dentures': 'Review what to expect after immediate dentures, including healing, sore spots, and adjustments.',
   '/dr-jeff-muszynski-dds': 'Meet the dentist who leads implant, surgical, root canal, and complex restorative care.',
   '/dr-kayla-muszynski-dds': 'Meet one of the dentists who provides family, restorative, and cosmetic care at Elm Ridge.',
 };
@@ -431,13 +440,13 @@ function defaultNextQuestions(page, related) {
     .map((item) => ({
       label: item.label,
       href: item.href,
-      text: relatedDescriptions[item.href] || 'Learn what Elm Ridge considers before recommending this option.',
+      text: item.text || relatedDescriptions[item.href] || '',
     }));
 }
 
 function nextQuestionsSection(items = []) {
   if (!items.length) return '';
-  return `<h2>Related Questions Patients Ask</h2><div class="not-prose grid sm:grid-cols-2 gap-4">${items.map((item) => `<a href="${item.href}" class="block border border-teal-light bg-stone p-5 hover:border-teal transition-colors"><p class="font-semibold text-charcoal mb-2">${esc(item.label)}</p><p class="text-sm leading-7 text-charcoal/65">${esc(item.text).replaceAll('\u2014', '&mdash;')}</p></a>`).join('')}</div>`;
+  return `<h2>Related Questions Patients Ask</h2><div class="not-prose grid sm:grid-cols-2 gap-4">${items.map((item) => `<a href="${item.href}" class="block border border-teal-light bg-stone p-5 hover:border-teal transition-colors"><p class="font-semibold text-charcoal mb-2">${esc(item.label)}</p>${item.text ? `<p class="text-sm leading-7 text-charcoal/65">${esc(item.text).replaceAll('\u2014', '&mdash;')}</p>` : ''}</a>`).join('')}</div>`;
 }
 
 function serviceBody(page) {
@@ -484,6 +493,7 @@ function createServicePage(page) {
     intro: page.intro,
     image: page.image || 'Building.webp',
     alt: page.alt || 'Elm Ridge Implant and Family Dentistry in Killeen, TX',
+    imageCaption: page.imageCaption,
     body: serviceBody(page),
     faqHeading: page.faqHeading || 'Common Questions',
     faq: page.faq,
@@ -1423,8 +1433,11 @@ const serviceEnhancements = {
   'veneers-killeen-tx': {
     h1: 'Porcelain Veneers That Look Like They Belong',
     kicker: 'Cosmetic Dentistry',
-    intro: 'Veneers can refine tooth shape, length, color, and symmetry without making your smile look fake. Elm Ridge plans veneers around your face, bite, goals, and how much natural tooth structure should be preserved.',
-    answer: 'Veneers can improve shape, color, symmetry, worn edges, small chips, and proportions, but they should still look like they belong in your mouth.',
+    image: 'cosmeticdentistrykilleen11.webp',
+    alt: 'Before-and-after porcelain veneer result at Elm Ridge in Killeen',
+    imageCaption: 'Individual results vary. Images are shared with patient consent.',
+    intro: 'The goal of veneers is not for people to notice your veneers &mdash; it is for them to notice your smile. Elm Ridge plans veneers around your face, bite, goals, and the amount of natural tooth structure that should be preserved, so the final result looks natural, balanced, and confident.',
+    answer: 'Veneers can improve shape, color, symmetry, worn edges, small chips, and proportions while keeping the smile natural and balanced.',
     glance: [
       ['Typical range', costRanges.veneers],
       ['Best for', 'Selected front-tooth shape, shade, proportion, and symmetry changes'],
@@ -1441,7 +1454,7 @@ const serviceEnhancements = {
     ],
     payment: `Insurance usually does not cover cosmetic veneers, but benefits vary. CareCredit and Cherry are available. ${insuranceCaveat}`,
     faq: [
-      ['Will veneers look fake?', 'They should not. Elm Ridge plans veneers around your face, smile, tooth proportions, shade goals, and bite so the result looks natural instead of bulky or artificial.'],
+      ['Will veneers look natural?', 'That is the goal. Elm Ridge plans veneers around your face, smile, tooth proportions, shade goals, and bite so people notice your smile, not the dental work.'],
       ['How much tooth structure is changed for veneers?', 'It depends on the tooth position, color change, material choice, and final shape. The goal is to be as conservative as the case allows while still creating a durable result.'],
       ['Are veneers better than bonding?', 'Sometimes. Bonding can be more conservative for small chips or minor shape changes. Veneers are often stronger and more color-stable for larger esthetic changes, but they require a case-by-case plan.'],
       ['Can whitening or clear aligners fix my concern instead?', 'Yes, sometimes. Whitening may be the better first step for color, and clear aligners may be better when tooth position is the main concern. Elm Ridge will explain the tradeoffs before recommending veneers.'],
@@ -1739,6 +1752,7 @@ function makePage(overrides) {
     faq: page.faq || standardFaq(name),
     image: page.image,
     alt: page.alt,
+    imageCaption: page.imageCaption,
     medical: page.medical ?? true,
     serviceType: page.serviceType,
     procedureType: page.procedureType,
@@ -1793,8 +1807,11 @@ function buildServicePages() {
       name: 'Veneers',
       kicker: 'Cosmetic Dentistry',
       h1: 'Porcelain Veneers That Look Like They Belong',
-      intro: 'Veneers can refine tooth shape, length, color, and symmetry without making your smile look fake. Elm Ridge plans veneers around your face, bite, goals, and how much natural tooth structure should be preserved.',
-      answer: 'Veneers can improve shape, color, symmetry, worn edges, small chips, and proportions, but they should still look like they belong in your mouth.',
+      image: 'cosmeticdentistrykilleen11.webp',
+      alt: 'Before-and-after porcelain veneer result at Elm Ridge in Killeen',
+      imageCaption: 'Individual results vary. Images are shared with patient consent.',
+      intro: 'The goal of veneers is not for people to notice your veneers &mdash; it is for them to notice your smile. Elm Ridge plans veneers around your face, bite, goals, and the amount of natural tooth structure that should be preserved, so the final result looks natural, balanced, and confident.',
+      answer: 'Veneers can improve shape, color, symmetry, worn edges, small chips, and proportions while keeping the smile natural and balanced.',
       who: 'Veneers may help when front teeth are worn, chipped, uneven, discolored, short, or out of proportion. They are not the answer for every cosmetic concern.',
       approach: 'Elm Ridge plans veneers around natural-looking esthetics, bite and function, and preserving healthy tooth structure where possible. Whitening, bonding, crowns, or clear aligners may be better depending on the case.',
       detailSections: [
@@ -1805,7 +1822,7 @@ function buildServicePages() {
       related: cosmeticRelated,
       providers: ['Kayla Muszynski, DDS', 'Jeff Muszynski, DDS'],
       faq: [
-        ['Will veneers look fake?', 'They should not. Elm Ridge plans veneers around your face, smile, tooth proportions, shade goals, and bite so the result looks natural instead of bulky or artificial.'],
+        ['Will veneers look natural?', 'That is the goal. Elm Ridge plans veneers around your face, smile, tooth proportions, shade goals, and bite so people notice your smile, not the dental work.'],
         ['How much tooth structure is changed for veneers?', 'It depends on the tooth position, color change, material choice, and final shape. The goal is to be as conservative as the case allows while still creating a durable result.'],
         ['Are veneers better than bonding?', 'Sometimes. Bonding can be more conservative for small chips or minor shape changes. Veneers are often stronger and more color-stable for larger esthetic changes, but they require a case-by-case plan.'],
         ['Can whitening or clear aligners fix my concern instead?', 'Yes, sometimes. Whitening may be the better first step for color, and clear aligners may be better when tooth position is the main concern. Elm Ridge will explain the tradeoffs before recommending veneers.'],

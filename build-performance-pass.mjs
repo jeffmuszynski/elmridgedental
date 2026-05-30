@@ -1,7 +1,7 @@
 import fs from 'fs';
 import path from 'path';
 import puppeteer from 'puppeteer';
-import { doctorPersonSchemas, globalDentistSchema } from './site-helpers.mjs';
+import { doctorPersonSchemas, getImageDimensions, globalDentistSchema } from './site-helpers.mjs';
 
 const root = process.cwd();
 
@@ -43,7 +43,7 @@ function routeFilesFromSitemap() {
     }
     files.add(route.slice(1));
   }
-  return [...files].filter((file) => fs.existsSync(file));
+  return [...files].filter((file) => fs.existsSync(file) && fs.statSync(file).isFile());
 }
 
 function normalizedImagePath(src) {
@@ -126,16 +126,27 @@ function syncHomepageSchemas(html) {
 function syncSharedSchemas(html) {
   const dentistScript = `<script type="application/ld+json" data-schema="global-dentist">${JSON.stringify(globalDentistSchema)}</script>`;
   const doctorScript = `<script type="application/ld+json" data-schema="doctor-persons">${JSON.stringify(doctorPersonSchemas)}</script>`;
-  if (html.includes('data-schema="global-dentist"')) {
-    return html.replace(
-      /<script type="application\/ld\+json" data-schema="global-dentist">[\s\S]*?<\/script>(?:<script type="application\/ld\+json" data-schema="doctor-persons">[\s\S]*?<\/script>)?/,
-      () => `${dentistScript}${doctorScript}`
-    );
+  let updated = html;
+  let hasDentistSchema = false;
+  let hasDoctorSchema = false;
+
+  updated = updated.replace(/<script type="application\/ld\+json" data-schema="global-dentist">[\s\S]*?<\/script>/g, () => {
+    if (hasDentistSchema) return '';
+    hasDentistSchema = true;
+    return dentistScript;
+  });
+
+  updated = updated.replace(/<script type="application\/ld\+json" data-schema="doctor-persons">[\s\S]*?<\/script>/g, () => {
+    if (hasDoctorSchema) return '';
+    hasDoctorSchema = true;
+    return doctorScript;
+  });
+
+  if (!hasDentistSchema || !hasDoctorSchema) {
+    return updated.replace('</head>', `${hasDentistSchema ? '' : dentistScript}${hasDoctorSchema ? '' : doctorScript}</head>`);
   }
-  if (html.includes('</head>')) {
-    return html.replace('</head>', `${dentistScript}${doctorScript}</head>`);
-  }
-  return html;
+
+  return updated;
 }
 
 function fixHeadingHierarchy(file, html) {
@@ -163,8 +174,15 @@ function fixHeadingHierarchy(file, html) {
 }
 
 async function withImageTools(fn) {
+  const heroPath = path.join(root, heroName);
+  const variantsExist = heroVariantWidths.every((width) => fs.existsSync(path.join(root, `hero-${width}.webp`)));
+  if (variantsExist && fs.existsSync(heroPath) && getImageDimensions(heroPath)) {
+    return fn(null);
+  }
+
   const browser = await puppeteer.launch({ headless: 'new' });
   const page = await browser.newPage();
+  page.setDefaultTimeout(120000);
   try {
     return await fn(page);
   } finally {
@@ -173,22 +191,18 @@ async function withImageTools(fn) {
 }
 
 async function imageInfo(page, absolutePath) {
-  const extension = path.extname(absolutePath).slice(1).toLowerCase();
-  const mime = extension === 'jpg' || extension === 'jpeg' ? 'image/jpeg' : extension === 'png' ? 'image/png' : 'image/webp';
-  const srcUrl = `data:${mime};base64,${fs.readFileSync(absolutePath).toString('base64')}`;
-  return page.evaluate(async (url) => {
-    const img = new Image();
-    img.decoding = 'async';
-    img.src = url;
-    await img.decode();
-    return { width: img.naturalWidth, height: img.naturalHeight };
-  }, srcUrl);
+  return getImageDimensions(absolutePath);
 }
 
 async function createHeroAssets(page) {
   const legacyPath = path.join(root, heroLegacyName);
   const heroPath = path.join(root, heroName);
   const heroJpgPath = path.join(root, 'hero photo.jpg');
+  const variantsExist = heroVariantWidths.every((width) => fs.existsSync(path.join(root, `hero-${width}.webp`)));
+  const currentHeroDimensions = fs.existsSync(heroPath) ? getImageDimensions(heroPath) : null;
+  if (variantsExist && currentHeroDimensions) {
+    return currentHeroDimensions;
+  }
   if (!fs.existsSync(heroPath) && fs.existsSync(legacyPath)) {
     fs.renameSync(legacyPath, heroPath);
   }
@@ -366,7 +380,7 @@ await withImageTools(async (page) => {
     homepageFaqCtaCount: (fs.readFileSync('index.html', 'utf8').match(/Questions before your visit\?/g) || []).length,
     implantFaqSchemaCount: countScriptSchemas(fs.readFileSync('dental-implants-killeen-tx', 'utf8'), 'FAQPage'),
     blogIndexEntryCount: (() => {
-      const blogHtml = fs.readFileSync('blog', 'utf8');
+      const blogHtml = fs.readFileSync(fs.statSync('blog').isDirectory() ? 'blog/index.html' : 'blog', 'utf8');
       const match = blogHtml.match(/"blogPost":\[(.*?)\]/);
       return match ? (match[1].match(/"@type":"BlogPosting"/g) || []).length : 0;
     })(),
