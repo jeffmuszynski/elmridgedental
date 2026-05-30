@@ -476,11 +476,12 @@ function serviceBody(page) {
   const related = uniqueLinks([...(page.related || []), ...supportLinks]).filter((item) => item.href !== `/${page.slug}`);
   const nextQuestions = page.nextQuestions || defaultNextQuestions(page, related);
   const introBlock = page.hideIntroBlock ? '' : pageIntroBlock(page);
+  const afterIntroBlock = page.afterIntroBlockHtml || '';
   const approachBlock = page.hideApproachSection ? '' : `
     <h2>How Elm Ridge Approaches It</h2>
     <p>${page.approach || defaultApproachText(page)}</p>`;
 
-  return `${introBlock}
+  return `${introBlock}${afterIntroBlock}
   <section class="py-14 bg-white"><div class="max-w-4xl mx-auto px-6 prose-page space-y-7">
     <h2>At a Glance</h2>
     ${atAGlance(page.glance)}
@@ -1216,11 +1217,12 @@ const serviceEnhancements = {
   },
   'snap-on-dentures-killeen-tx': {
     h1: 'Snap-On Dentures When a Loose Denture Needs More Stability',
-    answer: 'Snap-on dentures attach to dental implants for better retention than a traditional removable denture. At Elm Ridge, they are typically strongest and most predictable as a lower-arch solution.',
+    answer: 'Snap-on dentures attach to dental implants for better retention than a traditional removable denture, allowing you to eliminate the need for denture adhesives and laugh, smile, and eat without worrying about your dentures coming loose.',
+    afterIntroBlockHtml: '<section class="pb-10 bg-white"><div class="max-w-4xl mx-auto px-6"><figure class="border border-teal-light bg-stone p-2 shadow-xl"><img src="/gbp/snap-on-implant-denture-killeen-tx-1.png" alt="Snap-on implant denture designed for improved denture stability" class="w-full" loading="lazy" decoding="async" width="1254" height="1254" /></figure></div></section>',
     glance: [
       ['Typical range', costRanges.snapOnDenture],
       ['Implants', 'Often 2 or 4; four is better when anatomy and finances allow'],
-      ['Strongest use', 'Usually lower-arch denture stability'],
+      ['Strongest use', 'usually reserved for the lower arch for best long term success'],
       ['Provider focus', 'Jeff Muszynski, DDS'],
     ],
     who: 'Snap-on dentures can help patients who struggle with a loose lower denture, want a removable option with more retention, or need a middle-ground between traditional dentures and fixed full-arch implants.',
@@ -1776,6 +1778,7 @@ function makePage(overrides) {
     introBlockImageHeight: page.introBlockImageHeight,
     hideIntroBlock: page.hideIntroBlock,
     hideApproachSection: page.hideApproachSection,
+    afterIntroBlockHtml: page.afterIntroBlockHtml,
     extra: page.extra || '',
     providers: page.providers || ['Jeff Muszynski, DDS', 'Kayla Muszynski, DDS'],
     related: page.related || [serviceLinks.services, serviceLinks.newPatients, serviceLinks.insurance, serviceLinks.appointment, serviceLinks.reviews],
