@@ -1786,7 +1786,7 @@ function buildServicesHub() {
       ['Smile makeovers', '/cosmetic-dentistry-killeen-tx', 'Coordinated cosmetic and restorative planning.'],
     ]],
     ['Emergency Dentistry', [
-      ['Emergency dentist', '/emergency-dentist-killeen-tx', 'One clear emergency page for tooth pain, swelling, broken teeth, lost crowns, knocked-out teeth, and same-day triage when possible.'],
+      ['Emergency Visit', '/emergency-dentist-killeen-tx', 'Tooth pain, swelling, broken teeth, lost crown, knocked-out teeth? Elm Ridge offers same-day triage whenever possible.'],
     ]],
     ['Comfort and Adjacent Care', [
       ['Nitrous oxide', '/nitrous-oxide-dentist-killeen-tx', 'Light relaxation that wears off quickly.'],
