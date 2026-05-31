@@ -542,6 +542,7 @@ function createServicePage(page) {
     image: page.image || 'Building.webp',
     alt: page.alt || 'Elm Ridge Implant and Family Dentistry in Killeen, TX',
     imageCaption: page.imageCaption,
+    hideHeroIntro: page.hideHeroIntro,
     body: serviceBody(page),
     faqHeading: page.faqHeading || 'Common Questions',
     faq: page.faq,
@@ -578,12 +579,13 @@ function standardFaq(name) {
 
 function emergencyBody(page) {
   const related = uniqueLinks(page.related || []).filter((item) => item.href !== `/${page.slug}`);
+  const contentSectionClass = page.tightAfterIntro ? 'pt-6 pb-14 bg-white' : 'py-14 bg-white';
   return `${pageIntroBlock(page.answer)}
-  <section class="py-14 bg-white"><div class="max-w-4xl mx-auto px-6 prose-page space-y-7">
+  <section class="${contentSectionClass}"><div class="max-w-4xl mx-auto px-6 prose-page space-y-7">
     <h2>What to Do Now</h2>
     <p>${page.now}</p>
     <div class="not-prose grid sm:grid-cols-2 gap-4">
-      <a href="${phoneHref}" class="block bg-teal text-white p-6 text-center font-semibold tracking-widest uppercase text-xs">Call ${phoneDisplay}</a>
+      <a href="${phoneHref}" class="block bg-teal text-white p-6 text-center font-semibold tracking-widest uppercase text-xs" style="color:#fff;">Call ${phoneDisplay}</a>
       <a href="/request-appointment" class="block border border-teal p-6 text-center font-semibold tracking-widest uppercase text-xs text-teal-dark">Request Appointment</a>
     </div>
     <h2>When to Go to the ER</h2>
@@ -633,6 +635,8 @@ function createEmergencyPage(page) {
     kicker: 'Emergency Dentistry',
     h1: page.h1,
     intro: page.intro,
+    image: page.image,
+    alt: page.alt,
     body: page.isSymptom ? emergencyQuestionBody(page) : emergencyBody(page),
     faqHeading: 'Emergency FAQ',
     faq: page.faq,
@@ -1519,7 +1523,7 @@ const serviceEnhancements = {
   'cosmetic-dentistry-killeen-tx': {
     h1: 'Cosmetic Dentistry That Still Looks Like You',
     intro: 'Most people do not want a fake-looking smile. They want the details cleaned up without losing themselves.',
-    answer: 'Elm Ridge plans cosmetic dentistry around natural-looking results, tooth structure, bite, facial features, goals, and budget. Treatment may include whitening, bonding, veneers, clear aligners, crowns, or a staged combination.',
+    answer: 'Elm Ridge Implant and Family Dentistry helps patients improve chipped, worn, stained, uneven, or missing teeth with cosmetic treatment designed to look natural so people notice your beautiful smile and not your dentistry.',
     glance: [
       ['Philosophy', 'Natural-looking and conservative when appropriate'],
       ['Options', 'Whitening, bonding, veneers, clear aligners, crowns, bridges'],
@@ -1682,12 +1686,16 @@ const serviceEnhancements = {
   },
   'nitrous-oxide-dentist-killeen-tx': {
     h1: 'Nitrous Oxide for Light Dental Relaxation',
-    answer: 'Nitrous oxide can help take the edge off a dental visit while keeping the patient awake and responsive. It wears off quickly after the appointment.',
+    intro: 'Nitrous oxide, or "laughing gas" can help take the edge off a dental visit while keeping the patient awake and responsive. It wears off quickly, before you leave appointment.',
+    answer: 'Nitrous oxide, or "laughing gas" can help take the edge off a dental visit while keeping the patient awake and responsive. It wears off quickly, before you leave appointment.',
+    hideIntroBlock: true,
+    hideProviderLinks: true,
+    payment: 'Not usually covered by insurance, but coverage depends on your plan, diagnosis, and treatment details. We can estimate benefits, but final payment is determined by the insurance company.',
     glance: [
-      ['Best for', 'Light anxiety or mild comfort support'],
-      ['Recovery', 'Wears off quickly'],
-      ['Driver', 'Often not needed for nitrous alone'],
-      ['Related option', 'Oral conscious sedation for evaluated candidates'],
+      ['Best for', 'Nervous kids or adults; light anxiety or mild comfort support'],
+      ['Recovery', 'Wears off quickly, within 5 minutes of breathing 100% oxygen'],
+      ['Driver', 'Able to drive immediately after appointment'],
+      ['Related option', 'Oral conscious sedation for evaluated candidates when nitrous oxide is not enough'],
     ],
     detailSections: [
       { title: 'When nitrous makes sense', html: htmlList(['Mild to moderate nervousness', 'Shorter procedures', 'Patients who want relaxation without oral sedative planning', 'Appointments where a quick recovery matters']) },
@@ -1695,17 +1703,19 @@ const serviceEnhancements = {
     ],
   },
   'oral-conscious-sedation-killeen-tx': {
-    h1: 'Oral Conscious Sedation for Evaluated Candidates',
-    answer: 'Oral conscious sedation uses prescribed medication for deeper relaxation while the patient remains responsive. It is not IV sedation and it requires planning, instructions, and a driver.',
+    h1: 'Oral Conscious Sedation',
+    hideHeroIntro: true,
+    hideProviderLinks: true,
+    answer: 'Oral conscious sedation uses prescribed medication for deeper relaxation while the patient remains responsive. It is not IV sedation and it requires pre-planning, a driver, and someone to care for you at home for the day while you recover.',
     glance: [
-      ['Sedation type', 'Prescription oral medication'],
-      ['Driver', 'Required'],
+      ['Sedation type', 'Conscious oral sedation through prescription oral medication; available to healthy individuals'],
+      ['Driver and care-giver', 'Required'],
       ['IV sedation', 'Not offered'],
-      ['Provider focus', 'Jeff Muszynski, DDS'],
+      ['Recovery', 'Plan to rest at home for the day while the medication wears off'],
     ],
     detailSections: [
       { title: 'What the visit requires', html: htmlList(['A review of health history and medications', 'Clear pre-visit and post-visit instructions', 'A responsible driver', 'A plan for the procedure and recovery time']) },
-      { title: 'Boundaries', html: '<p>Oral conscious sedation is not deep sedation, general anesthesia, or IV sedation. Patients remain responsive, and not every patient is a candidate.</p>' },
+      { title: 'Boundaries', html: '<p>Oral conscious sedation is minimal sedation - not deep sedation, general anesthesia, or IV sedation. Patients remain responsive, though they may feel drowsy and not remember appointment details later. Not every patient is a candidate, especially individuals with other health issues.</p>' },
     ],
   },
 };
@@ -1716,11 +1726,11 @@ const emergencyEnhancements = {
   'emergency-dentist-killeen-tx': {
     answer: 'For urgent dental problems, call first. Elm Ridge offers same-day emergency appointments when possible and triages severe pain, swelling, broken teeth, knocked-out permanent teeth, and infection symptoms honestly.',
     now: `Call ${phoneDisplay} as early as possible. Describe your symptoms, how long they have been happening, whether swelling is present, and whether there was trauma. Use the appointment form only for non-urgent requests.`,
-    treat: 'Elm Ridge can examine the problem, take X-rays or imaging, relieve sharp edges, treat infection when appropriate, repair broken teeth, start a root canal when possible, remove a tooth when needed, or build a staged plan.',
+    treat: 'Elm Ridge can examine the problem, take X-rays or imaging, relieve sharp edges, treat infection when appropriate, repair broken teeth, start a root canal when possible, remove a tooth when needed, or build a staged plan.<br /><br />While it is difficult to guarantee same-day treatment due to the various potential treatment needs and required treatment times, we\'ll make every concerted effort to get you out of pain as soon as possible.',
     costText: emergencyCostText,
+    tightAfterIntro: true,
     detailSections: [
       { title: 'What is prioritized', html: htmlList(['True trauma', 'Knocked-out permanent teeth', 'Facial swelling', 'Severe or uncontrolled pain', 'Infection symptoms', 'Broken teeth with pain or sharp edges']) },
-      { title: 'What may not be same-day', html: '<p>A painless cosmetic chip may be seen same-day if the schedule allows, but it is not guaranteed. Complex treatment may need diagnosis first and treatment on a later visit.</p>' },
       { title: 'Typical emergency visit cost', html: costRangeHtml(costRanges.emergency, 'Treatment is separate and depends on the diagnosis.') },
     ],
   },
@@ -1884,6 +1894,7 @@ function makePage(overrides) {
     hideExpectSection: page.hideExpectSection,
     hideCallSection: page.hideCallSection,
     hidePaymentSection: page.hidePaymentSection,
+    hideHeroIntro: page.hideHeroIntro,
     tightAfterIntro: page.tightAfterIntro,
     readyBlockExtraClass: page.readyBlockExtraClass,
     afterIntroBlockHtml: page.afterIntroBlockHtml,
@@ -1977,7 +1988,7 @@ function buildServicePages() {
     makePage({ slug: 'dentures-vs-implants-killeen-tx', name: 'Dentures vs Implants', title: 'Dentures vs Implants in Killeen, TX | Elm Ridge', h1: 'Dentures, Snap-On Dentures, and Full-Arch Implants Compared', answer: 'Traditional dentures, snap-on dentures, and full-arch dental implants solve different problems. Elm Ridge helps patients compare stability, chewing, maintenance, surgery, cost, and long-term goals without pretending one option fits everyone.', providers: ['Jeff Muszynski, DDS'], related: implantRelated, faq: [['Will insurance cover full-arch implants?', `${insuranceCaveat} Dental implant benefits vary widely, and many plans limit implant coverage. Elm Ridge can estimate benefits before treatment.`], ['Do dentures stop bone loss?', 'Traditional dentures do not replace tooth roots, so the jawbone can continue to change over time. Implants can help preserve bone where they are placed.']] }),
     makePage({ slug: 'bone-grafting-killeen-tx', name: 'Bone Grafting', h1: 'Bone Grafting for Implant and Extraction Planning', answer: 'Bone grafting may be recommended after an extraction or before an implant when the jaw needs more support or better ridge shape for future treatment.', providers: ['Jeff Muszynski, DDS'], related: implantRelated }),
     makePage({ slug: 'sinus-lift-killeen-tx', name: 'Sinus Lift', h1: 'Sinus Lifts When Upper Implant Planning Needs More Bone', answer: 'A sinus lift may be needed for some upper back tooth implant cases when the sinus is close to the jawbone where an implant would be placed.', providers: ['Jeff Muszynski, DDS'], related: implantRelated }),
-    makePage({ slug: 'cosmetic-dentistry-killeen-tx', name: 'Cosmetic Dentistry', title: 'Cosmetic Dentistry in Killeen, TX | Elm Ridge', h1: 'Cosmetic Dentistry That Still Looks Like You', answer: 'Elm Ridge offers veneers, cosmetic bonding, custom take-home whitening trays, clear aligners, crowns, bridges, and smile planning with a natural-looking result as the goal.', related: cosmeticRelated, providers: ['Jeff Muszynski, DDS', 'Kayla Muszynski, DDS'], image: 'cosmetic dentistry killeen 1.webp', alt: 'Cosmetic dentistry result at Elm Ridge in Killeen' }),
+    makePage({ slug: 'cosmetic-dentistry-killeen-tx', name: 'Cosmetic Dentistry', title: 'Cosmetic Dentistry in Killeen, TX | Elm Ridge', h1: 'Cosmetic Dentistry That Still Looks Like You', answer: 'Elm Ridge Implant and Family Dentistry helps patients improve chipped, worn, stained, uneven, or missing teeth with cosmetic treatment designed to look natural so people notice your beautiful smile and not your dentistry.', related: cosmeticRelated, providers: ['Jeff Muszynski, DDS', 'Kayla Muszynski, DDS'], image: 'cosmetic dentistry killeen 1.webp', alt: 'Cosmetic dentistry result at Elm Ridge in Killeen' }),
     makePage({
       slug: 'veneers-killeen-tx',
       name: 'Veneers',
@@ -2016,7 +2027,7 @@ function buildServicePages() {
     makePage({ slug: 'clear-aligners-killeen-tx', name: 'Invisalign® Clear Aligners', h1: 'Invisalign® Clear Aligners', answer: 'Ditch the metal brackets and wires for a more comfortable and convenient alternative to conventional braces - straighten your teeth with clear aligners.', related: cosmeticRelated, providers: ['Jeff Muszynski, DDS', 'Kayla Muszynski, DDS'], image: 'gbp/invisalign-clear-aligners-killeen-tx.png', alt: 'Woman holding clear aligners for Invisalign treatment' }),
     makePage({ slug: 'sedation-dentistry-killeen-tx', name: 'Sedation Dentistry', h1: 'Sedation Options for a Calmer Dental Visit', answer: 'Elm Ridge offers nitrous oxide and oral conscious sedation for evaluated candidates. Elm Ridge does not offer IV sedation, deep sedation, or general anesthesia.', providers: ['Jeff Muszynski, DDS'], related: [{ label: 'Nitrous oxide', href: '/nitrous-oxide-dentist-killeen-tx' }, { label: 'Oral conscious sedation', href: '/oral-conscious-sedation-killeen-tx' }, serviceLinks.jeff, serviceLinks.appointment], faq: [['Do you offer IV sedation?', 'No. Elm Ridge offers nitrous oxide and oral conscious sedation, but not IV sedation.'], ['Can I drive after nitrous oxide?', 'Most patients can drive after nitrous oxide because it wears off quickly.'], ['Do I need a driver for oral conscious sedation?', 'Yes. Oral conscious sedation requires a driver and planning before the appointment.']] }),
     makePage({ slug: 'nitrous-oxide-dentist-killeen-tx', name: 'Nitrous Oxide', h1: 'Nitrous Oxide for Light Dental Relaxation', answer: 'Nitrous oxide can help take the edge off dental visits and wears off quickly after the appointment.', providers: ['Jeff Muszynski, DDS'], related: [{ label: 'Sedation dentistry', href: '/sedation-dentistry-killeen-tx' }, { label: 'Oral conscious sedation', href: '/oral-conscious-sedation-killeen-tx' }, serviceLinks.appointment] }),
-    makePage({ slug: 'oral-conscious-sedation-killeen-tx', name: 'Oral Conscious Sedation', h1: 'Oral Conscious Sedation for Evaluated Candidates', answer: 'Oral conscious sedation uses prescribed medication for deeper relaxation while the patient remains responsive. It requires evaluation, instructions, and a driver. It is not IV sedation.', providers: ['Jeff Muszynski, DDS'], related: [{ label: 'Sedation dentistry', href: '/sedation-dentistry-killeen-tx' }, { label: 'Nitrous oxide', href: '/nitrous-oxide-dentist-killeen-tx' }, serviceLinks.jeff] }),
+    makePage({ slug: 'oral-conscious-sedation-killeen-tx', name: 'Oral Conscious Sedation', h1: 'Oral Conscious Sedation', answer: 'Oral conscious sedation uses prescribed medication for deeper relaxation while the patient remains responsive. It is not IV sedation and it requires pre-planning, a driver, and someone to care for you at home for the day while you recover.', related: [{ label: 'Sedation dentistry', href: '/sedation-dentistry-killeen-tx' }, { label: 'Nitrous oxide', href: '/nitrous-oxide-dentist-killeen-tx' }] }),
     makePage({ slug: 'sleep-apnea-dentist-killeen-tx', name: 'Sleep Apnea Oral Appliances', title: 'Sleep Apnea Treatment in Killeen, TX | Elm Ridge', h1: 'Sleep Apnea Treatment', answer: 'Restoring restful sleep with a CPAP alternative.', providers: ['Jeff Muszynski, DDS'], related: [{ label: 'Insurance and financing', href: '/insurance-and-financing' }, serviceLinks.jeff, serviceLinks.appointment], faq: [['Can a dentist diagnose sleep apnea?', 'No. A sleep physician makes the official medical diagnosis.'], ['Do you use FDA-cleared oral appliances?', 'Yes. Elm Ridge uses FDA-cleared oral appliances and does not present one appliance brand as the only option.'], ['Does medical insurance cover sleep studies?', 'Elm Ridge bills medical insurance for appliances only, not sleep studies.']] }),
     makePage({ slug: 'tmj-splint-therapy-killeen-tx', name: 'TMJ Splint Therapy', h1: 'TMJ Splint Therapy for Limited TMJ Care', answer: 'Elm Ridge provides limited TMJ care focused on splint therapy. If a patient needs more advanced care, the practice will explain and refer appropriately.', providers: ['Jeff Muszynski, DDS'], related: [serviceLinks.services, serviceLinks.newPatients, serviceLinks.appointment, serviceLinks.jeff] }),
   ];
@@ -2032,10 +2043,12 @@ function buildServicePages() {
   [
     {
       slug: 'emergency-dentist-killeen-tx',
-      h1: 'Emergency Dentist in Killeen: When to Call and When to Go to the ER',
+      h1: 'Emergency Dentist',
       title: 'Emergency Dentist in Killeen, TX | Elm Ridge',
       description: 'Call Elm Ridge for emergency dental care in Killeen. Same-day appointments when possible, with ER guidance for severe swelling, trauma, or medical emergencies.',
-      intro: 'Call first for tooth pain, swelling, broken teeth, lost crowns, knocked-out teeth, or urgent dental concerns.',
+      intro: 'Call for tooth pain, swelling, broken teeth, lost crowns, knocked-out teeth, or urgent dental concerns.',
+      image: 'gbp/composite-bonding-killeen-tx.jpg',
+      alt: 'Composite bonding dental result at Elm Ridge in Killeen',
       answer: 'For dental emergencies, call first. Elm Ridge offers same-day emergency appointments when possible, but same-day care is not guaranteed without an appointment.',
       now: `Call ${phoneDisplay} as early as possible. Describe pain, swelling, trauma, fever, broken teeth, or lost restorations so the team can help triage the next step.`,
       treat: 'Elm Ridge can evaluate the problem, take X-rays when needed, relieve pain when possible, stabilize broken teeth, treat infection, perform root canals or extractions when appropriate, and explain follow-up options.',
