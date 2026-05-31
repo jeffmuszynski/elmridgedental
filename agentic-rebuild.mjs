@@ -1655,14 +1655,16 @@ const serviceEnhancements = {
   },
   'tmj-splint-therapy-killeen-tx': {
     h1: 'Limited TMJ Splint Therapy for Conservative Care',
-    answer: 'Elm Ridge provides limited TMJ care focused on splint therapy and conservative support. Complex TMJ disorders may require referral.',
-    glance: [
-      ['Scope', 'Limited splint therapy/conservative care'],
-      ['May help with', 'Clenching, grinding, jaw soreness, tooth wear'],
-      ['Not full-scope', 'Advanced joint disorder treatment or surgery'],
-      ['Provider focus', 'Jeff Muszynski, DDS'],
-    ],
+    answer: 'Elm Ridge provides limited TMJ care focused on splint therapy and conservative treatment for night-time clenching and grinding.',
+    image: 'gbp/tmj-splint-nightguard-killeen-tx.png',
+    alt: 'TMJ splint nightguard for clenching and grinding in Killeen',
+    hideIntroBlock: true,
+    hideAtAGlanceSection: true,
+    hideExpectSection: true,
     who: 'A splint may help when symptoms are connected to clenching, grinding, muscle soreness, tooth wear, or bite-related stress.',
+    approachHeading: 'The Elm Ridge Approach',
+    approach: 'Once deemed appropriate treatment, Elm Ridge will take impressions and fabricate a custom designed splint, or "night guard", that will help prevent TMJ pain and increased tooth breakage and wear from nighttime clenching and grinding, or "bruxism".<br /><br />Though fairly common, a frequent cause of nighttime "bruxism" is sleep apnea. <a href="/sleep-apnea-dentist-killeen-tx">Learn more about sleep apnea</a>.',
+    call: 'Call if you notice yourself clenching or grinding your teeth, waking up with headaches or jaw/muscle pain, worn or chipped teeth, or intermittent tooth pain with biting pressure.',
     detailSections: [
       { title: 'Why conservative care comes first', html: '<p>TMJ symptoms can have many causes. Conservative approaches are usually best to try before surgery or irreversible treatment.</p>' },
       { title: 'What a splint can and cannot do', html: '<p>A splint may protect teeth and reduce overload from clenching or grinding. It is not a cure-all for every jaw joint problem, headache, or facial pain condition.</p>' },
@@ -1832,7 +1834,7 @@ function buildServicesHub() {
       ['Nitrous oxide', '/nitrous-oxide-dentist-killeen-tx', 'Light relaxation that wears off quickly.'],
       ['Oral conscious sedation', '/oral-conscious-sedation-killeen-tx', 'Prescription oral sedation for evaluated candidates; no IV sedation.'],
       ['Sleep apnea oral appliances', '/sleep-apnea-dentist-killeen-tx', 'FDA-cleared oral appliances - a comfortable CPAP alternative'],
-      ['Take-home sleep studies', '/sleep-apnea-dentist-killeen-tx', 'test for sleep apnea from the comfort of your own bed'],
+      ['Take-home sleep studies', '/sleep-apnea-dentist-killeen-tx', 'Test for sleep apnea from the comfort of your own bed'],
       ['TMJ splint therapy', '/tmj-splint-therapy-killeen-tx', 'Limited TMJ care focused on splint therapy.'],
     ]],
   ];
@@ -1849,11 +1851,6 @@ function buildServicesHub() {
       ${groups.map(([group, items]) => `<section><div class="max-w-3xl mb-6"><h2 class="font-display text-4xl text-charcoal mb-3">${esc(group)}</h2></div>${cardGrid(items.map(([label, href, text]) => ({ label, href, text, kicker: group })))}</section>`).join('')}
       <section class="bg-stone border border-teal-light p-8"><h2 class="font-display text-4xl text-charcoal mb-4">Not Sure Where to Start?</h2><p class="text-charcoal/70 leading-8 mb-6">Call and describe what is going on. The team can help you decide whether you need a routine visit, consultation, emergency appointment, or a second opinion.</p>${pillLinks([serviceLinks.newPatients, serviceLinks.insurance, serviceLinks.reviews, serviceLinks.appointment])}</section>
     </div></section>`,
-    faq: [
-      ['Does Elm Ridge see children?', 'Yes, children are seen as part of family dentistry once teeth are present. Elm Ridge does not market as a pediatric specialty office.'],
-      ['Does Elm Ridge place dental implants?', 'Yes. Elm Ridge provides implant planning, surgery, and restoration for many implant cases, including full-arch dental implants.'],
-      ['Does Elm Ridge offer IV sedation?', 'No. Elm Ridge offers nitrous oxide and oral conscious sedation for evaluated candidates, but not IV sedation.'],
-    ],
     headSchemas: [simpleSchema('Service', 'Dental Services in Killeen', '/services', 'Dental service hub for Elm Ridge Implant and Family Dentistry.')],
   });
 }
@@ -2029,7 +2026,7 @@ function buildServicePages() {
     makePage({ slug: 'nitrous-oxide-dentist-killeen-tx', name: 'Nitrous Oxide', h1: 'Nitrous Oxide for Light Dental Relaxation', answer: 'Nitrous oxide can help take the edge off dental visits and wears off quickly after the appointment.', providers: ['Jeff Muszynski, DDS'], related: [{ label: 'Sedation dentistry', href: '/sedation-dentistry-killeen-tx' }, { label: 'Oral conscious sedation', href: '/oral-conscious-sedation-killeen-tx' }, serviceLinks.appointment] }),
     makePage({ slug: 'oral-conscious-sedation-killeen-tx', name: 'Oral Conscious Sedation', h1: 'Oral Conscious Sedation', answer: 'Oral conscious sedation uses prescribed medication for deeper relaxation while the patient remains responsive. It is not IV sedation and it requires pre-planning, a driver, and someone to care for you at home for the day while you recover.', related: [{ label: 'Sedation dentistry', href: '/sedation-dentistry-killeen-tx' }, { label: 'Nitrous oxide', href: '/nitrous-oxide-dentist-killeen-tx' }] }),
     makePage({ slug: 'sleep-apnea-dentist-killeen-tx', name: 'Sleep Apnea Oral Appliances', title: 'Sleep Apnea Treatment in Killeen, TX | Elm Ridge', h1: 'Sleep Apnea Treatment', answer: 'Restoring restful sleep with a CPAP alternative.', providers: ['Jeff Muszynski, DDS'], related: [{ label: 'Insurance and financing', href: '/insurance-and-financing' }, serviceLinks.jeff, serviceLinks.appointment], faq: [['Can a dentist diagnose sleep apnea?', 'No. A sleep physician makes the official medical diagnosis.'], ['Do you use FDA-cleared oral appliances?', 'Yes. Elm Ridge uses FDA-cleared oral appliances and does not present one appliance brand as the only option.'], ['Does medical insurance cover sleep studies?', 'Elm Ridge bills medical insurance for appliances only, not sleep studies.']] }),
-    makePage({ slug: 'tmj-splint-therapy-killeen-tx', name: 'TMJ Splint Therapy', h1: 'TMJ Splint Therapy for Limited TMJ Care', answer: 'Elm Ridge provides limited TMJ care focused on splint therapy. If a patient needs more advanced care, the practice will explain and refer appropriately.', providers: ['Jeff Muszynski, DDS'], related: [serviceLinks.services, serviceLinks.newPatients, serviceLinks.appointment, serviceLinks.jeff] }),
+    makePage({ slug: 'tmj-splint-therapy-killeen-tx', name: 'TMJ Splint Therapy', h1: 'TMJ Splint Therapy for Limited TMJ Care', answer: 'Elm Ridge provides limited TMJ care focused on splint therapy and conservative treatment for night-time clenching and grinding.', providers: ['Jeff Muszynski, DDS'], related: [serviceLinks.services, serviceLinks.newPatients, serviceLinks.appointment, serviceLinks.jeff] }),
   ];
   const preserveLegacyDesignedPages = new Set([
     'dental-implants-killeen-tx',
