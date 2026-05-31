@@ -489,9 +489,11 @@ function serviceBody(page) {
     <h2>${esc(approachHeading)}</h2>
     <p>${page.approach || defaultApproachText(page)}</p>`;
   const whoHeading = page.whoHeading || 'Who It Helps';
-  const overviewBlock = page.hideOverviewSections ? '' : `
+  const glanceBlock = page.hideAtAGlanceSection ? '' : `
     <h2>At a Glance</h2>
-    ${atAGlance(page.glance)}
+    ${atAGlance(page.glance)}`;
+  const overviewBlock = page.hideOverviewSections ? '' : `
+    ${glanceBlock}
     <h2>${esc(whoHeading)}</h2>
     <p>${page.who}</p>
     ${approachBlock}`;
@@ -512,7 +514,7 @@ function serviceBody(page) {
     .map((section) => section.trim())
     .join('\n    ');
   const lowerSectionHtml = [
-    providerLinks(page.providers),
+    page.hideProviderLinks ? '' : providerLinks(page.providers),
     nextQuestionsSection(nextQuestions),
     relatedSection(related),
     '<p class="bg-stone border border-teal-light p-5"><strong>Ready for the next step?</strong> Call <a href="' + phoneHref + '">' + phoneDisplay + '</a> or <a href="/request-appointment">request an appointment</a>. For urgent dental problems, call instead of using the form.</p>',
@@ -1371,6 +1373,8 @@ const serviceEnhancements = {
   'tooth-extractions-killeen-tx': {
     h1: 'Tooth Extractions With a Plan for What Comes Next',
     tightAfterIntro: true,
+    hideAtAGlanceSection: true,
+    hideProviderLinks: true,
     glance: [
       ['Simple extraction', costRanges.simpleExtraction],
       ['Surgical extraction', costRanges.surgicalExtraction],
@@ -1379,9 +1383,11 @@ const serviceEnhancements = {
     ],
     whoHeading: 'Do I need an extraction?',
     who: 'An extraction may be needed when a tooth is broken beyond repair, severely infected, loose, impacted, painful, or not restorable. If saving the tooth is a better choice, Elm Ridge will say so.',
+    approachHeading: 'The Elm Ridge Approach',
+    approach: 'Elm Ridge does not treat extraction as the only answer. The team first considers whether the tooth can or should be saved, then discusses and plans removal, bone grafting, and replacement options when needed.',
     detailSections: [
       { title: 'When saving the tooth may be better', html: '<p>A root canal, crown, or periodontal treatment may be better when the tooth has a predictable long-term outlook. Elm Ridge compares the options before recommending removal.</p>' },
-      { title: 'Replacement planning', html: htmlList(['Socket preservation may be recommended when future implant replacement is possible.', 'An immediate denture may be planned when several teeth are removed.', 'A single implant, bridge, partial, or denture may be discussed depending on the site.']) },
+      { title: 'Replacement planning', html: htmlList(['Socket preservation bone grafting may be recommended when future implant replacement is possible.', 'An immediate denture may be planned when several teeth are removed.', 'A single implant, bridge, partial, or denture may be discussed depending on the site.']) },
       { title: 'Typical cost range', html: costRangeHtml(`${costRanges.simpleExtraction} for simple extractions; ${costRanges.surgicalExtraction} for surgical extractions`, 'Socket preservation, sedation, implants, dentures, and other treatment are separate when needed.') },
     ],
     payment: costContext,
@@ -1842,7 +1848,9 @@ function makePage(overrides) {
     intro: page.intro || page.answer || `${name} is considered when it supports comfort, function, appearance, or long-term oral health after a diagnosis-first exam.`,
     answer: page.answer || `${name} may be recommended when it is the most sensible way to protect comfort, function, appearance, or long-term oral health. Elm Ridge starts with diagnosis before recommending treatment.`,
     glance: page.glance || defaultServiceGlance(page),
+    whoHeading: page.whoHeading,
     who: page.who || defaultWhoText(page),
+    approachHeading: page.approachHeading,
     approach: page.approach,
     detailSections: page.detailSections || [],
     nextQuestions: page.nextQuestions,
@@ -1857,10 +1865,13 @@ function makePage(overrides) {
     introBlockImageHeight: page.introBlockImageHeight,
     hideIntroBlock: page.hideIntroBlock,
     hideOverviewSections: page.hideOverviewSections,
+    hideAtAGlanceSection: page.hideAtAGlanceSection,
     hideApproachSection: page.hideApproachSection,
+    hideProviderLinks: page.hideProviderLinks,
     hideExpectSection: page.hideExpectSection,
     hideCallSection: page.hideCallSection,
     hidePaymentSection: page.hidePaymentSection,
+    tightAfterIntro: page.tightAfterIntro,
     afterIntroBlockHtml: page.afterIntroBlockHtml,
     extra: page.extra || '',
     providers: page.providers || ['Jeff Muszynski, DDS', 'Kayla Muszynski, DDS'],
