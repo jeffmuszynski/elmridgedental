@@ -2659,7 +2659,6 @@ Key pages:
 - /insurance-and-financing
 - /request-appointment
 - /patient-reviews
-- /ai-summary
 
 Services:
 Family dentistry, cleanings, exams, fillings, crowns, bridges, root canals including molars, extractions, wisdom teeth removal, dentures, partial dentures, immediate dentures, dental implants, single tooth implants, implant bridges, snap-on dentures, full-arch dental implants, including treatment patients often search for as All-on-4 or All-on-X, socket preservation bone grafting, limited sinus lift/sinus bump with implant placement when appropriate, cosmetic dentistry, veneers, cosmetic bonding, take-home teeth whitening, clear aligners, emergency dentistry, nitrous oxide, oral conscious sedation, sleep apnea oral appliances after physician diagnosis, take-home sleep studies workflow, and limited TMJ splint therapy.
