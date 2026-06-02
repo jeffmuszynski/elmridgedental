@@ -722,7 +722,7 @@ function appointmentForm(idPrefix = 'appointment') {
       <div><label for="${idPrefix}-last-name" class="block font-body text-xs tracking-widest uppercase text-charcoal/50 mb-2">Last Name</label><input id="${idPrefix}-last-name" name="Last name" type="text" autocomplete="family-name" required class="w-full px-4 py-3 border border-teal-light bg-stone text-charcoal" /></div>
     </div>
     <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-      <div><label for="${idPrefix}-phone" class="block font-body text-xs tracking-widest uppercase text-charcoal/50 mb-2">Phone</label><input id="${idPrefix}-phone" name="Phone" type="tel" autocomplete="tel" inputmode="tel" required class="w-full px-4 py-3 border border-teal-light bg-stone text-charcoal" /><p id="${idPrefix}-phone-error" class="hidden mt-2 font-body text-xs text-red-700" aria-live="polite">Please enter a valid phone number.</p></div>
+      <div><label for="${idPrefix}-phone" class="block font-body text-xs tracking-widest uppercase text-charcoal/50 mb-2">Phone</label><input id="${idPrefix}-phone" name="Phone" type="tel" autocomplete="tel" inputmode="tel" required aria-describedby="${idPrefix}-phone-error" aria-invalid="false" class="w-full px-4 py-3 border border-teal-light bg-stone text-charcoal" /><p id="${idPrefix}-phone-error" class="hidden mt-2 font-body text-xs text-red-700" role="alert" aria-live="assertive">Please enter a valid phone number.</p></div>
       <div><label for="${idPrefix}-email" class="block font-body text-xs tracking-widest uppercase text-charcoal/50 mb-2">Email</label><input id="${idPrefix}-email" name="Email" type="email" autocomplete="email" class="w-full px-4 py-3 border border-teal-light bg-stone text-charcoal" /></div>
     </div>
     <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -749,6 +749,8 @@ function appointmentForm(idPrefix = 'appointment') {
       status.classList.remove('hidden');
       status.classList.toggle('bg-red-50', !ok);
       status.classList.toggle('text-red-800', !ok);
+      status.setAttribute('role', ok ? 'status' : 'alert');
+      status.setAttribute('aria-live', ok ? 'polite' : 'assertive');
       status.focus();
     }
     form.addEventListener('submit', async function(event) {
@@ -760,6 +762,8 @@ function appointmentForm(idPrefix = 'appointment') {
         phone.focus();
         return;
       }
+      if (phone) phone.setAttribute('aria-invalid', 'false');
+      if (phoneError) phoneError.classList.add('hidden');
       if (!form.checkValidity()) {
         form.reportValidity();
         return;
@@ -3153,7 +3157,7 @@ function patchHomepage() {
   html = html.replace(/<label for="appointment-website">Website<\/label>\s*/g, '');
   html = html.replace(
     /<input id="appointment-website" type="text" name="website" tabindex="-1" autocomplete="off"(?![^>]*aria-hidden="true")\s*\/>/g,
-    '<input id="appointment-website" type="text" name="website" tabindex="-1" autocomplete="off" aria-hidden="true" />',
+    '<input id="appointment-website" type="text" name="website" tabindex="-1" autocomplete="off" aria-hidden="true" aria-label="Leave this field blank" />',
   );
   html = html.replace('Upload a clear smile photo to create an AI-assisted cosmetic smile preview.', 'Upload a clear smile photo to create an educational preview using a third-party AI-assisted tool.');
   html = html.replace(/<div style="margin: 16px 0; padding: 14px; background: #fff7ed; border: 1px solid #fed7aa; border-radius: 12px; color: #7c2d12; font-size: 14px; line-height: 1\.5;"><strong>This is not a secure patient portal\. Do not submit sensitive medical information or emergency concerns\.<\/strong><br \/>For urgent dental problems, call 254-699-4127 instead of using this tool\. Every submission is emailed to the practice and reviewed by Elm Ridge\. Uploaded images are stored in email\. There is no fixed deletion timeline\. The preview is not a diagnosis, not a treatment plan, not a dental record, not a doctor-patient relationship, and not a guarantee of results\. It does not replace an exam\.<\/div>\s*/g, '');

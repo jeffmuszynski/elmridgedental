@@ -24,11 +24,11 @@ const image = (item) => `<img src="${item.src}" alt="${item.alt}" class="ba-img 
 
 const card = (item) => {
   if (item.type === 'single') {
-    return `<div class="ba-single-card w-[280px] shrink-0 overflow-hidden rounded-[24px] border border-teal-light bg-white group">${image(item)}</div>`;
+    return `<button type="button" class="ba-single-card w-[280px] shrink-0 overflow-hidden rounded-[24px] border border-teal-light bg-white group" aria-label="View full before and after image">${image(item)}</button>`;
   }
 
   const label = item.type === 'before' ? 'Before' : 'After';
-  return `<div class="relative w-[280px] shrink-0 overflow-hidden rounded-[24px] border border-teal-light bg-white group"><span class="ba-label">${label}</span>${image(item)}</div>`;
+  return `<button type="button" class="ba-pair-card relative w-[280px] shrink-0 overflow-hidden rounded-[24px] border border-teal-light bg-white group" aria-label="View full before and after images"><span class="ba-label">${label}</span>${image(item)}</button>`;
 };
 
 export const beforeAfterStyles = `<style data-before-after-gallery>
@@ -39,7 +39,7 @@ export const beforeAfterStyles = `<style data-before-after-gallery>
   .ba-img--glasses{object-position:50% 72%}
   .ba-img--stacked{object-position:50% 62%}
   .ba-label{position:absolute;left:14px;top:14px;z-index:2;padding:5px 10px;border-radius:999px;background:rgba(44,62,62,.76);color:#fff;font-family:'DM Sans',sans-serif;font-size:10px;font-weight:700;letter-spacing:.16em;line-height:1;text-transform:uppercase;pointer-events:none}
-  .ba-pair-card,.ba-single-card{cursor:zoom-in}
+  .ba-pair-card,.ba-single-card{cursor:zoom-in;padding:0;text-align:left}
   .ba-lightbox[hidden]{display:none}
   .ba-lightbox{position:fixed;inset:0;z-index:80;display:flex;align-items:center;justify-content:center;padding:24px;background:rgba(44,62,62,.86)}
   .ba-lightbox__panel{width:min(1180px,100%);max-height:min(88vh,900px);overflow:auto;background:#fff;border:1px solid rgba(168,212,212,.7);box-shadow:0 24px 80px rgba(0,0,0,.28)}
@@ -103,7 +103,7 @@ export const beforeAfterScript = `<script data-before-after-gallery>
   if (!carousel || !track || track.dataset.baInitialized === 'true') return;
   track.dataset.baInitialized = 'true';
   track.innerHTML += track.innerHTML;
-  let hovering = false, dragging = false, startX = 0, startScrollLeft = 0, scrollPosition = 0, maxDragDistance = 0, suppressPairClickUntil = 0, pendingPairCard = null;
+  let hovering = false, dragging = false, startX = 0, startScrollLeft = 0, scrollPosition = 0, maxDragDistance = 0, suppressPairClickUntil = 0, pendingPairCard = null, lastLightboxTrigger = null;
   const speed = 0.675;
   const getCardRole = card => card?.querySelector('.ba-label')?.textContent.trim().toLowerCase();
   const getPairImages = card => {
@@ -143,26 +143,31 @@ export const beforeAfterScript = `<script data-before-after-gallery>
     document.body.classList.add('ba-lightbox-open');
     lightboxClose?.focus();
   };
-  const openGalleryCard = card => openPairLightbox(getPairImages(card)) || openSingleLightbox(getSingleImage(card));
+  const openGalleryCard = card => {
+    lastLightboxTrigger = card;
+    const pair = getPairImages(card);
+    if (pair) {
+      openPairLightbox(pair);
+      return;
+    }
+    openSingleLightbox(getSingleImage(card));
+  };
   const closePairLightbox = () => {
     if (!lightbox || !lightboxBefore || !lightboxAfter) return;
     lightbox.hidden = true; lightbox.setAttribute('aria-hidden', 'true');
     lightbox.classList.remove('ba-lightbox--single');
     document.body.classList.remove('ba-lightbox-open');
     lightboxBefore.removeAttribute('src'); lightboxAfter.removeAttribute('src');
+    if (lastLightboxTrigger && document.contains(lastLightboxTrigger)) lastLightboxTrigger.focus({ preventScroll: true });
   };
   track.querySelectorAll('.ba-label').forEach(label => {
     const card = label.parentElement;
     if (!getPairImages(card)) return;
     card.classList.add('ba-pair-card');
-    card.setAttribute('role', 'button');
-    card.setAttribute('tabindex', '0');
     card.setAttribute('aria-label', 'View full before and after images');
   });
   track.querySelectorAll('.ba-single-card').forEach(card => {
     if (!getSingleImage(card)) return;
-    card.setAttribute('role', 'button');
-    card.setAttribute('tabindex', '0');
     card.setAttribute('aria-label', 'View full before and after image');
   });
   const wrapScroll = () => {
@@ -172,12 +177,16 @@ export const beforeAfterScript = `<script data-before-after-gallery>
     else if (scrollPosition < 0) scrollPosition += midpoint;
     carousel.scrollLeft = scrollPosition;
   };
+  const syncScrollPosition = () => {
+    if (!dragging) scrollPosition = carousel.scrollLeft;
+  };
   const reduceMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   const animateCarousel = () => {
     if (reduceMotion) return;
     if (!hovering && !dragging) { scrollPosition += speed; wrapScroll(); }
     requestAnimationFrame(animateCarousel);
   };
+  carousel.addEventListener('scroll', syncScrollPosition, { passive: true });
   carousel.addEventListener('mouseenter', () => { hovering = true; });
   carousel.addEventListener('mouseleave', () => { hovering = false; });
   carousel.addEventListener('pointerdown', event => {
