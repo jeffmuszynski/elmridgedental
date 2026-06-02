@@ -82,6 +82,7 @@ const oldUrlRedirects = new Map([
   ['/postoperativeinstructions', '/post-operative-instructions'],
   ['/post-operative-care', '/post-operative-instructions'],
   ['/post-op-instructions', '/post-operative-instructions'],
+  ['/accessibility-statement', '/accessibility'],
   ['/insurance', '/insurance-and-financing'],
   ['/financing', '/insurance-and-financing'],
   ['/insurance-financing', '/insurance-and-financing'],

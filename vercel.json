@@ -31,12 +31,27 @@
       "permanent": true
     },
     {
+      "source": "/dentistnearme/",
+      "destination": "https://www.elmridgedental.com/dentist-killeen-tx",
+      "permanent": true
+    },
+    {
       "source": "/contact-us",
       "destination": "https://www.elmridgedental.com/request-appointment",
       "permanent": true
     },
     {
+      "source": "/contact-us/",
+      "destination": "https://www.elmridgedental.com/request-appointment",
+      "permanent": true
+    },
+    {
       "source": "/contact",
+      "destination": "https://www.elmridgedental.com/request-appointment",
+      "permanent": true
+    },
+    {
+      "source": "/contact/",
       "destination": "https://www.elmridgedental.com/request-appointment",
       "permanent": true
     },
@@ -56,7 +71,27 @@
       "permanent": true
     },
     {
+      "source": "/cleanings/",
+      "destination": "https://www.elmridgedental.com/dental-cleanings-killeen-tx",
+      "permanent": true
+    },
+    {
+      "source": "/generaldentistry",
+      "destination": "https://www.elmridgedental.com/services",
+      "permanent": true
+    },
+    {
+      "source": "/generaldentistry/",
+      "destination": "https://www.elmridgedental.com/services",
+      "permanent": true
+    },
+    {
       "source": "/sedation",
+      "destination": "https://www.elmridgedental.com/sedation-dentistry-killeen-tx",
+      "permanent": true
+    },
+    {
+      "source": "/sedation/",
       "destination": "https://www.elmridgedental.com/sedation-dentistry-killeen-tx",
       "permanent": true
     },
@@ -86,8 +121,38 @@
       "permanent": true
     },
     {
+      "source": "/invisalign-killeen-tx/",
+      "destination": "https://www.elmridgedental.com/clear-aligners-killeen-tx",
+      "permanent": true
+    },
+    {
       "source": "/invisalign",
       "destination": "https://www.elmridgedental.com/clear-aligners-killeen-tx",
+      "permanent": true
+    },
+    {
+      "source": "/invisalign/",
+      "destination": "https://www.elmridgedental.com/clear-aligners-killeen-tx",
+      "permanent": true
+    },
+    {
+      "source": "/dentures",
+      "destination": "https://www.elmridgedental.com/dentures-killeen-tx",
+      "permanent": true
+    },
+    {
+      "source": "/dentures/",
+      "destination": "https://www.elmridgedental.com/dentures-killeen-tx",
+      "permanent": true
+    },
+    {
+      "source": "/cosmeticdentistry",
+      "destination": "https://www.elmridgedental.com/cosmetic-dentistry-killeen-tx",
+      "permanent": true
+    },
+    {
+      "source": "/cosmeticdentistry/",
+      "destination": "https://www.elmridgedental.com/cosmetic-dentistry-killeen-tx",
       "permanent": true
     },
     {
@@ -131,8 +196,23 @@
       "permanent": true
     },
     {
+      "source": "/blog-are-dental-implants-painful/",
+      "destination": "https://www.elmridgedental.com/blog/are-dental-implants-painful",
+      "permanent": true
+    },
+    {
       "source": "/blog-cosmetic-dentistry-options-killeen-tx",
       "destination": "https://www.elmridgedental.com/blog/cosmetic-dentistry-options-killeen-tx",
+      "permanent": true
+    },
+    {
+      "source": "/accessibility-statement",
+      "destination": "https://www.elmridgedental.com/accessibility",
+      "permanent": true
+    },
+    {
+      "source": "/accessibility-statement/",
+      "destination": "https://www.elmridgedental.com/accessibility",
       "permanent": true
     },
     {

@@ -2838,6 +2838,7 @@ const redirectedArtifacts = [
   'blog-are-dental-implants-painful',
   'blog-implant-dentist-killeen-tx',
 ];
+const sitemapExcludedRoutes = new Set(['accessibility-statement', 'post-op/deep-cleaning']);
 
 function removeRedirectedArtifacts() {
   for (const file of redirectedArtifacts) {
@@ -2954,7 +2955,8 @@ function patchBlogTaxonomy() {
 }
 
 function modernizePageChrome(html) {
-  let out = html.replace(/<header\b[\s\S]*?<\/header>/i, header());
+  let out = html.replace(/<a href="#main-content" class="skip-link">Skip to main content<\/a>\s*/g, '');
+  out = out.replace(/<header\b[\s\S]*?<\/header>/i, header());
   out = out.replace(/<footer\b[\s\S]*?<\/footer>/i, footer());
   return out;
 }
@@ -3044,6 +3046,58 @@ function patchPreservedDesignedServicePages() {
   }
 }
 
+function relatedEducationSection(key, intro, links) {
+  return `<section data-indexing-support="${key}" class="py-12 bg-white"><div class="max-w-5xl mx-auto px-6 border-t border-teal-light pt-8"><p class="font-body text-xs tracking-widest uppercase text-teal-dark mb-3">Patient Education</p><h2 class="font-display text-3xl text-charcoal mb-3">Related reading</h2><p class="text-charcoal/65 leading-7 mb-5">${intro}</p>${pillLinks(links)}</div></section>`;
+}
+
+function appendRelatedEducation(file, key, intro, links) {
+  if (!fs.existsSync(file)) return;
+  let html = fs.readFileSync(file, 'utf8');
+  if (html.includes(`data-indexing-support="${key}"`)) return;
+  html = html.replace('</main>', `${relatedEducationSection(key, intro, links)}</main>`);
+  fs.writeFileSync(file, cleanupText(html));
+}
+
+function patchIndexingSupportLinks() {
+  appendRelatedEducation('dental-implants-killeen-tx', 'implant-education', 'Use these guides to compare cost, comfort, timing, and tooth replacement options before an implant consultation.', [
+    { label: 'Dental implant cost', href: '/blog/dental-implant-cost-killeen-tx' },
+    { label: 'Choosing an implant dentist', href: '/blog/implant-dentist-killeen-tx' },
+    { label: 'Implants vs dentures vs bridges', href: '/blog/implants-vs-dentures-vs-bridges' },
+    { label: 'Are implants painful?', href: '/blog/are-dental-implants-painful' },
+    { label: 'Implants near Harker Heights', href: '/blog/dental-implants-near-harker-heights-how-to-choose-the-right-fit' },
+  ]);
+  appendRelatedEducation('emergency-dentist-killeen-tx', 'emergency-education', 'These guides help patients understand when to call, what can wait, and when medical emergency care is safer.', [
+    { label: 'Emergency dentist guide', href: '/blog/emergency-dentist-killeen-tx' },
+    { label: 'Broken tooth guide', href: '/blog/broken-tooth-crown-root-canal-or-extraction-killeen' },
+    { label: 'Dental abscess guide', href: '/blog/dental-abscess-or-swelling-killeen' },
+    { label: 'Lost crown or filling', href: '/blog/lost-crown-lost-filling-killeen' },
+  ]);
+  appendRelatedEducation('cosmetic-dentistry-killeen-tx', 'cosmetic-education', 'Compare cosmetic options and sequencing before choosing whitening, bonding, veneers, crowns, or aligners.', [
+    { label: 'Cosmetic dentistry options', href: '/blog/cosmetic-dentistry-options-killeen-tx' },
+    { label: 'Smile makeover guide', href: '/blog/smile-makeover-killeen-veneers-crowns-invisalign-whitening' },
+    { label: 'Worn or chipped teeth', href: '/blog/fix-worn-chipped-short-teeth-killeen' },
+    { label: 'Missing teeth and cosmetics', href: '/blog/cosmetic-dentistry-missing-teeth-killeen' },
+  ]);
+  appendRelatedEducation('dentures-killeen-tx', 'denture-education', 'These guides compare removable dentures, snap-on dentures, bridges, and full-arch implant options.', [
+    { label: 'Dentures options guide', href: '/blog/dentist-for-dentures-near-me-in-killeen-options-that-fit' },
+    { label: 'Implants vs dentures vs bridges', href: '/blog/implants-vs-dentures-vs-bridges' },
+    { label: 'Can I wait to replace a tooth?', href: '/blog/can-i-wait-to-replace-a-missing-tooth-killeen' },
+    { label: 'Replacing a tooth years later', href: '/blog/can-a-missing-tooth-be-replaced-years-later-killeen' },
+  ]);
+  appendRelatedEducation('snap-on-dentures-killeen-tx', 'snap-on-denture-education', 'Compare snap-on dentures with traditional dentures and fixed implant teeth before planning treatment.', [
+    { label: 'Dentures options guide', href: '/blog/dentist-for-dentures-near-me-in-killeen-options-that-fit' },
+    { label: 'Implants vs dentures vs bridges', href: '/blog/implants-vs-dentures-vs-bridges' },
+    { label: 'Snap-on denture cost', href: '/snap-on-denture-cost-killeen-tx' },
+    { label: 'Full-arch implants', href: '/full-arch-dental-implants-killeen-tx' },
+  ]);
+  appendRelatedEducation('dentist-harker-heights-tx', 'harker-implant-education', 'Nearby Harker Heights patients can use these guides to compare implant options, cost factors, and next steps before visiting Elm Ridge in Killeen.', [
+    { label: 'Implants near Harker Heights', href: '/blog/dental-implants-near-harker-heights-how-to-choose-the-right-fit' },
+    { label: 'Dental implants', href: '/dental-implants-killeen-tx' },
+    { label: 'Implant cost', href: '/blog/dental-implant-cost-killeen-tx' },
+    { label: 'Choosing an implant dentist', href: '/blog/implant-dentist-killeen-tx' },
+  ]);
+}
+
 function buildSitemap() {
   const excluded = new Set(redirectedArtifacts);
   const urls = [''];
@@ -3051,6 +3105,7 @@ function buildSitemap() {
     const normalized = route.replaceAll('\\', '/').replace(/\/index\.html$/, '').replace(/^\.?\//, '');
     if (normalized === 'reviews') return;
     if (normalized === 'ai-summary') return;
+    if (sitemapExcludedRoutes.has(normalized)) return;
     if (!normalized || excluded.has(normalized)) return;
     if (normalized.includes('node_modules') || normalized.includes('temporary screenshots')) return;
     if (!urls.includes(normalized)) urls.push(normalized);
@@ -3211,6 +3266,7 @@ function main() {
   cleanupBlogs();
   patchBlogTaxonomy();
   patchPreservedDesignedServicePages();
+  patchIndexingSupportLinks();
   patchHomepage();
   patchSitewideChrome();
   removeRedirectedArtifacts();

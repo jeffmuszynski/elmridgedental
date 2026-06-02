@@ -499,7 +499,10 @@ function addServicePostOpLinks() {
 
 function updateSitemap() {
   const childPattern = /  <url><loc>https:\/\/www\.elmridgedental\.com\/post-op\/[^<]+<\/loc><priority>0\.5<\/priority><\/url>\n/g;
-  let sitemap = fs.readFileSync('sitemap.xml', 'utf8').replace(childPattern, '');
+  const deepCleaningPattern = /  <url><loc>https:\/\/www\.elmridgedental\.com\/post-op\/deep-cleaning<\/loc><priority>[^<]+<\/priority><\/url>\n/g;
+  let sitemap = fs.readFileSync('sitemap.xml', 'utf8')
+    .replace(childPattern, '')
+    .replace(deepCleaningPattern, '');
   const routes = ['post-operative-instructions'];
   for (const route of routes) {
     const loc = `${domain}/${route}`;
