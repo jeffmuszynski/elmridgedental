@@ -2870,11 +2870,26 @@ function cleanupBlogs() {
   function updateFile(file) {
     if (!fs.existsSync(file)) return;
     let html = fs.readFileSync(file, 'utf8');
+    const normalizedFile = String(file).replaceAll('\\', '/');
     for (const [oldTitle, newTitle] of blogTitleChanges) {
       html = html.replaceAll(oldTitle, newTitle);
     }
     if (!html.includes('data-blog-related')) {
-      html = html.replace('<article class="py-16 bg-white"><div class="max-w-4xl mx-auto px-6 prose-page space-y-7">', '<article class="py-16 bg-white"><div class="max-w-4xl mx-auto px-6 prose-page space-y-7"><div data-blog-related="true" class="not-prose border border-teal-light bg-stone p-5"><p class="text-xs uppercase tracking-[0.26em] text-teal-dark mb-3">Related Services</p>' + pillLinks([{ label: 'Services', href: '/services' }, { label: 'Insurance and financing', href: '/insurance-and-financing' }, { label: 'Request appointment', href: '/request-appointment' }]) + '</div>');
+      const blogRelatedLinks = normalizedFile.includes('blog/dental-implant-cost-killeen-tx')
+        ? [{ label: 'Services', href: '/services' }, { label: 'Dental crowns', href: '/dental-crowns-killeen-tx' }, { label: 'Crown cost', href: '/crown-cost-killeen-tx' }, { label: 'Insurance and financing', href: '/insurance-and-financing' }, { label: 'Request appointment', href: '/request-appointment' }]
+        : [{ label: 'Services', href: '/services' }, { label: 'Insurance and financing', href: '/insurance-and-financing' }, { label: 'Request appointment', href: '/request-appointment' }];
+      html = html.replace('<article class="py-16 bg-white"><div class="max-w-4xl mx-auto px-6 prose-page space-y-7">', '<article class="py-16 bg-white"><div class="max-w-4xl mx-auto px-6 prose-page space-y-7"><div data-blog-related="true" class="not-prose border border-teal-light bg-stone p-5"><p class="text-xs uppercase tracking-[0.26em] text-teal-dark mb-3">Related Services</p>' + pillLinks(blogRelatedLinks) + '</div>');
+    } else if (normalizedFile.includes('blog/dental-implant-cost-killeen-tx') && !html.includes('/crown-cost-killeen-tx')) {
+      html = html.replace(
+        '<a href="/services" class="inline-flex border border-teal-light bg-white px-4 py-2 text-sm font-semibold text-teal-dark hover:border-teal hover:text-charcoal">Services</a><a href="/insurance-and-financing"',
+        '<a href="/services" class="inline-flex border border-teal-light bg-white px-4 py-2 text-sm font-semibold text-teal-dark hover:border-teal hover:text-charcoal">Services</a><a href="/dental-crowns-killeen-tx" class="inline-flex border border-teal-light bg-white px-4 py-2 text-sm font-semibold text-teal-dark hover:border-teal hover:text-charcoal">Dental crowns</a><a href="/crown-cost-killeen-tx" class="inline-flex border border-teal-light bg-white px-4 py-2 text-sm font-semibold text-teal-dark hover:border-teal hover:text-charcoal">Crown cost</a><a href="/insurance-and-financing"',
+      );
+    }
+    if (normalizedFile.includes('blog/dental-implant-cost-killeen-tx') && !html.includes('Looking for crown pricing instead?')) {
+      html = html.replace(
+        '<p class="bg-stone border border-teal-light p-5"><strong>Need a personalized answer?</strong> <a href="/request-appointment">Schedule an implant consultation</a> with Elm Ridge Implant and Family Dentistry in Killeen.</p>',
+        '<p class="bg-stone border border-teal-light p-5"><strong>Need a personalized answer?</strong> <a href="/request-appointment">Schedule an implant consultation</a> with Elm Ridge Implant and Family Dentistry in Killeen.</p><p class="bg-stone border border-teal-light p-5"><strong>Looking for crown pricing instead?</strong> If your question is about a lab-made tooth crown, start with <a href="/dental-crowns-killeen-tx">dental crowns in Killeen</a> or the <a href="/crown-cost-killeen-tx">dental crown cost guide</a>.</p>',
+      );
     }
     fs.writeFileSync(file, cleanupText(html));
   }
@@ -2997,6 +3012,17 @@ function patchPreservedDesignedServicePages() {
   if (fs.existsSync(implantFile)) {
     let html = fs.readFileSync(implantFile, 'utf8');
     html = modernizePageChrome(html);
+    html = html.replaceAll('Dental Implants Killeen TX | Elm Ridge Implant and Family Dentistry', 'Dental Implants in Killeen, TX | Implant Options | Elm Ridge');
+    html = html.replaceAll('Dental implants in Killeen, TX by Dr. Jeff Muszynski with single implants, implant bridges, full-arch options, CBCT planning, and financing.', 'Dental implants in Killeen for one tooth, several teeth, or full-arch replacement with in-house placement/restoration, CBCT planning, clear costs, and financing.');
+    html = html.replace(
+      'Missing teeth affect more than chewing. They can change confidence, speech, bite stability, and the way you feel in photos. At Elm Ridge Implant and Family Dentistry, Dr. Jeff Muszynski places and restores dental implants in-house for patients who want clear answers and a plan that fits their mouth.',
+      'If you are comparing dental implants in Killeen, missing teeth affect more than chewing. They can change confidence, speech, bite stability, and the way you feel in photos. At Elm Ridge Implant and Family Dentistry, Dr. Jeff Muszynski places and restores implants in-house for patients replacing one tooth, several teeth, or a full arch and who want clear answers before choosing treatment.',
+    );
+    html = html.replace('Ready to talk about dental implants?', 'Ready to compare dental implant options?');
+    html = html.replace(
+      'Schedule a paid implant consultation with Elm Ridge Implant and Family Dentistry in Killeen.',
+      'Schedule an implant consultation with Elm Ridge Implant and Family Dentistry in Killeen so you can review the options, timeline, and costs that fit your mouth.',
+    );
     html = html.replaceAll('conscious sedation with triazolam', 'oral conscious sedation');
     html = html.replace(/\boral\s+oral conscious sedation\b/g, 'oral conscious sedation');
     html = html.replaceAll('All-on-4 style', 'All-on-4-style');
@@ -3025,12 +3051,16 @@ function patchPreservedDesignedServicePages() {
   if (fs.existsSync(cosmeticFile)) {
     let html = fs.readFileSync(cosmeticFile, 'utf8');
     html = modernizePageChrome(html);
+    html = html.replace(
+      'Patients visit us for many reasons: old dental work that no longer matches, teeth that have chipped or worn down, discoloration that whitening alone cannot fix, spacing, uneven edges, missing teeth, or a smile that has changed over time. Some plans are simple. Others combine whitening, bonding, veneers, crowns, clear aligners, or implant treatment. We explain the tradeoffs so you can choose the right level of care for your goals.',
+      'Patients visit us for many reasons: old dental work that no longer matches, teeth that have chipped or worn down, discoloration that whitening alone cannot fix, spacing, uneven edges, missing teeth, or a smile that has changed over time. Some plans are simple. Others combine whitening, bonding, veneers, crowns, Invisalign clear aligners, or implant treatment. The smile preview simulator can help you picture possibilities before a consultation, and we explain the tradeoffs so you can choose the right level of care for your goals.',
+    );
     if (!html.includes('Individual results vary. Images are shared with patient consent.')) {
       html = html.replace('<h2 class="font-display text-4xl md:text-5xl font-light italic text-charcoal mb-14 leading-snug">Before &amp; After.</h2>', '<h2 class="font-display text-4xl md:text-5xl font-light italic text-charcoal mb-5 leading-snug">Before &amp; After.</h2><p class="text-charcoal/60 leading-7 mb-10">Individual results vary. Images are shared with patient consent.</p>');
     }
     if (!html.includes('data-service-refinement="cosmetic"')) {
       const cosmeticBlock = `<section data-service-refinement="cosmetic" class="py-16 bg-stone"><div class="max-w-5xl mx-auto px-6 space-y-8">
-        <div class="max-w-3xl"><p class="font-body text-xs tracking-widest uppercase text-teal-dark mb-3">Cosmetic Decision Guide</p><h2 class="font-display text-4xl text-charcoal mb-4">The right cosmetic plan depends on the problem</h2><p class="text-charcoal/70 leading-8">Elm Ridge plans cosmetic dentistry with restraint. Some patients need one conservative touchup; others need whitening, alignment, bonding, veneers, crowns, or implant planning in the right order.</p></div>
+        <div class="max-w-3xl"><p class="font-body text-xs tracking-widest uppercase text-teal-dark mb-3">Cosmetic Decision Guide</p><h2 class="font-display text-4xl text-charcoal mb-4">The right cosmetic plan depends on the problem</h2><p class="text-charcoal/70 leading-8">Elm Ridge plans cosmetic dentistry with restraint. Some patients need one conservative touchup; others need whitening, Invisalign clear aligner planning, bonding, veneers, crowns, or implant planning in the right order.</p></div>
         <div class="grid md:grid-cols-2 gap-5 text-charcoal/70 leading-7">
           <div class="bg-white border border-teal-light p-6"><h3 class="font-display text-3xl text-charcoal mb-3">Conservative first when appropriate</h3><p>Whitening, bonding, and clear aligners can sometimes improve the smile while preserving more tooth structure. Veneers or crowns make more sense when shape, old dental work, cracks, wear, or strength needs require porcelain coverage.</p></div>
           <div class="bg-white border border-teal-light p-6"><h3 class="font-display text-3xl text-charcoal mb-3">Function still matters</h3><p>Cosmetic treatment should fit the bite, not just the photo. Worn, chipped, or short teeth may need a bite and restorative conversation before porcelain or bonding is chosen.</p></div>
@@ -3138,6 +3168,10 @@ function buildSitemap() {
 function patchHomepage() {
   let html = fs.readFileSync('index.html', 'utf8');
   html = cleanupText(html);
+  const homepageSeoTitle = 'Dentist in Killeen, TX | Private Care and 550+ Reviews | Elm Ridge';
+  const homepageSeoDescription = 'Private dentist in Killeen with familiar faces, clear explanations, modern technology, calmer visits, implants, emergency, family, cosmetic care, and 550+ five-star reviews.';
+  html = html.replaceAll('Top-Rated Dentist in Killeen, TX | 550+ Reviews | Elm Ridge Implant and Family Dentistry', homepageSeoTitle);
+  html = html.replaceAll('Elm Ridge Implant and Family Dentistry offers private, modern dental care in Killeen with familiar faces, clear explanations, implants, emergency care, cosmetic dentistry, family dentistry, and 5.0 Google rating from 550+ reviews.', homepageSeoDescription);
   html = html.replace(/<!-- NAV -->\s*<header id="nav"[\s\S]*?<\/header>/, `<!-- NAV -->\n  ${header()}`);
   html = html.replace(/<footer class="bg-charcoal[\s\S]*?<\/footer>/, footer());
   html = html.replace('Patient Rating', reviewPhrase);
@@ -3145,8 +3179,15 @@ function patchHomepage() {
   html = html.replace('Most Insurances Accepted', 'In-Network With Most Major PPO Plans');
   html = html.replace('Same-Day Emergency Appointments', 'Same-Day Emergencies When Possible');
   html = html.replace('Financing Available', 'CareCredit and Cherry Available');
-  html = html.replace('From single-tooth replacements to full-arch All-on-4 restorations - the most natural tooth replacement outcome available in dentistry.', 'From single-tooth implants to full-arch dental implants - often searched as All-on-4, All-on-X, or fixed implant teeth - treatment is planned around your bone, bite, anatomy, and long-term function.');
-  html = html.replace('From single-tooth replacements to full-arch dental implants, including All-on-4 and All-on-X options when appropriate, planned around long-term function instead of a one-size-fits-all implant count.', 'From single-tooth implants to full-arch dental implants - often searched as All-on-4, All-on-X, or fixed implant teeth - treatment is planned around your bone, bite, anatomy, and long-term function.');
+  const homepageImplantCard = 'From single-tooth implants to full-arch dental implants - often searched as All-on-4, All-on-X, or fixed implant teeth - <a href="/dental-implants-killeen-tx" class="text-teal-dark font-semibold hover:text-charcoal">dental implant options</a> are planned around your bone, bite, anatomy, and long-term function.';
+  html = html.replace('From single-tooth replacements to full-arch All-on-4 restorations - the most natural tooth replacement outcome available in dentistry.', homepageImplantCard);
+  html = html.replace('From single-tooth replacements to full-arch dental implants, including All-on-4 and All-on-X options when appropriate, planned around long-term function instead of a one-size-fits-all implant count.', homepageImplantCard);
+  html = html.replace('From single-tooth implants to full-arch dental implants - often searched as All-on-4, All-on-X, or fixed implant teeth - treatment is planned around your bone, bite, anatomy, and long-term function.', homepageImplantCard);
+  html = html.replace('Fillings, crowns, and everyday restorative care - keeping your teeth strong and functional.', 'Fillings, <a href="/dental-crowns-killeen-tx" class="text-teal-dark font-semibold hover:text-charcoal">dental crowns</a>, and everyday restorative care - keeping your teeth strong and functional.');
+  html = html.replace('Veneers, whitening, porcelain crowns - we craft smiles that are genuinely beautiful and naturally yours.', 'Veneers, bonding, whitening, Invisalign clear aligners, porcelain crowns, and smile makeover planning for results that look naturally yours.');
+  html = html.replace('A beautiful smile is more than cosmetics - it\'s confidence. Our cosmetic services deliver natural-looking results tailored to your face, your goals, and your budget.', 'If you are comparing <a href="/cosmetic-dentistry-killeen-tx" class="text-teal-dark font-semibold hover:text-charcoal">cosmetic dentistry in Killeen</a>, Elm Ridge can help you think through smile makeover options like bonding, whitening, veneers, Invisalign clear aligners, porcelain crowns, and the smile preview simulator while keeping the result natural-looking.');
+  html = html.replace('<a href="/dental-implants-killeen-tx" class="font-body text-xs font-semibold tracking-widest uppercase text-teal mt-3 inline-block">LEARN MORE &rarr;</a>', '<a href="/dental-implants-killeen-tx" class="font-body text-xs font-semibold tracking-widest uppercase text-teal mt-3 inline-block">DENTAL IMPLANT OPTIONS &rarr;</a>');
+  html = html.replace('<a href="/cosmetic-dentistry-killeen-tx" class="font-body text-xs font-semibold tracking-widest uppercase text-teal mt-3 inline-block">LEARN MORE &rarr;</a>', '<a href="/cosmetic-dentistry-killeen-tx" class="font-body text-xs font-semibold tracking-widest uppercase text-teal mt-3 inline-block">COSMETIC DENTISTRY OPTIONS &rarr;</a>');
   html = html.replace('Custom oral appliances to treat sleep apnea and snoring - a comfortable, CPAP-free alternative.', 'Take-home sleep study workflow with physician diagnosis and FDA-cleared oral appliance therapy when appropriate.');
   html = html.replace('Take-home sleep studies with physician diagnosis and FDA-cleared oral appliance therapy when appropriate.', 'Take-home sleep study workflow with physician diagnosis and FDA-cleared oral appliance therapy when appropriate.');
   html = html.replace('Gentle, efficient extractions - including wisdom teeth - with your comfort as the priority.', 'Simple and surgical extractions, including many wisdom teeth, with replacement planning when it matters.');
@@ -3155,12 +3196,15 @@ function patchHomepage() {
   html = html.replace("We'll do our best to get you in the office and out of pain as soon as possible, often times on the same day.", 'Call first for urgent dental problems. Same-day emergency appointments are available when possible.');
   html = html.replace("Your dental care shouldn't have to wait on finances. We partner with CareCredit and Cherry to offer flexible payment plans that fit your budget - apply in minutes and know your options before your first visit. Interest-free options may be available!", `Elm Ridge is in-network with most major PPO dental plans and offers CareCredit and Cherry. ${insuranceCaveat}`);
   const homepageImplantValue =
-    'Dental implants are often one of the strongest long-term options for replacing missing teeth. They usually cost more upfront than dentures or bridges, but they can be more cost-effective over time because they are designed for longevity and do not rely on reshaping neighboring teeth. Elm Ridge is one of the few general practices to place <em>and</em> restore implants entirely in-house, using state-of-the-art 3D imaging for precision.';
+    '<a href="/dental-implants-killeen-tx" class="text-teal font-semibold hover:text-white">Dental implants in Killeen</a> are often one of the strongest long-term options for replacing missing teeth. They usually cost more upfront than dentures or bridges, but they can be more cost-effective over time because they are designed for longevity and do not rely on reshaping neighboring teeth. Elm Ridge is one of the few general practices to place <em>and</em> restore implants entirely in-house, using state-of-the-art 3D imaging for precision.';
 
   html = html.replace('Dental implants are the gold standard for replacing missing teeth - and Elm Ridge is one of the few general practices to place <em>and</em> restore implants entirely in-house, using state-of-the-art 3D imaging for precision every time.', homepageImplantValue);
   html = html.replace('Dental implants are one of the strongest long-term options for replacing missing teeth - and Elm Ridge is one of the few general practices to place <em>and</em> restore implants entirely in-house, using state-of-the-art 3D imaging for precision every time.', homepageImplantValue);
   html = html.replace('Dental implants are often one of the strongest long-term tooth replacement options. They usually cost more upfront than dentures or bridges, but they can be more cost-effective over time because they are designed for longevity and do not rely on reshaping neighboring teeth.', homepageImplantValue);
-  html = html.replace("Whether you're missing one tooth or need a full-arch restoration, we'll walk you through every step with honest answers and a clear treatment plan.", "Whether you're missing one tooth or comparing fixed implant teeth for a full arch, we'll walk you through realistic options, timing, cost, and long-term maintenance.");
+  html = html.replace('Dental implants are often one of the strongest long-term options for replacing missing teeth. They usually cost more upfront than dentures or bridges, but they can be more cost-effective over time because they are designed for longevity and do not rely on reshaping neighboring teeth. Elm Ridge is one of the few general practices to place <em>and</em> restore implants entirely in-house, using state-of-the-art 3D imaging for precision.', homepageImplantValue);
+  html = html.replace("Whether you're missing one tooth or need a full-arch restoration, we'll walk you through every step with honest answers and a clear treatment plan.", 'Whether you\'re missing one tooth or comparing fixed implant teeth for a full arch, our <a href="/dental-implants-killeen-tx" class="text-teal font-semibold hover:text-white">implant treatment options</a> page can help you understand realistic options, timing, cost, and long-term maintenance.');
+  html = html.replace("Whether you're missing one tooth or comparing fixed implant teeth for a full arch, we'll walk you through realistic options, timing, cost, and long-term maintenance.", 'Whether you\'re missing one tooth or comparing fixed implant teeth for a full arch, our <a href="/dental-implants-killeen-tx" class="text-teal font-semibold hover:text-white">implant treatment options</a> page can help you understand realistic options, timing, cost, and long-term maintenance.');
+  html = html.replace('Learn More About Dental Implants', 'Explore Dental Implant Options');
   html = html.replace('Single implants, implant bridges, All-on-4, and All-on-6 full-arch solutions', 'Single implants, implant bridges, full-arch dental implants, and All-on-4 or All-on-X options when appropriate');
   html = html.replace('Single implants, implant bridges, All-on-4, and All-on-X full-arch solutions', 'Single implants, implant bridges, full-arch dental implants, and All-on-4 or All-on-X options when appropriate');
   if (!html.includes('Individual results vary. Images are shared with patient consent.')) {
