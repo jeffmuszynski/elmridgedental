@@ -106,13 +106,13 @@ function main() {
   withLock(() => {
     ensureCleanWorktree();
 
-    const generated = runJson('npm', ['run', 'seo:generate-draft', '--', '--queue', 'seo-automation/topic-queue.example.json']);
+    const generated = runJson('node', ['scripts/seo-generate-draft.mjs', '--queue', 'seo-automation/topic-queue.example.json']);
     const draftFile = newestGeneratedFile(generated, 'draftFile');
 
-    const reviewed = runJson('npm', ['run', 'seo:review-draft', '--', '--input', draftFile]);
+    const reviewed = runJson('node', ['scripts/seo-review-draft.mjs', '--input', draftFile]);
     const reviewFile = newestGeneratedFile(reviewed, 'reviewFile');
 
-    const renderResult = runJson('npm', ['run', 'seo:render-blog', '--', '--input', reviewFile, '--write']);
+    const renderResult = runJson('node', ['scripts/seo-render-blog.mjs', '--input', reviewFile, '--write']);
 
     run('npm', ['run', 'seo:test'], { stdio: 'inherit' });
     commitAndPush(reviewFile, renderResult);
