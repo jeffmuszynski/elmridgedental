@@ -108,7 +108,7 @@ function buildSuggestedTitle(item) {
   if (category.includes('emergency')) return compact(`${keyword} | Same-Day Help When Possible`, 62);
   if (category.includes('cosmetic')) return compact(`${keyword} | Natural-Looking Smile Options`, 62);
   if (category.includes('location')) return compact(`${keyword} | Private Dental Office Nearby`, 62);
-  if (category.includes('core local')) return 'Killeen Dentist | Private Office & 550+ Reviews';
+  if (category.includes('core local')) return 'Killeen Dentist | Private Office and 550+ Reviews';
   return compact(`${keyword} | Elm Ridge Dentist in Killeen, TX`, 62);
 }
 
