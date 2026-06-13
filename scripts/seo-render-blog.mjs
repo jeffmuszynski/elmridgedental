@@ -70,6 +70,13 @@ function cleanSectionHtml(html) {
     .replace(/\s(href|src)\s*=\s*(['"])\s*javascript:[\s\S]*?\2/gi, ' $1="#"');
 }
 
+function stripHtml(value) {
+  return String(value || '')
+    .replace(/<[^>]*>/g, ' ')
+    .replace(/\s+/g, ' ')
+    .trim();
+}
+
 function normalizeDraft(rawDraft) {
   const hasReviewedDraft = Boolean(rawDraft.finalDraft);
   const draft = hasReviewedDraft ? rawDraft.finalDraft : rawDraft;
@@ -149,12 +156,12 @@ export function renderBlogHtml(rawDraft) {
     .map((section) => `<h2>${escapeHtml(section.heading)}</h2>${cleanSectionHtml(section.html)}`)
     .join('');
   const faqHtml = draft.faq.length
-    ? `<section class="py-16 bg-stone"><div class="max-w-4xl mx-auto px-6"><h2 class="font-display text-4xl mb-8">FAQ</h2><div class="space-y-4">${draft.faq.map((item) => `<details class="bg-white border border-teal-light p-6"><summary class="font-semibold">${escapeHtml(item.question)}</summary><p class="mt-3 text-charcoal/65 leading-7">${escapeHtml(item.answer)}</p></details>`).join('')}</div></div></section>`
+    ? `<section class="py-16 bg-stone"><div class="max-w-4xl mx-auto px-6"><h2 class="font-display text-4xl mb-8">FAQ</h2><div class="space-y-4">${draft.faq.map((item) => `<details class="bg-white border border-teal-light p-6"><summary class="font-semibold">${escapeHtml(item.question)}</summary><p class="mt-3 text-charcoal/65 leading-7">${cleanSectionHtml(item.answer)}</p></details>`).join('')}</div></div></section>`
     : '';
 
   return `${withHeadSchemas(
     head(draft.title, draft.description, pagePath),
-    draft.faq.length ? faqSchema(draft.faq.map((item) => [item.question, item.answer])) : '',
+    draft.faq.length ? faqSchema(draft.faq.map((item) => [item.question, stripHtml(item.answer)])) : '',
     breadcrumb(pagePath, 'Blog'),
     blogPostingSchema(draft, pagePath),
   )}<body class="font-body text-charcoal bg-stone">${header()}<main><section class="bg-charcoal text-white py-20"><div class="max-w-4xl mx-auto px-6"><nav class="text-xs uppercase tracking-widest text-teal mb-6"><a href="/">Home</a> / <a href="/blog">Blog</a></nav><p class="text-xs uppercase tracking-widest text-teal mb-4">${escapeHtml(draft.category)}</p><h1 class="font-display text-5xl md:text-6xl font-light leading-tight mb-6">${escapeHtml(draft.title)}</h1><p class="text-white/70 leading-8 text-lg">${escapeHtml(draft.heroIntro)}</p></div></section><article class="py-16 bg-white"><div class="max-w-4xl mx-auto px-6 prose-page space-y-7">${imageHtml}${relatedLinksHtml(draft.relatedLinks)}${sectionsHtml}<p class="bg-stone border border-teal-light p-5"><strong>Need a personalized answer?</strong> <a href="/request-appointment">Request a visit</a> with Elm Ridge Implant and Family Dentistry in Killeen.</p></div></article>${faqHtml}<section class="py-16 bg-charcoal text-white text-center"><div class="max-w-3xl mx-auto px-6"><h2 class="font-display text-4xl mb-4">Ready for a Clearer Answer?</h2><p class="text-white/65 mb-8">Elm Ridge can evaluate your situation and explain the options that fit your mouth, goals, and budget.</p><a href="/request-appointment" class="inline-block bg-teal px-8 py-4 text-xs uppercase tracking-widest font-semibold">Request an Appointment</a></div></section></main>${footer(false)}${menuScript}</body></html>`;
