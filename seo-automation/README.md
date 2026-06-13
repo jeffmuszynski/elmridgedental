@@ -60,3 +60,9 @@ so topic selection follows the active Target_Keywords/GSC scoring logic.
 - LLM provider for draft generation and second-pass review.
 
 Credentials belong in local ignored files or platform secrets, never in this repo.
+
+## Runbook
+
+The durable handoff/runbook for this system is in:
+
+- `docs/seo-gbp-blog-automation-runbook.md`
