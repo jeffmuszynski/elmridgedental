@@ -14,6 +14,7 @@ import {
 } from '../site-helpers.mjs';
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
+const ledgerPath = path.join(root, 'seo-automation', 'ledger.json');
 
 function parseArgs(argv) {
   const args = {};
@@ -45,6 +46,20 @@ function normalizeSlug(value) {
     .toLowerCase()
     .replace(/[^a-z0-9]+/g, '-')
     .replace(/^-+|-+$/g, '');
+}
+
+function imageUrl(value) {
+  if (!value) return `${domain}/Building.webp`;
+  const image = String(value);
+  if (/^https?:\/\//i.test(image)) return image;
+  return `${domain}/${image.replace(/^\/+/, '')}`;
+}
+
+function imageSrc(value) {
+  if (!value) return '';
+  const image = String(value);
+  if (/^https?:\/\//i.test(image)) return image;
+  return `/${image.replace(/^\/+/, '')}`;
 }
 
 function cleanSectionHtml(html) {
@@ -101,7 +116,7 @@ function blogPostingSchema(draft, pagePath) {
     '@type': 'BlogPosting',
     headline: draft.title,
     description: draft.description,
-    image: draft.image ? `${domain}/${draft.image.replace(/^\/+/, '')}` : `${domain}/Building.webp`,
+    image: imageUrl(draft.image),
     datePublished: draft.datePublished || now,
     dateModified: draft.dateModified || now,
     author: {
@@ -128,7 +143,7 @@ export function renderBlogHtml(rawDraft) {
   const draft = normalizeDraft(rawDraft);
   const pagePath = `/blog/${draft.slug}`;
   const imageHtml = draft.image
-    ? `<figure class="not-prose mb-8"><img src="/${escapeHtml(draft.image.replace(/^\/+/, ''))}" alt="${escapeHtml(draft.imageAlt || draft.title)}" class="w-full shadow-xl" loading="eager" decoding="async" /></figure>`
+    ? `<figure class="not-prose mb-8"><img src="${escapeHtml(imageSrc(draft.image))}" alt="${escapeHtml(draft.imageAlt || draft.title)}" class="w-full shadow-xl" loading="eager" decoding="async" /></figure>`
     : '';
   const sectionsHtml = draft.sections
     .map((section) => `<h2>${escapeHtml(section.heading)}</h2>${cleanSectionHtml(section.html)}`)
@@ -145,6 +160,57 @@ export function renderBlogHtml(rawDraft) {
   )}<body class="font-body text-charcoal bg-stone">${header()}<main><section class="bg-charcoal text-white py-20"><div class="max-w-4xl mx-auto px-6"><nav class="text-xs uppercase tracking-widest text-teal mb-6"><a href="/">Home</a> / <a href="/blog">Blog</a></nav><p class="text-xs uppercase tracking-widest text-teal mb-4">${escapeHtml(draft.category)}</p><h1 class="font-display text-5xl md:text-6xl font-light leading-tight mb-6">${escapeHtml(draft.title)}</h1><p class="text-white/70 leading-8 text-lg">${escapeHtml(draft.heroIntro)}</p></div></section><article class="py-16 bg-white"><div class="max-w-4xl mx-auto px-6 prose-page space-y-7">${imageHtml}${relatedLinksHtml(draft.relatedLinks)}${sectionsHtml}<p class="bg-stone border border-teal-light p-5"><strong>Need a personalized answer?</strong> <a href="/request-appointment">Request a visit</a> with Elm Ridge Implant and Family Dentistry in Killeen.</p></div></article>${faqHtml}<section class="py-16 bg-charcoal text-white text-center"><div class="max-w-3xl mx-auto px-6"><h2 class="font-display text-4xl mb-4">Ready for a Clearer Answer?</h2><p class="text-white/65 mb-8">Elm Ridge can evaluate your situation and explain the options that fit your mouth, goals, and budget.</p><a href="/request-appointment" class="inline-block bg-teal px-8 py-4 text-xs uppercase tracking-widest font-semibold">Request an Appointment</a></div></section></main>${footer(false)}${menuScript}</body></html>`;
 }
 
+function blogIndexCard(draft) {
+  return `<a href="/blog/${escapeHtml(draft.slug)}" class="block bg-stone border border-teal-light p-7 hover:border-teal transition-colors"><p class="text-xs uppercase tracking-widest text-teal-dark mb-3">${escapeHtml(draft.category)}</p><h2 class="font-display text-3xl text-charcoal mb-4">${escapeHtml(draft.title)}</h2><p class="text-charcoal/65 leading-7">${escapeHtml(draft.description)}</p></a>`;
+}
+
+function upsertBlogIndex(draft) {
+  const file = path.join(root, 'blog', 'index.html');
+  let html = fs.readFileSync(file, 'utf8');
+  const href = `/blog/${draft.slug}`;
+  if (html.includes(`href="${href}"`)) return { file, changed: false };
+
+  const marker = '<section class="py-16 bg-white"><div class="max-w-5xl mx-auto px-6 grid md:grid-cols-2 gap-6">';
+  if (!html.includes(marker)) throw new Error('Could not find blog index card grid.');
+  html = html.replace(marker, `${marker}${blogIndexCard(draft)}`);
+  fs.writeFileSync(file, html);
+  return { file, changed: true };
+}
+
+function upsertSitemap(draft) {
+  const file = path.join(root, 'sitemap.xml');
+  const loc = `${domain}/blog/${draft.slug}`;
+  let xml = fs.readFileSync(file, 'utf8');
+  if (xml.includes(`<loc>${loc}</loc>`)) return { file, changed: false };
+
+  const entry = `  <url><loc>${loc}</loc><priority>${draft.category === 'Dental Implants' ? '0.9' : '0.7'}</priority></url>\n`;
+  xml = xml.replace('</urlset>', `${entry}</urlset>`);
+  fs.writeFileSync(file, xml);
+  return { file, changed: true };
+}
+
+function upsertLedger(draft) {
+  const ledger = JSON.parse(fs.readFileSync(ledgerPath, 'utf8'));
+  const url = `${domain}/blog/${draft.slug}`;
+  const existing = ledger.entries.find((entry) => entry.url === url);
+  if (existing) return { file: ledgerPath, changed: false };
+
+  const today = new Date().toISOString().slice(0, 10);
+  ledger.updated = today;
+  ledger.entries.unshift({
+    date: today,
+    type: 'blog',
+    bucket: String(draft.category || 'Patient Education').toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, ''),
+    primaryKeyword: draft.primaryKeyword || draft.title,
+    title: draft.title,
+    url,
+    imageId: draft.gbp?.imageId || null,
+    status: 'ready',
+  });
+  fs.writeFileSync(ledgerPath, `${JSON.stringify(ledger, null, 2)}\n`);
+  return { file: ledgerPath, changed: true };
+}
+
 function main() {
   const args = parseArgs(process.argv.slice(2));
   if (!args.input) throw new Error('Usage: npm run seo:render-blog -- --input path/to/reviewed-draft.json [--write]');
@@ -158,7 +224,13 @@ function main() {
   if (args.write) {
     fs.mkdirSync(path.dirname(outputPath), { recursive: true });
     fs.writeFileSync(outputPath, html);
-    console.log(outputPath);
+    const updates = [
+      { file: outputPath, changed: true },
+      upsertBlogIndex(draft),
+      upsertSitemap(draft),
+      upsertLedger(draft),
+    ];
+    console.log(JSON.stringify({ outputPath, updates }, null, 2));
   } else {
     console.log(JSON.stringify({ outputPath, bytes: Buffer.byteLength(html), dryRun: true }, null, 2));
   }
