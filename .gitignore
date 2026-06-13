@@ -4,6 +4,7 @@ temporary screenshots/
 *.exe
 .env
 .env.local
+.clasp.json
 seo-automation/drafts/
 seo-automation/local/
 seo-automation/credentials/
