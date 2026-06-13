@@ -56,7 +56,8 @@ function titleCase(value) {
     })
     .join(' ')
     .replace(/\bTx\b/g, 'TX')
-    .replace(/\bGbp\b/g, 'GBP');
+    .replace(/\bGbp\b/g, 'GBP')
+    .replace(/\bAll On 4\b/g, 'All-on-4');
 }
 
 function localizeTitle(value) {
@@ -205,7 +206,7 @@ function buildOutline(topic, bucketLabel) {
       'FAQ',
     ],
     faqIdeas: [
-      `Is ${shortTitle.toLowerCase()} something I should ask a dentist about?`,
+      `Should I ask a dentist about ${shortTitle.toLowerCase()}?`,
       'Can you give an exact answer online?',
       'Will insurance cover treatment?',
       'How do I schedule a visit?',

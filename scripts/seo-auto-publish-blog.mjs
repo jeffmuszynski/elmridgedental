@@ -45,7 +45,7 @@ function ensureCleanWorktree() {
   }
 }
 
-function withLock(fn) {
+async function withLock(fn) {
   fs.mkdirSync(path.dirname(lockPath), { recursive: true });
 
   if (fs.existsSync(lockPath)) {
@@ -57,7 +57,7 @@ function withLock(fn) {
 
   fs.writeFileSync(lockPath, `${process.pid}\n${new Date().toISOString()}\n`);
   try {
-    return fn();
+    return await fn();
   } finally {
     fs.rmSync(lockPath, { force: true });
   }
@@ -67,6 +67,30 @@ function newestGeneratedFile(result, key) {
   const file = result[key];
   if (!file) throw new Error(`Expected ${key} in command output.`);
   return path.relative(root, path.resolve(root, file));
+}
+
+async function resolveTopicQueueArgs() {
+  const exportUrl = process.env.SEO_TOPIC_QUEUE_URL;
+  if (!exportUrl) return ['--queue', 'seo-automation/topic-queue.example.json'];
+
+  try {
+    const response = await fetch(exportUrl, { redirect: 'follow' });
+    if (!response.ok) throw new Error(`HTTP ${response.status}`);
+
+    const queue = await response.json();
+    if (queue.ok === false) throw new Error(queue.error || 'SEO topic export returned ok=false.');
+    if (!Array.isArray(queue.topics) || !queue.topics.length) {
+      throw new Error('SEO topic export returned no topics.');
+    }
+
+    const queuePath = path.join(root, 'seo-automation', 'local', 'topic-queue-live.json');
+    fs.mkdirSync(path.dirname(queuePath), { recursive: true });
+    fs.writeFileSync(queuePath, `${JSON.stringify(queue, null, 2)}\n`);
+    return ['--queue', path.relative(root, queuePath)];
+  } catch (error) {
+    console.warn(`Could not load SEO_TOPIC_QUEUE_URL; using local queue. Reason: ${error.message}`);
+    return ['--queue', 'seo-automation/topic-queue.example.json'];
+  }
 }
 
 function commitAndPush(reviewFile, renderResult) {
@@ -94,7 +118,7 @@ function commitAndPush(reviewFile, renderResult) {
   run('git', ['push', 'origin', 'main'], { stdio: 'inherit' });
 }
 
-function main() {
+async function main() {
   loadEnvLocal();
   if (!process.env.OPENAI_API_KEY) {
     throw new Error('OPENAI_API_KEY is required in .env.local or the environment.');
@@ -102,10 +126,11 @@ function main() {
 
   fs.mkdirSync(logDir, { recursive: true });
 
-  withLock(() => {
+  await withLock(async () => {
     ensureCleanWorktree();
 
-    const generated = runJson('node', ['scripts/seo-generate-draft.mjs', '--queue', 'seo-automation/topic-queue.example.json']);
+    const queueArgs = await resolveTopicQueueArgs();
+    const generated = runJson('node', ['scripts/seo-generate-draft.mjs', ...queueArgs]);
     const draftFile = newestGeneratedFile(generated, 'draftFile');
 
     const reviewed = runJson('node', ['scripts/seo-review-draft.mjs', '--input', draftFile]);
@@ -128,4 +153,7 @@ function main() {
   });
 }
 
-main();
+main().catch((error) => {
+  console.error(error.message);
+  process.exit(1);
+});

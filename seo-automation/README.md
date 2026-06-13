@@ -38,7 +38,7 @@ npm run seo:auto-publish-blog
 
 It:
 
-- chooses the next topic from the local SEO queue and ledger,
+- chooses the next topic from `SEO_TOPIC_QUEUE_URL` when configured, otherwise from the local SEO queue and ledger,
 - generates a first draft with OpenAI,
 - runs a second-pass AI review,
 - renders the approved blog page,
@@ -47,6 +47,9 @@ It:
 - commits and pushes the website repo.
 
 The script aborts if the git worktree has unrelated uncommitted changes.
+
+`SEO_TOPIC_QUEUE_URL` can point at the token-protected Apps Script export endpoint
+so topic selection follows the active Target_Keywords/GSC scoring logic.
 
 ## Planned Live Integrations
 
