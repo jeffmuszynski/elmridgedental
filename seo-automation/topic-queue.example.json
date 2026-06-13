@@ -1,0 +1,25 @@
+{
+  "topics": [
+    {
+      "primaryKeyword": "how long do dental implants last killeen tx",
+      "bucket": "implants",
+      "intent": "patient education",
+      "priority": 90,
+      "source": "manual-example"
+    },
+    {
+      "primaryKeyword": "toothache at night killeen tx",
+      "bucket": "emergency",
+      "intent": "urgent symptom education",
+      "priority": 85,
+      "source": "manual-example"
+    },
+    {
+      "primaryKeyword": "veneers vs bonding killeen tx",
+      "bucket": "cosmetic",
+      "intent": "comparison",
+      "priority": 75,
+      "source": "manual-example"
+    }
+  ]
+}

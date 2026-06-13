@@ -1,0 +1,52 @@
+{
+  "practice": {
+    "name": "Elm Ridge Implant and Family Dentistry",
+    "city": "Killeen",
+    "state": "TX",
+    "phone": "254-699-4127",
+    "domain": "https://www.elmridgedental.com"
+  },
+  "cadence": {
+    "blogPostsPerWeek": 1,
+    "gbpPostsPerWeek": 2
+  },
+  "strategyBuckets": [
+    {
+      "id": "implants",
+      "label": "Dental Implants",
+      "weight": 5,
+      "topics": ["dental implants", "single tooth implant", "implant bridge", "full arch", "all on 4", "snap on dentures", "missing tooth"]
+    },
+    {
+      "id": "emergency",
+      "label": "Emergency Dentistry",
+      "weight": 4,
+      "topics": ["emergency dentist", "toothache", "broken tooth", "lost crown", "dental abscess", "root canal"]
+    },
+    {
+      "id": "cosmetic",
+      "label": "Cosmetic Dentistry",
+      "weight": 3,
+      "topics": ["cosmetic dentistry", "veneers", "bonding", "whitening", "clear aligners", "smile makeover"]
+    },
+    {
+      "id": "family",
+      "label": "Family Dentistry",
+      "weight": 2,
+      "topics": ["family dentist", "dental cleanings", "fillings", "crowns", "gum health"]
+    },
+    {
+      "id": "sleep",
+      "label": "Sleep Apnea",
+      "weight": 2,
+      "topics": ["sleep apnea", "oral appliance", "mandibular advancement device", "snoring"]
+    }
+  ],
+  "guardrails": [
+    "Do not use PHI or patient-specific details.",
+    "Do not promise outcomes, pain-free treatment, insurance coverage, or exact costs.",
+    "Use educational language and invite patients to request a visit for personalized recommendations.",
+    "Keep Google Business Profile posts concise, local, and non-duplicative.",
+    "Prefer existing service pages for internal links before creating new landing pages."
+  ]
+}

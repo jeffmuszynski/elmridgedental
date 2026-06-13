@@ -4,6 +4,9 @@ temporary screenshots/
 *.exe
 .env
 .env.local
+seo-automation/drafts/
+seo-automation/local/
+seo-automation/credentials/
 blog-schema-report.json
 elmridge-seo-geo-audit.md (claude audit).pdf
 seo-os-priority-refactor.gs

@@ -1,0 +1,36 @@
+{
+  "version": 1,
+  "updated": "2026-06-12",
+  "entries": [
+    {
+      "date": "2026-05-05",
+      "type": "blog",
+      "bucket": "implants",
+      "primaryKeyword": "dental implant cost killeen tx",
+      "title": "Dental Implant Cost in Killeen, TX",
+      "url": "https://www.elmridgedental.com/blog/dental-implant-cost-killeen-tx",
+      "imageId": "dental-implants-killeen",
+      "status": "published"
+    },
+    {
+      "date": "2026-05-05",
+      "type": "blog",
+      "bucket": "emergency",
+      "primaryKeyword": "emergency dentist killeen tx",
+      "title": "Emergency Dentist in Killeen, TX",
+      "url": "https://www.elmridgedental.com/blog/emergency-dentist-killeen-tx",
+      "imageId": "root-canal-killeen-texas",
+      "status": "published"
+    },
+    {
+      "date": "2026-05-05",
+      "type": "blog",
+      "bucket": "cosmetic",
+      "primaryKeyword": "cosmetic dentistry options killeen tx",
+      "title": "Cosmetic Dentistry Options in Killeen, TX",
+      "url": "https://www.elmridgedental.com/blog/cosmetic-dentistry-options-killeen-tx",
+      "imageId": "cosmetic-dentistry-killeen",
+      "status": "published"
+    }
+  ]
+}
