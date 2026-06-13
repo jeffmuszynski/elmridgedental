@@ -56,8 +56,12 @@ function cleanSectionHtml(html) {
 }
 
 function normalizeDraft(rawDraft) {
-  const draft = rawDraft.finalDraft || rawDraft;
-  if (rawDraft.status && rawDraft.status !== 'approved') {
+  const hasReviewedDraft = Boolean(rawDraft.finalDraft);
+  const draft = hasReviewedDraft ? rawDraft.finalDraft : rawDraft;
+  if (hasReviewedDraft && rawDraft.status !== 'approved') {
+    throw new Error(`Review is not approved: ${rawDraft.status || 'missing status'}`);
+  }
+  if (!hasReviewedDraft && rawDraft.status && rawDraft.status !== 'approved') {
     throw new Error(`Draft is not approved: ${rawDraft.status}`);
   }
 
@@ -71,6 +75,7 @@ function normalizeDraft(rawDraft) {
 
   return {
     ...draft,
+    status: 'approved',
     slug,
     category: draft.category || 'Patient Education',
     heroIntro: draft.heroIntro || draft.description,
