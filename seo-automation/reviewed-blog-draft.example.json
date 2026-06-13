@@ -1,0 +1,46 @@
+{
+  "status": "approved",
+  "title": "How Long Do Dental Implants Last in Killeen, TX",
+  "description": "How long dental implants last depends on planning, health, bite forces, home care, and maintenance. Elm Ridge explains what Killeen patients should know.",
+  "slug": "how-long-do-dental-implants-last-killeen",
+  "category": "Dental Implants",
+  "heroIntro": "Dental implants are designed as a long-term tooth replacement option, but their lifespan depends on more than the implant itself.",
+  "primaryKeyword": "how long do dental implants last killeen tx",
+  "image": "cbct-implant-planning-killeen.webp",
+  "imageAlt": "CBCT implant planning image for dental implant patients in Killeen, TX",
+  "sections": [
+    {
+      "heading": "Quick Answer",
+      "html": "<p><strong>Dental implants can last many years with the right planning and maintenance, but no dentist can promise a lifetime result.</strong> Long-term success depends on bone support, gum health, bite forces, medical history, home care, and regular dental visits.</p>"
+    },
+    {
+      "heading": "What Affects Implant Longevity?",
+      "html": "<p>The implant, abutment, and final crown or bridge all have different maintenance needs. A healthy foundation, a well-designed bite, and good cleaning habits help protect the result over time.</p><ul><li>Gum and bone health</li><li>Smoking or medical conditions that affect healing</li><li>Grinding or heavy bite forces</li><li>Quality of the final crown, bridge, or denture</li><li>Regular professional maintenance</li></ul>"
+    },
+    {
+      "heading": "When to Schedule an Implant Consultation",
+      "html": "<p>If you are missing a tooth, have a failing tooth, or are frustrated with a loose denture, an exam and imaging can help clarify your options. Elm Ridge Implant and Family Dentistry can review whether a single implant, implant bridge, snap-on denture, or full-arch plan makes sense.</p>"
+    }
+  ],
+  "faq": [
+    {
+      "question": "Can dental implants last a lifetime?",
+      "answer": "Some implants last for decades, but lifetime results cannot be guaranteed. Health, hygiene, bite forces, and maintenance all matter."
+    },
+    {
+      "question": "Do implant crowns ever need to be replaced?",
+      "answer": "Yes, the crown or prosthetic tooth may wear, chip, loosen, or need replacement even when the implant itself remains healthy."
+    }
+  ],
+  "relatedLinks": [
+    { "label": "Dental Implants", "href": "/dental-implants-killeen-tx" },
+    { "label": "Single Tooth Implants", "href": "/single-tooth-implant-killeen-tx" },
+    { "label": "Request Appointment", "href": "/request-appointment" }
+  ],
+  "gbp": {
+    "caption": "Wondering how long dental implants last? Elm Ridge Implant and Family Dentistry in Killeen explains how planning, gum health, bite forces, and maintenance affect long-term results. Call 254-699-4127 to request a personalized consultation.",
+    "imageId": "cbct-implant-planning-killeen",
+    "imageUrl": "https://www.elmridgedental.com/gbp/cbct-implant-planning-killeen.jpg"
+  },
+  "reviewNotes": ["Example only. Do not publish without replacing with a current generated draft."]
+}
