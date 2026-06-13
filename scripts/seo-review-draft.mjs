@@ -87,9 +87,20 @@ async function main() {
     return;
   }
 
-  const review = await reviewWithOpenAI({ prompt, draft });
-  const reviewFile = writeReviewFile(slug, 'review', review);
-  console.log(JSON.stringify({ mode: 'reviewed', reviewFile }, null, 2));
+  try {
+    const review = await reviewWithOpenAI({ prompt, draft });
+    const reviewFile = writeReviewFile(slug, 'review', review);
+    console.log(JSON.stringify({ mode: 'reviewed', reviewFile }, null, 2));
+  } catch (error) {
+    const reviewPackageFile = writeReviewFile(slug, 'api-error-review-package', {
+      status: 'needs_llm_review',
+      reason: error.message,
+      prompt,
+      draft,
+    });
+    console.log(JSON.stringify({ mode: 'api-error', reviewPackageFile, reason: error.message }, null, 2));
+    process.exitCode = 1;
+  }
 }
 
 main().catch((error) => {

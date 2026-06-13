@@ -82,9 +82,20 @@ async function main() {
     return;
   }
 
-  const draft = await generateWithOpenAI({ prompt, plan });
-  const draftFile = writeDraftFile(plan.blog.slug, 'draft', draft);
-  console.log(JSON.stringify({ mode: 'generated', draftFile }, null, 2));
+  try {
+    const draft = await generateWithOpenAI({ prompt, plan });
+    const draftFile = writeDraftFile(plan.blog.slug, 'draft', draft);
+    console.log(JSON.stringify({ mode: 'generated', draftFile }, null, 2));
+  } catch (error) {
+    const packageFile = writeDraftFile(plan.blog.slug, 'api-error-prompt-package', {
+      status: 'needs_llm',
+      reason: error.message,
+      prompt,
+      plan,
+    });
+    console.log(JSON.stringify({ mode: 'api-error', packageFile, reason: error.message }, null, 2));
+    process.exitCode = 1;
+  }
 }
 
 main().catch((error) => {
