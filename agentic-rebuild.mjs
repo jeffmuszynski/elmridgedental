@@ -3168,8 +3168,8 @@ function buildSitemap() {
 function patchHomepage() {
   let html = fs.readFileSync('index.html', 'utf8');
   html = cleanupText(html);
-  const homepageSeoTitle = 'Dentist in Killeen, TX | Private Care and 550+ Reviews | Elm Ridge';
-  const homepageSeoDescription = 'Private dentist in Killeen with familiar faces, clear explanations, modern technology, calmer visits, implants, emergency, family, cosmetic care, and 550+ five-star reviews.';
+  const homepageSeoTitle = 'Killeen Dentist | Private Office and 550+ Reviews | Elm Ridge';
+  const homepageSeoDescription = 'Private dental care in Killeen with familiar faces, clear explanations, modern technology, calmer visits, implants, emergency care, and 550+ five-star reviews.';
   html = html.replaceAll('Top-Rated Dentist in Killeen, TX | 550+ Reviews | Elm Ridge Implant and Family Dentistry', homepageSeoTitle);
   html = html.replaceAll('Elm Ridge Implant and Family Dentistry offers private, modern dental care in Killeen with familiar faces, clear explanations, implants, emergency care, cosmetic dentistry, family dentistry, and 5.0 Google rating from 550+ reviews.', homepageSeoDescription);
   html = html.replace(/<!-- NAV -->\s*<header id="nav"[\s\S]*?<\/header>/, `<!-- NAV -->\n  ${header()}`);
@@ -3320,4 +3320,3 @@ function main() {
 main();
 
 export { blogTitleChanges };
-
