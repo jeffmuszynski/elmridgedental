@@ -71,7 +71,6 @@ function newestGeneratedFile(result, key) {
 
 function commitAndPush(reviewFile, renderResult) {
   const changedFiles = new Set([
-    reviewFile,
     'blog/index.html',
     'sitemap.xml',
     'seo-automation/ledger.json',

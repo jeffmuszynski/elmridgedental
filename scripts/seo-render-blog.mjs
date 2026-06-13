@@ -52,6 +52,7 @@ function imageUrl(value) {
   if (!value) return `${domain}/Building.webp`;
   const image = String(value);
   if (/^https?:\/\//i.test(image)) return image;
+  if (!fs.existsSync(path.join(root, image.replace(/^\/+/, '')))) return `${domain}/Building.webp`;
   return `${domain}/${image.replace(/^\/+/, '')}`;
 }
 
@@ -59,7 +60,9 @@ function imageSrc(value) {
   if (!value) return '';
   const image = String(value);
   if (/^https?:\/\//i.test(image)) return image;
-  return `/${image.replace(/^\/+/, '')}`;
+  const relative = image.replace(/^\/+/, '');
+  if (!fs.existsSync(path.join(root, relative))) return '';
+  return `/${relative}`;
 }
 
 function cleanSectionHtml(html) {
@@ -149,8 +152,9 @@ function blogPostingSchema(draft, pagePath) {
 export function renderBlogHtml(rawDraft) {
   const draft = normalizeDraft(rawDraft);
   const pagePath = `/blog/${draft.slug}`;
-  const imageHtml = draft.image
-    ? `<figure class="not-prose mb-8"><img src="${escapeHtml(imageSrc(draft.image))}" alt="${escapeHtml(draft.imageAlt || draft.title)}" class="w-full shadow-xl" loading="eager" decoding="async" /></figure>`
+  const resolvedImageSrc = imageSrc(draft.image);
+  const imageHtml = resolvedImageSrc
+    ? `<figure class="not-prose mb-8"><img src="${escapeHtml(resolvedImageSrc)}" alt="${escapeHtml(draft.imageAlt || draft.title)}" class="w-full shadow-xl" loading="eager" decoding="async" /></figure>`
     : '';
   const sectionsHtml = draft.sections
     .map((section) => `<h2>${escapeHtml(section.heading)}</h2>${cleanSectionHtml(section.html)}`)

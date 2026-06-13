@@ -38,6 +38,7 @@ Rules:
 - Do not use PHI, patient names, or patient-specific facts.
 - Do not promise results, pain-free care, exact costs, same-day care, insurance coverage, or timelines that depend on diagnosis.
 - Use clear local language for Killeen, TX without keyword stuffing.
+- Rewrite awkward keyword fragments into natural patient language. For example, use "Should I ask a dentist about dental implants?" instead of "Is dental implants something I should ask a dentist about?"
 - Include the phrase "Elm Ridge Implant and Family Dentistry" naturally.
 - Keep claims educational and diagnosis-dependent.
 - Prefer internal links from the plan.
