@@ -12,6 +12,7 @@
     "seo:generate-draft": "node scripts/seo-generate-draft.mjs",
     "seo:render-blog": "node scripts/seo-render-blog.mjs",
     "seo:review-draft": "node scripts/seo-review-draft.mjs",
+    "seo:ctr-audit": "node scripts/seo-ctr-audit.mjs",
     "seo:visibility-audit": "node scripts/seo-visibility-audit.mjs",
     "seo:test": "node tests/seo-automation-smoke.mjs",
     "start": "node serve.mjs",
