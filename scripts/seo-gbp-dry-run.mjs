@@ -41,7 +41,7 @@ function normalize(value) {
 
 function slugify(value) {
   return normalize(value)
-    .replace(/\b(tx|texas|near|me)\b/g, '')
+    .replace(/\b(tx|texas)\b/g, '')
     .replace(/\s+/g, '-')
     .replace(/^-+|-+$/g, '');
 }
@@ -60,8 +60,17 @@ function titleCase(value) {
 }
 
 function localizeTitle(value) {
-  const withoutLocalTail = normalize(value).replace(/\b(killeen|tx|texas)\b/g, ' ').replace(/\s+/g, ' ').trim();
-  return `${titleCase(withoutLocalTail)} in Killeen, TX`;
+  const patientPhrase = normalize(value)
+    .replace(/\b(tx|texas)\b/g, ' ')
+    .replace(/\bnear me\b/g, 'in killeen')
+    .replace(/\s+/g, ' ')
+    .trim();
+  const withoutKilleen = patientPhrase
+    .replace(/\bin killeen\b/g, ' ')
+    .replace(/\bkilleen\b/g, ' ')
+    .replace(/\s+/g, ' ')
+    .trim();
+  return `${titleCase(withoutKilleen)} in Killeen, TX`;
 }
 
 function keywordTokens(value) {

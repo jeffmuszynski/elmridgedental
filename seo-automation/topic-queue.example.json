@@ -5,21 +5,161 @@
       "bucket": "implants",
       "intent": "patient education",
       "priority": 90,
-      "source": "manual-example"
+      "source": "target-keyword-seed"
+    },
+    {
+      "primaryKeyword": "dental implants near me",
+      "bucket": "implants",
+      "intent": "high-intent local comparison",
+      "priority": 94,
+      "source": "target-keyword-seed"
+    },
+    {
+      "primaryKeyword": "implant dentist killeen tx",
+      "bucket": "implants",
+      "intent": "provider comparison",
+      "priority": 93,
+      "source": "target-keyword-seed"
+    },
+    {
+      "primaryKeyword": "am i a candidate for dental implants killeen tx",
+      "bucket": "implants",
+      "intent": "patient education",
+      "priority": 89,
+      "source": "target-keyword-seed"
+    },
+    {
+      "primaryKeyword": "all on 4 dental implants killeen tx",
+      "bucket": "implants",
+      "intent": "full arch treatment education",
+      "priority": 92,
+      "source": "target-keyword-seed"
+    },
+    {
+      "primaryKeyword": "full arch dental implants killeen tx",
+      "bucket": "implants",
+      "intent": "full arch treatment education",
+      "priority": 91,
+      "source": "target-keyword-seed"
     },
     {
       "primaryKeyword": "toothache at night killeen tx",
       "bucket": "emergency",
       "intent": "urgent symptom education",
       "priority": 85,
-      "source": "manual-example"
+      "source": "target-keyword-seed"
+    },
+    {
+      "primaryKeyword": "broken tooth emergency dentist killeen tx",
+      "bucket": "emergency",
+      "intent": "urgent symptom education",
+      "priority": 87,
+      "source": "target-keyword-seed"
+    },
+    {
+      "primaryKeyword": "dental abscess swelling killeen tx",
+      "bucket": "emergency",
+      "intent": "urgent symptom education",
+      "priority": 86,
+      "source": "target-keyword-seed"
+    },
+    {
+      "primaryKeyword": "lost crown lost filling killeen tx",
+      "bucket": "emergency",
+      "intent": "urgent symptom education",
+      "priority": 78,
+      "source": "target-keyword-seed"
+    },
+    {
+      "primaryKeyword": "dentures killeen tx",
+      "bucket": "implants",
+      "intent": "restorative option comparison",
+      "priority": 82,
+      "source": "target-keyword-seed"
+    },
+    {
+      "primaryKeyword": "snap on dentures killeen tx",
+      "bucket": "implants",
+      "intent": "implant denture comparison",
+      "priority": 84,
+      "source": "target-keyword-seed"
+    },
+    {
+      "primaryKeyword": "dentures vs implants killeen tx",
+      "bucket": "implants",
+      "intent": "comparison",
+      "priority": 86,
+      "source": "target-keyword-seed"
     },
     {
       "primaryKeyword": "veneers vs bonding killeen tx",
       "bucket": "cosmetic",
       "intent": "comparison",
       "priority": 75,
-      "source": "manual-example"
+      "source": "target-keyword-seed"
+    },
+    {
+      "primaryKeyword": "cosmetic dentist killeen tx",
+      "bucket": "cosmetic",
+      "intent": "service comparison",
+      "priority": 81,
+      "source": "target-keyword-seed"
+    },
+    {
+      "primaryKeyword": "smile makeover killeen tx",
+      "bucket": "cosmetic",
+      "intent": "treatment planning",
+      "priority": 79,
+      "source": "target-keyword-seed"
+    },
+    {
+      "primaryKeyword": "clear aligners killeen tx",
+      "bucket": "cosmetic",
+      "intent": "orthodontic option comparison",
+      "priority": 76,
+      "source": "target-keyword-seed"
+    },
+    {
+      "primaryKeyword": "family dentist killeen tx",
+      "bucket": "family",
+      "intent": "core local service",
+      "priority": 78,
+      "source": "target-keyword-seed"
+    },
+    {
+      "primaryKeyword": "best dentist killeen tx",
+      "bucket": "family",
+      "intent": "trust comparison",
+      "priority": 80,
+      "source": "target-keyword-seed"
+    },
+    {
+      "primaryKeyword": "dentist near fort hood",
+      "bucket": "family",
+      "intent": "location page support",
+      "priority": 77,
+      "source": "target-keyword-seed"
+    },
+    {
+      "primaryKeyword": "dentist harker heights tx",
+      "bucket": "family",
+      "intent": "nearby city support",
+      "priority": 72,
+      "source": "target-keyword-seed"
+    },
+    {
+      "primaryKeyword": "dentist belton tx",
+      "bucket": "family",
+      "intent": "nearby city support",
+      "priority": 68,
+      "source": "target-keyword-seed"
+    },
+    {
+      "primaryKeyword": "dentist salado tx",
+      "bucket": "family",
+      "intent": "nearby city support",
+      "priority": 68,
+      "source": "target-keyword-seed"
     }
   ]
 }

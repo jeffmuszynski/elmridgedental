@@ -28,6 +28,26 @@ npm run seo:dry-run -- --queue seo-automation/topic-queue.example.json --write
 npm run seo:test
 ```
 
+## Automated Blog Publishing
+
+The local blog publisher runs the full pipeline without copy-paste:
+
+```bash
+npm run seo:auto-publish-blog
+```
+
+It:
+
+- chooses the next topic from the local SEO queue and ledger,
+- generates a first draft with OpenAI,
+- runs a second-pass AI review,
+- renders the approved blog page,
+- updates the blog index, sitemap, and SEO ledger,
+- runs the SEO smoke test,
+- commits and pushes the website repo.
+
+The script aborts if the git worktree has unrelated uncommitted changes.
+
 ## Planned Live Integrations
 
 - Google Sheets or Apps Script for audit/topic input.

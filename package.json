@@ -8,6 +8,7 @@
     "generate": "node build-content.mjs && node agentic-rebuild.mjs && node build-insurance.mjs && node build-post-op.mjs",
     "build:agentic": "node agentic-rebuild.mjs",
     "seo:dry-run": "node scripts/seo-gbp-dry-run.mjs",
+    "seo:auto-publish-blog": "node scripts/seo-auto-publish-blog.mjs",
     "seo:generate-draft": "node scripts/seo-generate-draft.mjs",
     "seo:render-blog": "node scripts/seo-render-blog.mjs",
     "seo:review-draft": "node scripts/seo-review-draft.mjs",
