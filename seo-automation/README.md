@@ -61,6 +61,27 @@ so topic selection follows the active Target_Keywords/GSC scoring logic.
 
 Credentials belong in local ignored files or platform secrets, never in this repo.
 
+## AI Usage Guardrails
+
+AI calls should receive compact task packets only, not raw reports, full Sheets, or broad site dumps.
+
+Current website AI calls are limited to:
+
+- blog draft generation,
+- second-pass blog review.
+
+Those calls estimate input size before sending, abort oversized packets, and append token usage metadata to the ignored local log:
+
+- `seo-automation/local/logs/ai-usage.jsonl`
+
+The log stores operation/model/token counts and small non-secret metadata. It must not store prompt text, generated prose, API keys, webhooks, or raw GSC exports.
+
+Optional local caps:
+
+- `SEO_AI_MAX_INPUT_TOKENS`
+- `SEO_AI_MAX_SEO_BLOG_DRAFT_INPUT_TOKENS`
+- `SEO_AI_MAX_SEO_BLOG_REVIEW_INPUT_TOKENS`
+
 ## Runbook
 
 The durable handoff/runbook for this system is in:

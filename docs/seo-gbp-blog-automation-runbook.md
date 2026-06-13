@@ -52,6 +52,27 @@ Important local script properties in Apps Script include:
 
 Do not print their values.
 
+## AI Usage And Token Controls
+
+The website automation keeps AI usage narrow:
+
+- deterministic code chooses topics, target pages, images, CTR opportunities, schedules, and eligibility;
+- AI is used only for blog draft generation and second-pass blog review;
+- AI calls receive compact task packets, not full Sheets, raw GSC exports, Slack history, or broad site dumps;
+- AI usage is logged locally without prompts or generated prose.
+
+Local ignored usage log:
+
+- `seo-automation/local/logs/ai-usage.jsonl`
+
+Guardrail environment variables:
+
+- `SEO_AI_MAX_INPUT_TOKENS`
+- `SEO_AI_MAX_SEO_BLOG_DRAFT_INPUT_TOKENS`
+- `SEO_AI_MAX_SEO_BLOG_REVIEW_INPUT_TOKENS`
+
+If a task packet exceeds the configured estimate, the script aborts before calling OpenAI.
+
 ## Website SEO / Agentic Search Layer
 
 The site has an LLM-readable layer:

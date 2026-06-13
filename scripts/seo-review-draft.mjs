@@ -1,6 +1,7 @@
 import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
+import { assertCompactTaskPacket, logAIUsage } from './seo-ai-usage.mjs';
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const draftsDir = path.join(root, 'seo-automation', 'drafts');
@@ -55,13 +56,28 @@ async function reviewWithOpenAI({ prompt, draft }) {
   const { default: OpenAI } = await import('openai');
   const client = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
   const model = process.env.SEO_OPENAI_MODEL || 'gpt-4.1';
+  const messages = [
+    { role: 'system', content: prompt },
+    { role: 'user', content: JSON.stringify(draft, null, 2) },
+  ];
+  const requestStats = assertCompactTaskPacket({
+    operation: 'seo_blog_review',
+    messages,
+  });
   const response = await client.chat.completions.create({
     model,
     response_format: { type: 'json_object' },
-    messages: [
-      { role: 'system', content: prompt },
-      { role: 'user', content: JSON.stringify(draft, null, 2) },
-    ],
+    messages,
+  });
+  logAIUsage({
+    operation: 'seo_blog_review',
+    model,
+    requestStats,
+    usage: response.usage,
+    metadata: {
+      slug: slugFromDraft(draft),
+      primaryKeyword: draft.primaryKeyword || draft.finalDraft?.primaryKeyword || null,
+    },
   });
   const content = response.choices?.[0]?.message?.content;
   if (!content) throw new Error('OpenAI returned an empty review.');
